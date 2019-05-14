@@ -114,6 +114,8 @@
 #define RANGING_UNIT AIR_SPEED_OF_LIGHT*DW1000_TIMEBASE
 
 #define DWM1000_DEFAULT_ANTENNA_DELAY_VALUE 32847 //@brief Calibration value for DWM1000 on IRIT's DecaWiNo, by Adrien van den Bossche <vandenbo at univ-tlse2.fr>
+#define DWM1000_PRF_16MHZ_CIRE_CONSTANT 113.77   //@brief Required for CIRE noise estimation
+#define DWM1000_PRF_64MHZ_CIRE_CONSTANT 121.74	//@brief Required for CIRE noise estimation
 
 #define DW1000_TRX_STATUS_IDLE 0
 #define DW1000_TRX_STATUS_TX 1
@@ -139,7 +141,13 @@
 #define DW1000_REGISTER_SYS_TIME			0x06
 
 #define DW1000_REGISTER_TX_FCTRL			0x08
+#define DW1000_REGISTER_TX_FCTRL_TXPRF_MASK 0x00030000
 #define DW1000_REGISTER_TX_FCTRL_FRAME_LENGTH_MASK	0x000003FF
+
+#define DW1000_REGISTER_OFFSET_DRX_TUNE1A 0x04
+#define DW1000_REGISTER_OFFSET_DRX_TUNE1B 0x06
+#define DW1000_REGISTER_DRX_TUNE_PRF16 0x0087
+#define DW1000_REGISTER_DRX_TUNE_PRF64 0x008D
 
 #define DW1000_REGISTER_TX_BUFFER			0x09
 
@@ -174,6 +182,9 @@
 #define DW1000_REGISTER_RX_RFQUAL					0x12
 #define DW1000_REGISTER_RX_RFQUAL_FPAMPL2_MASK 		0XFFFF0000
 #define DW1000_REGISTER_RX_RFQUAL_CIRE_MASK 		0X0000FFFF
+#define DW1000_REGISTER_OFFSET_FPAMPL1 				0x07
+#define DW1000_REGISTER_OFFSET_FPAMPL3 				0x04
+#define DW1000_REGISTER_OFFSET_CIRP 				0x04
 
 #define DW1000_REGISTER_RX_TTCKI			0x13
 
@@ -194,6 +205,21 @@
 #define DW1000_REGISTER_CHAN_CTRL_TX_PCODE_MASK		0x07C00000
 #define DW1000_REGISTER_CHAN_CTRL_RX_PCODE_MASK		0xF8000000
 
+
+
+#define DW1000_REGISTER_DIGITAL_TRANSCEIVER_CONFIGURATION 	0x27
+
+#define DW1000_REGISTER_ANALOG_RF_CONFIGURATION 		  	0x28
+#define DW1000_REGISTER_OFFSET_RF_RXCTRL					0x0B	
+#define DW1000_REGISTER_OFFSET_RF_TXCTRL					0x0C	
+
+#define DW1000_REGISTER_TRANSMITTER_CALIBRATION_BLOCK		0x2A  
+#define DW1000_REGISTER_OFFSET_TC_PGDELAY					0x0B
+
+#define DW1000_REGISTER_FREQUENCY_SYNTHESISER_BLOCK_CONTROL	0x2B
+#define DW1000_REGISTER_OFFSET_FS_PLLCFG					0x07
+#define DW1000_REGISTER_OFFSET_FS_PLLTUNE					0x0B
+
 #define DW1000_REGISTER_AON_CTRL			0x2C
 #define DW1000_REGISTER_OFFSET_AON_CTRL			0x02
 #define DW1000_REGISTER_AON_CTRL_UPL_CFG_MASK		0x04
@@ -211,6 +237,53 @@
 
 #define DW1000_REGISTER_PMSC_CTRL1			0x36
 #define DW1000_REGISTER_OFFSET_PMSC_CTRL1		0x04
+
+#define DWM1000_REGISTER_OTP 					0x2D
+#define DWM1000_REGISTER_OFFSET_OTP_ADDR		0x04
+#define DWM1000_REGISTER_OFFSET_OTP_CTRL		0x06
+#define DWM1000_REGISTER_OFFSET_OTP_RDAT		0x0A
+
+// some useful addresses in the one-time-programmable memory (DWM1000 user manual page 59)
+
+#define DWM1000_OTP_ADDR_TEMP					0x09
+#define DWM1000_OTP_OFFSET_TEMP23				0x00
+#define DWM1000_OTP_OFFSET_TEMP_ANT_CAl			0x01
+#define DWM1000_OTP_ADDR_V						0x08
+#define DWM1000_OTP_OFFSET_V33					0x00
+#define DWM1000_OTP_OFFSET_V37					0x01
+
+// values to write for channel control settings (User Manual p154 / 160)
+
+#define DWM1000_RF_RXCTRL_C1235	0xD8
+#define DWM1000_RF_RXCTRL_C47	0xBC
+
+#define DWM1000_RF_TXCTRL_C1	0x00005C40
+#define DWM1000_RF_TXCTRL_C2	0x00045CA0
+#define DWM1000_RF_TXCTRL_C3	0x00086CC0
+#define DWM1000_RF_TXCTRL_C4	0x00045C80
+#define DWM1000_RF_TXCTRL_C5	0x001E3FE0
+#define DWM1000_RF_TXCTRL_C7	0x001E7DE0
+
+
+
+#define DWM1000_TC_PGDELAY_C1 	0xC9
+#define DWM1000_TC_PGDELAY_C2 	0xC2
+#define DWM1000_TC_PGDELAY_C3 	0xC5
+#define DWM1000_TC_PGDELAY_C4 	0x95
+#define DWM1000_TC_PGDELAY_C5 	0xC0
+#define DWM1000_TC_PGDELAY_C7 	0x93
+
+#define DWM1000_FS_PLLCFG_C1 	0x09000407
+#define DWM1000_FS_PLLCFG_C24 	0x08400508	
+#define DWM1000_FS_PLLCFG_C3 	0x08401009
+#define DWM1000_FS_PLLCFG_C57 	0x0800041D
+
+#define DWM1000_FS_PLLTUNE_C1 	0x1E
+#define DWM1000_FS_PLLTUNE_C24 	0x26
+#define DWM1000_FS_PLLTUNE_C3 	0x56
+#define DWM1000_FS_PLLTUNE_C57 	0xBE
+
+
 
 
 class DecaDuino {
@@ -466,13 +539,38 @@ class DecaDuino {
 		uint8_t getRxPcode(void);
  
  		/**
-		* @brief Sets the radio channels for TX and RX
-		* @param channel The channel number to set. Valid values are: 1, 2, 3, 4, 5, 7. 
-		* @return Indicates whether configuration went well or not
-		* @author Réjane Dalce
-		* @date 20160109
+		* @brief Sets the Rx & TX radio channels
+		* @param the channel to set. Valid values are 1, 2, 3, 4, 5, 7, cf DWM1000 User Manual
+		* @return True if the configuration was successful, false otherwise
+		* @author Baptiste Pestourie
+		* @date 20190329
 		*/
  		bool setChannel(uint8_t channel);
+	
+
+
+
+ 		/**
+		* @brief Sets the radio RX channel; changing only the RX channel will 
+		* @param channel The channel number to set. Valid values are 1, 2, 3, 4, 5, 7. 
+		* @return True if the channel has been sucessfully set, false otherwise
+		* @author Baptiste Pestourie
+		* @date 20190329
+		*/		
+	
+	
+		bool setRxChannel(uint8_t channel);
+	
+ 		/**
+		* @brief Sets the radio TX channel
+		* @param channel The channel number to set. Valid values are 1, 2, 3, 4, 5, 7. 
+		* @return True if the channel has been sucessfully set, false otherwise
+		* @author Baptiste Pestourie
+		* @date 20190329
+		*/		
+	
+	
+		bool setTxChannel(uint8_t channel);
 
  		/**
 		* @brief Sets the Pulse Repetition Frequency
@@ -481,7 +579,30 @@ class DecaDuino {
 		* @author Réjane Dalce
 		* @date 20160310
 		*/
+		
+		
 		bool setRxPrf(uint8_t prf);
+		
+		
+ 		/**
+		* @brief Sets the TX Pulse Repetition Frequency
+		* @param prf The PRF value to set. Valid values are: 1, 2.
+		* @return True if success otherwise false
+		* @author Baptiste Pestourie
+		* @date 20180412
+		*/
+		bool setTxPrf(uint8_t prf);
+		
+		
+ 		/**
+		* @brief Sets the tuning register - required for changing Tx Prf 
+		* @param prf The TX PRF value to tune to (16 if 16 Mhz, 64 otherwise)
+		* @return True if success otherwise false
+		* @author Baptiste Pestourie
+		* @date 20181112
+		*/
+		bool setDrxTune(uint8_t prf);
+		
 
  		/**
 		* @brief Sets the Tx Preamble Code
@@ -702,9 +823,8 @@ class DecaDuino {
 		/**
 		* @brief Gets the temperature value in celsius degrees from the DW1000's embedded temperature sensor
 		* @return The temperature value in celsius degrees
-		* @author Adrien van den Bossche
-		* @date 20141115
-		* @todo To be implemented
+		* @author Baptiste Pestourie
+		* @date 20180501
 		*/
 		float getTemperature(void);
 
@@ -719,9 +839,9 @@ class DecaDuino {
 		/**
 		* @brief Gets the voltage value in volts from the DW1000's embedded voltage sensor
 		* @return The voltage value in volts
-		* @author Adrien van den Bossche
-		* @date 20141115
-		* @todo To be implemented
+		* @author Baptiste Pestourie
+		* @date 20180501
+		
 		*/
 		float getVoltage(void);
 

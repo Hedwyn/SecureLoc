@@ -1,3 +1,0 @@
-{"sample": 100, "protocol": "TWR", "anchorID": "A", "botID": "3", "distance": [1, 5], "reference_point": 50, "timestamps": 90, "rssi": null}
-{"sample": 101, "protocol": "TWR", "anchorID": "A", "botID": "3", "distance": [1, 4], "reference_point": 49, "timestamps": 88, "rssi": null}
-{"metadata": true, "anchors_positions": ""}

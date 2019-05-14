@@ -47,9 +47,10 @@ AES aes ;
 //#define Y_CORRECTION 0.230000000 // correction de la ligne 96 du B ?
 #define Y_CORRECTION 0.000000000
 
-#define TIMEOUT 50
+#define TIMEOUT 200
 #define INDEX_AVERAGE_MAX 0
 
+#define ASCII_NUMBERS_OFFSET 48
 #define TWR_ENGINE_STATE_INIT 1
 #define TWR_ENGINE_STATE_WAIT_NEW_CYCLE 2
 #define TWR_ENGINE_STATE_SEND_START 3
@@ -64,11 +65,13 @@ AES aes ;
 #define TWR_ENGINE_STATE_WAIT_DATA_REPLY 12
 #define TWR_ENGINE_STATE_EXTRACT_T2_T3 13
 
+
 #define TWR_ENGINE_STATE_SEND_DATA_PI 14
 #define TWR_ENGINE_STATE_IDLE 15
 #define TWR_ENGINE_STATE_PREPARE_LOC 16
 
 #define TWR_ENGINE_STATE_INIT_OFFSET 17
+#define TWR_ENGINE_STATE_SERIAL 18
 
 #define TWR_MSG_TYPE_UNKNOWN 0
 #define TWR_MSG_TYPE_START 1
@@ -82,12 +85,21 @@ int rxFrames;
 byte succ;
 byte nbrand [8];     //nb aléa à crypter et son identifiant
 byte rxIdentifiant[8];  // /!\ identifiant de l'émetteur robot
-byte identifiant[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A}; // identifiant de l'ancre
+byte identifiant[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01}; // identifiant de l'ancre
 byte identifiantAncreRx[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-byte idNextAncreTx[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B};
+byte idNextAncreTx[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02};
 byte idNextAncreRx[8] ={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-byte idRobotTx[NB_ROBOTS][8]= { {0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x02},
-                     {0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03} };                                                   ;
+byte idTarget[][8]= { {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x01},// bots
+                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x02},
+                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01}, 
+                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02},
+                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03},
+                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04},
+                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05},
+                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06},
+                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07},
+                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08},
+                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x09}};                                                   
 byte IdRobotRx[8];
 byte key [2*N_BLOCK] = { 0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03,
                          0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03,
@@ -97,7 +109,7 @@ byte cipher [N_BLOCK] ; //données encryptées
 byte check [N_BLOCK] ;  //contient le msg décrypté
 char * hex = "0123456789abcdef" ;
 
-uint64_t t1, t2, t3, t4;
+uint64_t t1, t2, t3, t4, t5;
 uint64_t mask = 0xFFFFFFFFFF;
 int32_t tof;
 int32_t tof_skew;
@@ -110,11 +122,14 @@ int unsigned iInitialisation=0;
 DecaDuino decaduino;
 uint8_t txData[128];
 uint8_t rxData[128];
+//char serialIn[128],serialOut[128];
 uint16_t rxLen;
-int state;
+int state,next_state;
 int timeout;
 int timeoutWait;
 boolean warning;
+char serial_command, target_id;
+uint16_t sfdto;
 
 /**
  * Dans la boucle "setup" on initialise l'antenne UWB, on génère la clé privé  
@@ -123,6 +138,11 @@ boolean warning;
  * La fonction check_same vérifie la correspondance entre le message décrypter
  * et le message en clair
  */
+
+
+
+
+
 
 
 void setup() {
@@ -146,19 +166,34 @@ void setup() {
       delay(50);    
     }
   }
+
   
   
-  // Set RX buffer
+  // RX TX settings
+  
+  decaduino.setPreambleLength(2048);
+  decaduino.setPACSize(8);
+
+  /*decaduino.enableCounters(1);
+  decaduino.setSfdTimeout(64 );*/
+  /*decaduino.setRxPrf(2);
+  decaduino.setTxPrf(2);
+  decaduino.setDrxTune(64);*/
+
+  //decaduino.setTBR(110);  
+  decaduino.setChannel(5);
   decaduino.setRxBuffer(rxData, &rxLen);
+  decaduino.plmeRxEnableRequest();
+
+  
   state = TWR_ENGINE_STATE_IDLE;
 
-  succ = aes.set_key (key, 32) ;      //initialisation de la clé
+  succ = aes.set_key (key, 32) ;      //AES key
       if (succ != SUCCESS)
         DPRINTFLN ("Failure set_key") ; 
 
- average=0;
- iAverage=0;
- decaduino.plmeRxEnableRequest();
+
+
  DPRINTFLN("decaduino init finished");
   
 }
@@ -200,8 +235,10 @@ void check_same (byte * a, byte * b, int bits) {   //vérifie la correspondance 
       }
 }
 
-int next_bot_idx = NB_ROBOTS - 1; //gives the index of the next robot to lcoalize 
+int next_target_idx = NB_ROBOTS - 1; //gives the index of the next robot to lcoalize 
 void loop() {
+  int new_msg = 0;
+  
  
 
   
@@ -217,41 +254,91 @@ void loop() {
       decaduino.plmeRxDisableRequest();
       state = TWR_ENGINE_STATE_WAIT_NEW_CYCLE; 
       break;
+
+
+    case TWR_ENGINE_STATE_SERIAL:
+       // reading serial command
+       serial_command = Serial.read(); // { used as termination character
+       while ((serial_command == '\r') || (serial_command == '\n')) {
+        // skipping
+        serial_command = Serial.read();
+        
+       }
+
+       if (serial_command == (char) -1) {
+        // Nothing was available
+        state = next_state;
+       }
+       else {
+         switch(serial_command - ASCII_NUMBERS_OFFSET) {        
+          case 0:          
+            Serial.println("$ [Serial command]: anchor ranging request");
+            // reading anchor ID
+            target_id = Serial.read();
+            if ((target_id == -1) || (target_id == '\r') || (target_id == '\n') ){
+              Serial.println("$ Dismissing command: no ID received");
+            }
+            else if ( (serial_command < ASCII_NUMBERS_OFFSET) || (serial_command > ASCII_NUMBERS_OFFSET + 9)){
+              Serial.println("$ Dismissing command: invalid ID received");
+            }
+            else {
+              next_target_idx = (int) (target_id - ASCII_NUMBERS_OFFSET) ;
+            }
+            
+            
+            break;
+          case 1:
+            Serial.println("$ command #2 received");
+            break;
+          default:
+            Serial.println("$ unknown command received:");
+            Serial.println(serial_command);
+            break;
+         }
+
+         // Staying in Serial state if bytes are still available in buffer
+         if (Serial.available() > 0) {
+          state = TWR_ENGINE_STATE_SERIAL;
+         }
+         else {
+          state = next_state;
+         }
+       }      
+      break;
       
     case TWR_ENGINE_STATE_WAIT_NEW_CYCLE:
       iInitialisation=0;
       //delay(30); //increase resfresh rate here
       delay(200);
       DPRINTFLN("New TWR");
-      state = TWR_ENGINE_STATE_SEND_START;
-      // getting the index of the next robot to localize
-      if (next_bot_idx == NB_ROBOTS - 1) {
-        next_bot_idx =0;
+      if (Serial.available() > 0) {
+        state = TWR_ENGINE_STATE_SERIAL;
+        next_state = TWR_ENGINE_STATE_SEND_START;
       }
       else {
-        next_bot_idx++;       
+      state = TWR_ENGINE_STATE_SEND_START;
       }
-      DPRINTFLN(next_bot_idx);
+      // getting the index of the next robot to localize
+      if (next_target_idx == NB_ROBOTS - 1) {
+        next_target_idx =0;
+      }
+
+      else if (!(next_target_idx > NB_ROBOTS)) { // not switching target id if the target is an anchor
+        next_target_idx++;       
+      }
+      DPRINTFLN(next_target_idx);
       break;
 
     case TWR_ENGINE_STATE_SEND_START:     //on définie la trame de start
       txData[0] = TWR_MSG_TYPE_START;     // Trame émise : idRobot | idAncreTx | idNextAncre
 
       // getting temperature
-      /*
-      DPRINTFLN("temperature:\n");
-      DPRINTFLN(decaduino.getTemperature());
-      DPRINTFLN("\n");
 
-      DPRINTFLN("voltage:\n");
-      DPRINTFLN(decaduino.getVoltage());
-      DPRINTFLN("\n");
-      */
 
      
       
       for(int i=0; i<8; i++){
-        txData[1+i]=idRobotTx[next_bot_idx][i];
+        txData[1+i]=idTarget[next_target_idx][i];
         
         txData[9+i]=identifiant[i];
         txData[17+i]=idNextAncreTx[i];   
@@ -259,7 +346,9 @@ void loop() {
       
       
       txData[25]=0;
-      
+      Serial.println("Sending START");
+
+
       if( decaduino.pdDataRequest(txData, 26) ){
         
       }else{
@@ -287,7 +376,20 @@ void loop() {
       break;     
 
     case TWR_ENGINE_STATE_RX_ON_FOR_ACK:
+      /* testing FP power */
+
+      
+
+    
       decaduino.plmeRxEnableRequest();
+      Serial.println((int) (decaduino.getSystemTimeCounter() - t4) );
+      /*
+      sfdto = decaduino.readSfdTimeoutCounter();
+
+      while (decaduino.readSfdTimeoutCounter() - sfdto <1);*/
+ 
+ 
+
       state = TWR_ENGINE_STATE_WAIT_ACK;
       break;
 
@@ -297,24 +399,33 @@ void loop() {
         DPRINTFLN("timeout");
       } else {
         if ( decaduino.rxFrameAvailable() ) {   // Si on a reçu le ack on mémorise l'heure de réception
+          
           if ( rxData[0] == TWR_MSG_TYPE_ACK ) {    //On regarde ici si la donnée nous est destiné ou non -
             for ( i=0; i<8; i++){
+                
                 rxIdentifiant[i]=rxData[i+1]; //On récupère l'identifiant
             }
             if( (*(uint64_t*) rxIdentifiant) == (*(uint64_t*) identifiant) ){//si c'est le bon id on passe à l'étape suivante
+              Serial.println("ACK received");
               state = TWR_ENGINE_STATE_MEMORISE_T4;   //
             }else{
                 DPRINTFLN("bad robot id");
                 print_value("RX ID = ", rxIdentifiant, 64 );
                 print_value("MY ID = ", identifiant, 64 );
             }
-          } else state = TWR_ENGINE_STATE_RX_ON_FOR_ACK; // - sinon on retourne dans cet état 
+          } else {
+            state = TWR_ENGINE_STATE_RX_ON_FOR_ACK;
+            t4 = decaduino.getSystemTimeCounter();
+            Serial.print("First byte:");
+            Serial.println((int)rxData[0]);
+            } // - sinon on retourne dans cet état 
         }
       }
       break;
 
     case TWR_ENGINE_STATE_MEMORISE_T4:            //Heure de réception du ack
       t4 = decaduino.getLastRxTimestamp();
+      t5 = decaduino.getPreambleTimestamp();
       state = TWR_ENGINE_STATE_WATCHDOG_FOR_DATA_REPLY;
       break;
 
@@ -337,6 +448,7 @@ void loop() {
             for ( i=0; i<8; i++){
                 rxIdentifiant[i]=rxData[42+i]; //On récupère l'identifiant
             }
+            Serial.println("Data received");
             if( (*(uint64_t*) rxIdentifiant) == (*(uint64_t*) identifiant) ){//si c'est le bon id on passe à l'étape suivante
                 state = TWR_ENGINE_STATE_EXTRACT_T2_T3;
             } else {
@@ -427,40 +539,50 @@ void loop() {
         //RPRINTF("*W : speed exceed 12km.h-1#\n");
       }
       
-//      RPRINTF("*");                   //RPRINTF correspont à la communication avec la RasPI
-//      //Trame * idAncre | idRobot| distance #
-//      print_value_raspberry(identifiant,64);
-//     
-//      RPRINTF("|"); 
-//
-//      //print_value_raspberry(rxIdentifiant,64);
-//      print_value_raspberry(idRobotTx[next_bot_idx],64);
-//      RPRINTF("|"); 
-//
-//
-//      RPRINTF(distance_skew);
-//      RPRINTF("|");
-//      /* timestamps */
-//      RPRINTF((int) t1);
-//      RPRINTF("|");
-//
-//      RPRINTF((int) t2);
-//      RPRINTF("|");
-//
-//      RPRINTF( (int) t3);
-//      RPRINTF("|");
-//
-//      RPRINTF( (int) t4);
-//      RPRINTF("|");
-//      
-//
-//      /* RSSI */
-//      
-//      RPRINTF(decaduino.getRSSI() );
-//      
-//      RPRINTF("#\n");
-      Serial.println("i'm alive");
-      Serial.send_now();
+      RPRINTF("*");                   //RPRINTF correspont à la communication avec la RasPI
+      //Trame * idAncre | idRobot| distance #
+      print_value_raspberry(identifiant,64);
+     
+      RPRINTF("|"); 
+
+      //print_value_raspberry(rxIdentifiant,64);
+      print_value_raspberry(idTarget[next_target_idx],64);
+      RPRINTF("|"); 
+
+
+      RPRINTF(distance_skew);
+      RPRINTF("|");
+      /* timestamps */
+      RPRINTF((int) t1);
+      RPRINTF("|");
+
+      RPRINTF((int) t2);
+      RPRINTF("|");
+
+      RPRINTF( (int) t3);
+      RPRINTF("|");
+
+      RPRINTF( (int) t4);
+      RPRINTF("|");
+
+      
+
+      /* RSSI */
+      
+      RPRINTF(decaduino.getRSSI() );
+      
+      
+      RPRINTF("#\n");
+
+      
+      
+
+      Serial.print("Preamble starting timestamp: ");
+      Serial.println((long) (t4 - t5));
+     
+      Serial.println((long) ( 16 *  (t4 - t5 ) )/ 1E6 );
+      Serial.println(decaduino.getRxPacc());
+
       
       decaduino.plmeRxEnableRequest();
       state= TWR_ENGINE_STATE_IDLE;

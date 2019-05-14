@@ -9,6 +9,7 @@ import math
 import os
 from datetime import datetime
 from parameters import *
+from Menu import Menu
 from world import World
 from anchor import Anchor
 from movingentity import MovingEntity
@@ -21,6 +22,8 @@ import json
 import glob
 from multiprocessing import Process, Pipe
 from jsonStructures import dataset,position,metadata
+import numpy as np
+import sympy as sp
 
 
 
@@ -44,8 +47,12 @@ class Application(ShowBase):
         self.pipe = {} # pipes dictionary 
         self.init_render()
         self.filters = {}
+        #self.menu = Menu()
         self.menu = Menu()
-        self.dataset = dataset()
+        self.dataset = {}
+        #self.dataset = dataset()
+        self.log_flag = True
+        self.exit_flag = False
         
         # notifies that process should end
         self.done = False
@@ -70,9 +77,7 @@ class Application(ShowBase):
 
         # logs for rangings
         self.logs_rangings = None
-        # now creating the world in the 3D engine
-        self.create_world()
-        self.create_moving_entities()
+
         
         
        
@@ -86,7 +91,22 @@ class Application(ShowBase):
                
                 
                 self.playback_rangings = self.log2play.read(playback_file)
+                
+                # getting anchors position
+                metadata = self.log2play.read_metadata()
+                
+                # parsing anchors positions
+                with open("anchors_playback.tab",'w+') as f:
+                    lines = metadata[0]["anchors_positions"].split('|')
+                    for line in lines:
+                        f.write(line)
+                        f.write("\n")
+                
+                # anchors_playback.tab will be read by create_world
+                        
+                
                 taskMgr.doMethodLater(0,self.update_sock_task,'update sock')
+                
                 
                 # creating directory for pos logs if there isn't already one
                 # cutting json extension in the filename
@@ -103,12 +123,22 @@ class Application(ShowBase):
                 
             except IOError:
                 print("failed to read playback log file")
-          
-        else:
-            self.init_mqtt()
+
         
+        # now creating the world in the 3D engine
+        d_print("creating world...")
+        self.create_world()
+        d_print(" world created ...")
+        self.create_moving_entities()
+        d_print(" robots created ...")   
+        
+          
+        if not(PLAYBACK):
+            self.init_mqtt()
+            taskMgr.doMethodLater(0,self.update_positions_task,'update sock')
         # initializing logs
         self.init_logs()
+
         
 
         # in playback mode, prepares the iteration through the ranging lists
@@ -148,7 +178,11 @@ class Application(ShowBase):
     def create_world(self):
         """Creates the 3D world in which entities will evolve"""
         self.anchors = []
-        with open('anchors.tab') as anchors_file:
+        if PLAYBACK:
+            tabfile = 'anchors_playback.tab'
+        else:
+            tabfile = 'anchors.tab'
+        with open(tabfile) as anchors_file:
             for line in anchors_file:
                 data = line.strip().split()
                 if len(data) != 5:
@@ -171,7 +205,8 @@ class Application(ShowBase):
         v_print("creating moving entities \n:")
         #bots_id = self.world.gen_bots_id(NB_BOTS)
         for i in range(NB_BOTS):
-            self.robots[ bots_id[i] ]  = MovingEntity( bots_id[i], 'blue' )
+            colors = ['blue','orange']
+            self.robots[ bots_id[i] ]  = MovingEntity( bots_id[i], colors[i] )
         self.processed_robot = bots_id[0]
 
 
@@ -179,11 +214,10 @@ class Application(ShowBase):
         """creates the mqtt client and handles the subscriptions"""
         self.mqttc = mqtt.Client()
         self.mqttc.on_message = self.on_message
+        
+        # connecting to local host
         self.mqttc.connect("127.0.0.1", 1883, 60)
-#        self.mqttc.subscribe("testbed/bylabel/0a/distance", 0)
-#        self.mqttc.subscribe("testbed/bylabel/0b/distance", 0)
-#        self.mqttc.subscribe("testbed/bylabel/0c/distance", 0)
-#        self.mqttc.subscribe("testbed/bylabel/0d/distance", 0)
+
         
         for label_a in anchors_labels:
             for label_b in bots_labels:
@@ -194,14 +228,19 @@ class Application(ShowBase):
                 self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/ts3")
                 self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/ts4")
                 self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/rssi")
-                print(ROOT + label_a + "/"  + label_b + "/distance")
+                self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/fp_power")
+                self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/fp_ampl2")
+                self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/std_noise")
+                self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/temperature")
+                print(ROOT + label_a + "/"  + label_b + "/temperature")
         self.mqttc.loop_start()
+        print("MQTT loop succesfully started !")
 
 
     def on_message(self,mqttc,obj,msg):
         """handles data resfreshing when a mqtt message is received"""
 
-        
+        d_print("MQTT frame received !")
         
         labels = msg.topic.split("/")
         anchor_id = labels[2]
@@ -209,27 +248,83 @@ class Application(ShowBase):
         anchor_name = id_to_name(anchor_id)
         data_type = labels[4]
         
+        # one dataset for each anchor/bot combination
+        
+        if not (anchor_id in self.dataset):
+            self.dataset[anchor_id] = {}
+        
+        if not (bot_id in self.dataset[anchor_id]):
+            # creating an empty dataset
+            self.dataset[anchor_id][bot_id] = dataset()
+        
+        
         
         if (data_type == "distance"):
+            # publishing the dataset
+            if self.log_flag:
+                self.log_dataset(self.dataset[anchor_id][bot_id])
+            # resetting the dataset
+            self.dataset[anchor_id][bot_id].__init__()
+            
+            
             distance = float(msg.payload)
-            print('distance received:' + str(distance))
-            self.dataset.distance = distance
-            self.dataset.anchorID = anchor_id
-            self.dataset.botID = bot_id
-            # publishing the data. Distance is assumed to be the last to be sent
-            self.log_dataset(self.dataset)
+            d_print('distance received:' + str(distance))
+            if MEASURING and (self.rp < len(self.ref_points)):
+                # adding the current reference point into the dataset
+                self.dataset[anchor_id][bot_id].rp = self.ref_points[self.rp]
+            self.dataset[anchor_id][bot_id].distance = distance
+            self.dataset[anchor_id][bot_id].anchorID = anchor_id
+            self.dataset[anchor_id][bot_id].botID = bot_id
+
             self.processed_robot = bot_id
-            self.world.update_anchor(anchor_name, distance,bot_id,'SAT')
+            self.world.update_anchor(anchor_name, distance,bot_id,'SW')
             #task = taskMgr.doMethodLater(0,self.update_positions_task,'Log Reading')
             taskMgr.doMethodLater(0,self.update_sock_task,'update sock')
         
         if (data_type == "rssi"):
             rssi = float(msg.payload)
-            print('rssi received:' + str(rssi))
-            if ( (bot_id != self.dataset.botID) or (anchor_id != self.dataset.anchorID ) ):
-                print("interference !")
-            else:
-                self.dataset.rssi = rssi
+            d_print('rssi received:' + str(rssi))
+
+            self.dataset[anchor_id][bot_id].rssi = rssi
+                
+        if (data_type[:-1] == "ts"):
+            # timestamp
+            ts = float(msg.payload)
+            d_print(data_type + ' received:' + str(ts))
+
+            self.dataset[anchor_id][bot_id].timestamps[data_type] = ts
+
+        if (data_type == "fp_power"):
+            fp_power = float(msg.payload)
+            d_print('fp_power received:' + str(fp_power))
+
+            self.dataset[anchor_id][bot_id].fp_power = fp_power
+        
+        
+        if (data_type == "fp_ampl2"):
+            fp_ampl2 = float(msg.payload)
+            d_print('fp_ampl2 received:' + str(fp_ampl2))
+
+            self.dataset[anchor_id][bot_id].fp_ampl2 = fp_ampl2        
+                
+        if (data_type == "std_noise"):
+            std_noise = float(msg.payload)
+            d_print('std_noise received:' + str(std_noise))
+
+            self.dataset[anchor_id][bot_id].std_noise = std_noise
+                
+
+        if (data_type == "temperature"):
+            temperature = float(msg.payload)
+            d_print('temperature received:' + str(temperature))
+            
+            self.dataset[anchor_id][bot_id].temperature = temperature
+            
+        
+        
+        d_print("MQTT frame processed !")
+                
+        
             
         
       
@@ -274,7 +369,7 @@ class Application(ShowBase):
             # directory name is the playback log name without .json estension
             
             repo = self.playback_path
-            print("pos repo"+ repo)
+            print("pos repo: "+ repo)
             
         else:
             repo = POS_REPO
@@ -316,8 +411,9 @@ class Application(ShowBase):
 
                 
     def checkInputs(self):
-        """ manages the user interaction through the keyboard"""
+        """ manages user keyboard interaction """
         inputs = []
+
         if (keyboard.is_pressed('q') ):
             inputs.append('q')
         elif (keyboard.is_pressed('w') ):
@@ -337,20 +433,21 @@ class Application(ShowBase):
 
         return(inputs)
 
-    def update_positions_task(self,task):
-    
-        filter_type = None
+    def update_positions_task(self,task):        
         """Updates moving entities positions"""
         # increments positions updates counter
         # is triggered by update_sock_task when new data is sent into the socket
-        
+        filter_type = 'SW'
           
         robotname = self.processed_robot
         if robotname in self.robots:
             robot = self.robots[robotname]
         else:
             # quits the task if invalid robot id is received
-            print("invalid robot id has been received")
+            print("invalid robot id has been received: " + str(robotname))
+            self.playback_counter += 1
+            data = self.playback_rangings[self.playback_counter] 
+            self.processed_robot = data['botID']
             return(0)
         
         # computes multilateration to localize the robot
@@ -362,7 +459,8 @@ class Application(ShowBase):
                 if (self.playback_counter >= len(self.playback_rangings)):
                     # quitting
                     print("playback file finished !")
-                    print(self.playback_counter)
+                
+   
                     self.done = True
                     return(task.done)
                 data = self.playback_rangings[self.playback_counter] 
@@ -370,13 +468,17 @@ class Application(ShowBase):
                                          data['distance'],
                                          data['botID'],
                                          'SAT')
-                self.playback_counter += 1;
+                self.processed_robot = data['botID']
+                
+             
+    
+                self.playback_counter += 1
                 
                 
-            
-        pos = self.world.localize(robotname)
-        
-        
+         
+        (pos,mse,anchors_mse) = self.world.localize(robotname)
+        self.menu.update_mse(mse)
+       
 
         # applying saturation filter
         robot.set_pos(pos)
@@ -408,7 +510,7 @@ class Application(ShowBase):
         
         pos = robot.get_pos()
         (x,y,z) = pos
-        self.log_pos(position(robotname,x,y,z))
+        self.log_pos(position(robotname,x,y,z,mse,anchors_mse))
         
 
 
@@ -419,48 +521,26 @@ class Application(ShowBase):
         # computes the robot acceleration based on speed variation
         robot.compute_acc()
 
-        
-
-
-
-           
-
-
-                
-            
-            
+          
             
         if not robot.shown:
             robot.show()
 
 
-       
-        return(task.done)
-
-
-    def create_log_file(self, logsfile = LOGSFILE):
-        i = 1
-        
-        while (os.path.exists(logsfile + str(i) + ".txt" ) ):
-               i += 1
-        
-        self.logs = open(logsfile + str(i) + ".txt",'w')
-        i = 1
-
-        if not(PLAYBACK):
-            while (os.path.exists(LOGSRANGINGS + str(i) + ".txt" ) ):
-                   i += 1
-        
-            self.logs_rangings = open(LOGSRANGINGS + str(i) + ".txt",'w')
+        if self.exit_flag or PLAYBACK:
+            return(task.done)
+        else:
+            task.delayTime = 0.33
+            return(task.again)
 
 
     def get_rp(self,tabfile = "rp.tab"):
+        """For measurements mode only. Gets the reference points in the configuration file"""
         rp_file = open(tabfile)
         for line in rp_file:
             coord = line.split()
             self.ref_points.append(coord)
-    
-                
+   
         
         
         
@@ -476,7 +556,8 @@ class Application(ShowBase):
         
         
 
-        # getting keyboard inputs
+        ##  managing user inputs
+        
         pressed_keys = self.checkInputs()
         if self.done:
             # adding quit input if measuring protocol is over
@@ -485,24 +566,27 @@ class Application(ShowBase):
 
             if (key == 'q'):
                 # quit command
+                self.exit_flag = True
                 
+
                     
                 # sending termination signal to logging thread
                 print("closing logs & pipes...")
                 for key in self.pipe:  
                     self.pipe[key].send('stop')
                     self.pipe[key].close()
-               
+
                 
                 print('done !')
                 self.pipe = {}
                 if not(PLAYBACK):
                     self.mqttc.loop_stop()
 
-
+                self.menu.callback()
+                print("returning...")
                 return(task.done)
 
-            
+           
             if (key == 'sw'):
                 # enables sliding windows
                 filter_type = 'SW'
@@ -525,7 +609,7 @@ class Application(ShowBase):
                 task.delayTime = REFRESH_TIME / self.menu.getAccel()
                 return(task.again)
             else:
-                taskMgr.doMethodLater(0,self.update_positions_task,'update positions')
+                #taskMgr.doMethodLater(0,self.update_positions_task,'update positions')
                 return(task.done)
     
 
@@ -567,14 +651,16 @@ class Application(ShowBase):
             elif (self.mes_counter < NB_MES):
                 # measurement phase - recoding position into json log
                 
-                # adding the current reference point into the dataset
-                self.dataset.rp = self.ref_points[self.rp]
+
                 
                 self.mes_counter += 1
                 taskMgr.doMethodLater(0,self.update_positions_task,'update positions')
             elif (self.mes_counter == NB_MES):
 
                 Melody(end_score).start()
+                
+                # disabling logging
+                self.log_flag = False
                 
                 self.mes_counter += 1
                 
@@ -584,6 +670,7 @@ class Application(ShowBase):
 
                 # rest phase for robot displacement
                 print("rest..")
+                
                 self.mes_counter += 1
 
             else:
@@ -592,6 +679,9 @@ class Application(ShowBase):
 
                 self.mes_counter = 0
                 self.rp += 1
+                # enabling logging
+                self.log_flag = True
+                
                 
 
                 
@@ -606,5 +696,6 @@ class Application(ShowBase):
 
         
         return (task.done)
+
 
             

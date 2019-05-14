@@ -4,16 +4,6 @@ from Filter import Filter
 
 import utils
 
-
-
-
-def placeholder_distance(pos1, pos2):
-    x, y, z = pos1
-    xt, yt, zt = pos2
-    return pow(xt-x, 2)+pow(yt-y, 2)+pow(zt-z, 2)
-
-
-
 class Anchor:
     """Anchor class: represents an anchor"""
     def __init__(self, x, y, z, name="unnamed", color='red'):
@@ -68,8 +58,8 @@ class Anchor:
         # writing NB_RANGINGS times the first distance to fill up the list
         
             
-        corrected_distance = self.correction_filter.apply( [ distance, correction_coeff[self.name],correction_offset[self.name] ] )[0]
-        
+        #corrected_distance = self.correction_filter.apply( [ distance, correction_coeff[self.name],correction_offset[self.name] ] )[0]
+        corrected_distance = distance
         if (self.rangings[target] == [] ):
             for i in range(1, NB_RANGINGS):
                 
@@ -95,9 +85,9 @@ class Anchor:
         """Create display text with anchor name"""
         self.label = TextNode('anchor label {}'.format(self.name))
         self.label.set_text(self.name)
-        if (bots_id[0] in self.distance and bots_id[1] in self.distance):
-            self.label.set_text(self.name + ": " + str(self.get_distance(bots_id[0])) + " / " + str(self.get_distance(bots_id[1])))
-            
+        #if (bots_id[0] in self.distance and bots_id[1] in self.distance):
+        #    self.label.set_text(self.name + ": " + str(self.get_distance(bots_id[0])) + " / " + str(self.get_distance(bots_id[1])))
+        self.label.set_text(self.name + ": " + str(self.get_distance(bots_id[0])) + " / " + str(self.get_distance(bots_id[1])))    
         self.label.set_card_decal(True)
         self.label.set_text_color(utils.colors[self.color])
         self.label_np = render.attach_new_node(self.label)
@@ -120,6 +110,7 @@ class Anchor:
 
     def get_distance(self, robot_id):
         """ gets the filtered distance between the anchor and the given robot"""
+       
         if (robot_id in self.distance):
             
             return self.distance[robot_id]
@@ -137,6 +128,7 @@ class Anchor:
     
     
     def split_dist(self, distance):
+        """ graphical function; displays the distance measured by the anchor"""
         result = ""
         x = 0
         for i in distance:
@@ -150,7 +142,7 @@ class Anchor:
     def update_text_task(self, task):
         """Updates the text angle for it to always face the camera"""
         self.label_np.look_at(-base.cam.get_x(), -base.cam.get_y(), -base.cam.get_z())
-        if (bots_id[0] in self.distance):
-            self.label.set_text(self.name + ": " + self.split_dist( str( self.get_distance(bots_id[0]) ) ) )
+        #if (bots_id[0] in self.distance):self.label.set_text(self.name + ": " + str(self.get_distance(bots_id[0]))
+        self.label.set_text(self.name + ": " + str(self.get_distance(bots_id[0])) + " / " + str(self.get_distance(bots_id[1])))  
         return task.cont
 

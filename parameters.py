@@ -1,39 +1,26 @@
-from tkinter import *
-from threading import Thread
-import time as time
-
+## SecureLoc mode and DEBUG parameters
 DEBUG = 0
 VERBOSE = 0
 ENABLE_LOGS = 1
-NB_BOTS = 1
-JSON_DIR = 'json'
-PLAYBACK_DIR = 'Playback'
-PLAYBACK = False 
+PLAYBACK = True 
 MEASURING = False
+HOST = '169.254.1.1'   # IP address of the MQTT broker              
+PORT = 80              # Arbitrary non-privileged port
 
-MQTT_REPO = 'mqtt'
-POS_REPO = 'pos'
-MEASUREMENTS_REPO = 'measurements'
-PLAYBACK_REPO = 'playback'
+## Standard mode
+T = 0.1 # sample time (s), should match the sample time of the hardware
+NB_RANGINGS = 25 # size of the list that keeps track of the last rangings
 
-ACCELERATION = 1.0
-REFRESH_TIME = 0.2
-
+## Measurements mode parameters
 SQUARE_SIZE = 0.304
-TILES = False
+MSE_THRESHOLD = 0.6
+TILES = False  # Gives the coordinates with a grid model with a resolution of SQAURE_SIZE
 NB_BYTES = 4
-NB_MES = 200
-NB_REST = 15
+NB_MES = 500
+NB_REST = 50
 START_DELAY = 1
-SQUARE_SIZE = 0.304
-ANCHOR_NAME = 'A'
-anchors_labels = ['01',
-                  '02',
-                  '03',
-                  '04']
-bots_labels = ['03']
-ROOT = 'SecureLoc/anchors_data/'
 
+# audio signals for the measurement mode
 end_score = [('E4',0.33),
              ('G#4',0.33),
              ('A4',0.33),
@@ -50,78 +37,75 @@ launch_score = [('E6',0.5),
                 ('E6',0.5)
                 ]
 
+
+## Playback parameters
+ACCELERATION = 1.0  #used by Tkinter menu. Allows accelerating the playback
+REFRESH_TIME = 0.2  #default position refresh time. Decreased by ACCELERATION.
+
+## anchors and robots
+NB_BOTS = 2
+anchors_labels = ['01',
+                  '02',
+                  '03',
+                  '04']
+bots_labels = ['01','02']
+bots_id = ["0000000000000b01",
+           "0000000000000b02"]
+
+colorList = ['orange', 'red'] # used for the robots representation
+
+
+## directories and files
 LOGSFILE = 'measurements/logs'
 LOGSRANGINGS = 'rangings/logs'
 LOGSFILE_PLAYBACK = 'measurements/raw/logs'
 LOGSRANGINGS_PLAYBACK = 'rangings/playback/logs'
 
+MQTT_REPO = 'mqtt'
+POS_REPO = 'pos'
+MEASUREMENTS_REPO = 'measurements'
+PLAYBACK_REPO = 'playback'
+
+JSON_DIR = 'json'
+PLAYBACK_DIR = 'Playback'
+ROOT = 'SecureLoc/anchors_data/'
 
 
+## localization parameters
 
-anchors_id = ["000000000000000a",
-              "000000000000000b",
-              "000000000000000c",
-              "000000000000000d"]
+# If both GN and ITERATIVE are disabled the position is calulated only with weighted centroid 
+RANDOM_SEARCH = False # notifies that GN and iterative algorithm should use the default pos as starting point
+GN = False # notifies that Gauss-Newton algorithm should be used for position computation
+ITERATIVE = True # used only when GN is disabled. Notifies that iterative localization should be used for position computation
+DEFAULT_POS = (0.9,2.4,0) # default position; center of the platform
+NB_STEPS = 20 #Steps number for position iterative resolution
 
-bots_id = ["0001020300010203",
-          "0001020300010202"]
+# Filters & speed/acceleration computation parameters
+SPEED_LIST_SIZE = 5 #size of the list storing the last speed measurements
+POS_LIST_SIZE = 5 #size of the list storing the last positions measurements
+ACC_LIST_SIZE = 5
+
+DEFAULT_ACC_THOLD = 10 #THold for SAT filter
+STEP = 1 # Steps for SAT filter
 
 
+# correction factors
+CORRECTION_COEFF = {'01': 1.,'02':  1.,'03': 1.,'04':1.}
+CORRECTION_OFFSET = {'01':0.,'02':0.,'03':0.,'04':0.}
 
-colorList = ['orange', 'red'] # used for the robots representation
-           
-
-anchors_name = ["1","2","3","4"]
-
-# constants, defines init values for the correction
-CORRECTION_COEFF = {'A': 1.,'B':  1.,'C': 1.,'D':1.}
-CORRECTION_OFFSET = {'A':0.,'B':0.,'C':0.,'D':0.}
-
-# global var used by the tkinter menu
-
-##correction_coeff = {'A': 1.,'B':  1.,'C': 1.,'D':1.}
-##correction_offset = {'A':0.,'B':0.,'C':0.,'D':0.}
-
-##correction_coeff = {'A': 1.0,'B':1.0,'C': 1.0,'D':1.0}
-##correction_offset = {'A':-0.40,'B':-0.35,'C':0.30,'D':0.35}
-
-correction_coeff = {'1': 1.,'2':  1.,'3': 1.,'4':1.,'5':1.,'6':1.,'7':1.,
-                    '8':1.,'9':1.,'10':1.,'11':1.,'12':1.,'13':1.,'14':1.,'15':1.,}
-correction_offset = {'1':0.,'2':-0.20,'3':0.30,'4':0.35,'5':0.,'6':0.,'7':0.,
+correction_coeff = {'01': 1.,'02':  1.,'03': 1.,'04':1.,'05':1.,'06':1.,'07':1.,
+                    '08':1.,'09':1.,'10':1.,'11':1.,'12':1.,'13':1.,'14':1.,'15':1.,}
+correction_offset = {'01':0.,'02':0.,'03':0.,'04':0.,'05':0.,'06':0.,'07':0.,
                     '8':0.,'9':0.,'10':0.,'11':0.,'12':0.,'13':0.,'14':0.,'15':0.}
 
-##correction_coeff = {'A': 1.1,'B':  1.1,'C': 1.1,'D':1.1}
-##correction_offset = {'A':0.,'B':-0.40,'C':0.0,'D':0.35}
+## Menu parameters
 
 MENU_LABELS = ['Coeff {A}','Coeff {B}','Coeff {C}','Coeff {D}',
                   'Offset{A}','Offset{B}','Offset{C}','Offset{D}']
 
 
+## special prints and conversion functions
 
-
-T = 0.1 # sample time (s), should match the sample time of the hardware
-
-
-NB_RANGINGS = 25 # size of the list that keeps track of the last rangings
-NB_SAMPLES = 1000 # used for logs reading, maximum number of samples that will be read/replayed 
-LOGS_POS = 'logs/logs_pos.txt'
-LOGS_RANGING = 'logs/logs_ranging.txt'
-LOGS_SPEED = 'logs/logs_speed.txt'
-
-
-
-#HOST = '127.0.0.1' #for local server
-HOST = '169.254.1.1'                 
-PORT = 80              # Arbitrary non-privileged port
-
-
-SPEED_LIST_SIZE = 5 #size of the list storing the last speed measurements
-POS_LIST_SIZE = 5 #size of the list storing the last positions measurements
-ACC_LIST_SIZE = 5
-
-# parameters for SAT filter
-DEFAULT_ACC_THOLD = 10
-STEP = 1
 
 def d_print(msg):
     """print function for debugging"""
@@ -142,183 +126,17 @@ def id_to_name(id):
         return(dic[id])
     else:
         return(id)
-    
+
+
+   
  
 def name_to_id(name):
-    dic = {"02":"0001020300010202",
-           "03":"0001020300010203"
+    dic = {"01":"0000000000000b01",
+           "02":"0000000000000b02"
            }
     return(dic[name])
 
 
-
-    
-    
-class Menu(Thread):
-
-    def __init__(self):
-        Thread.__init__(self)
-
-        self.scale = []
-        self.var = []
-        self.accel = ACCELERATION
-
-        self.position = (0,0,0)
-        self.rangings = [0,0,0,0]
-        self.start()
-      
-
-    def update_param(self,value,idx):
-        global correction_coeff
-        global correction_offset
-        
-
-        if (idx < 4):
-            correction_coeff[ anchors_name[idx] ] = float(value)
-        elif(idx < 8):
-            correction_offset[ anchors_name[idx - 4 ]] = float(value)
-        else:
-            # acceleration
-            
-            self.accel = value
-            
-            
-        
-        
-    
-    def run(self):
-        
-        self.root = Tk()
-        #self.scale = []
-        #self.var = []
-        self.root.protocol("WM_DELETE_WINDOW", self.callback)
-
-        # creating the scales
-        for i in range(8):
-            # variable initialization
-            
-            acceleration = DoubleVar()
-            self.var.append( DoubleVar() )
-            
-            self.scale.append( Scale(self.root, variable = self.var[i], label = MENU_LABELS[i],
-                                length = 200, orient = HORIZONTAL, from_ = -2.0 , to = 2.0,
-                                digits = 4, resolution = 0.01,
-                                command = lambda value,idx = i : self.update_param(value,idx) ) )
-            if ( i < 4):
-                # correction coeff initialization
-                self.scale[i].set( correction_coeff[ anchors_name[i] ] )
-            else:
-                # correction offset initialization
-                self.scale[i].set( correction_offset[ anchors_name[i - 4] ] )
-
-            self.scale[i].pack(anchor = CENTER)
-            
-        # creating reset button
-        reset_button = Button(self.root, text = "Reset", command = self.reset)
-        reset_button.pack()
-
-        accel_button = Scale(self.root, variable = acceleration, label = "Acceleration",
-                                length = 200, orient = HORIZONTAL, from_ = 0.5 , to = 50,
-                                digits = 4, resolution = 0.5,
-                                command = lambda value,idx = 8 : self.update_param(value,idx) )
-        accel_button.set(ACCELERATION)
-        accel_button.pack()
-
-        
-        self.update()   
-        self.root.mainloop()
-        
-    def update_pos(self,pos):
-        self.position = pos
-        self.root.update_idletasks()
-
-    def update_rangings(self,rangings):
-        self.rangings = rangings
-        self.root.update_idletasks()
-
-    def draw(self,oldframe = None):
-
-        frame = Frame(self.root,width=100,height=100,relief='solid',bd=1)
-        frame.place(x=10,y=10)
-        
-        
-
-        
-        
-        position = StringVar()
-        rangings = StringVar()
-
-  
-    
-
-        position.set(str(self.position))
-        rangings.set(str(self.rangings))
-      
-
-        
-        # creatings labels
-        Label(frame, text="Ranging values: ").pack()
-        Label(frame, textvariable= rangings ).pack()
-        #self.space()
-
-        
-        Label(frame, text="Position of robot " + bots_id[1]).pack()
-        Label(frame, textvariable= position ).pack()
-        #self.space()
-
-        frame.pack()
-        if oldframe is not None:
-            oldframe.destroy() # cleanup        
-        
-        return frame
-
-    def update(self,frame=None):
-        
-        frame = self.draw(frame)
-        frame.after(50, self.update, frame) 
-        
-
-        
-    def space(self):
-        separator = Frame(width=500, height=4, bd=1, relief=SUNKEN)
-        separator.pack(fill=X, padx=5, pady=5)
-
-
-
-    def callback(self):
-        self.root.quit()
-
-    def getAccel(self):
-        return(float(self.accel))
-        
-
-    def reset(self):
-        for i in range(8):
-            
-            
-           
-            if ( i < 4):
-                # correction coeff reset
-                self.scale[i].set( CORRECTION_COEFF[ anchors_name[i] ] )
-            else:
-                # correction offset reset
-                self.scale[i].set( CORRECTION_OFFSET[ anchors_name[i - 4] ] )
-
-            
-
-        
-        
-
-
-if __name__ == "__main__":
-
-    menu = Menu()
-    time.sleep(1)
-    print("now")
-    menu.update_pos((2,2,2))
-    menu.update_rangings([1,1,1,1])
-    time.sleep(5)
-    
     
 
 

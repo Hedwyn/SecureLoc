@@ -48,13 +48,15 @@ AES aes ;
 #define TWR_MSG_TYPE_ACK 2
 #define TWR_MSG_TYPE_DATA_REPLY 3
 
+#define TIME_SHIFT 500
+
 
 int rxFrames;
 byte succ;
 byte nbrand_et_id [N_BLOCK];     //nb aléa à crypter et son identifiant
 
-byte identifiant[8] = {0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03};
-
+//byte identifiant[8] = {0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03};
+byte identifiant[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x02};
 byte key [2*N_BLOCK] = { 0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03,
                          0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03,
                          0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03,
@@ -116,6 +118,25 @@ void setup() {
       delay(50);    
     }
   }
+  decaduino.setPreambleLength(2048);
+  /*decaduino.setRxPrf(2);
+  decaduino.setTxPrf(2);
+  decaduino.setDrxTune(64);
+  decaduino.setRxPcode(9);
+  decaduino.setTxPcode(9);*/
+  //decaduino.setTBR(110);  
+  decaduino.setChannel(5);
+  decaduino.setRxBuffer(rxData, &rxLen);
+  decaduino.plmeRxEnableRequest();
+  decaduino.setPhrPower(3,0);
+  decaduino.setSdPower(3,0);
+  
+  /*
+  decaduino.setSmartTxPower(0);
+  decaduino.setTxPower(18,15.5);
+  */
+
+  
   
 
   succ = aes.set_key (key, 32) ;
@@ -125,10 +146,10 @@ void setup() {
 
 
   // Set RX buffer
-  decaduino.setRxBuffer(rxData, &rxLen);
-  if (!decaduino.setRxPrf(1)) {
-   RPRINTF("failed to set PRF to 16");
-  }
+
+
+  
+
   state = TWR_ENGINE_STATE_INIT;
   randomSeed(decaduino.getSystemTimeCounter());
 }
@@ -215,6 +236,7 @@ void loop() {
         txData[9+i] = IdRobotRx[i];
       }
       decaduino.pdDataRequest(txData, 18);
+      //decaduino.pdDataRequest(txData, 18,1,t2 + 500000000);
       state = TWR_ENGINE_STATE_WAIT_SENT;
       break;
 

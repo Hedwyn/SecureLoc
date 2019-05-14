@@ -31,8 +31,6 @@ class Ranging:
             
         return(self.distance)
         
-# tests
-test = Ranging([-1404924849,193340928,218452047,-1379812821])
-print(test.getDistance() )
+
     
         

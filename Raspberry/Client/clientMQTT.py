@@ -15,9 +15,10 @@ distance = 0
 anchor_id = ''
 bot_id = ''
 NB_DATA = 8 # number of datatypes sent by the node
+NB_DATA_EXTENDED = 12 # number of datatypes sent by the node in EXTENDED_MODE
 ROOT = 'SecureLoc/anchors_data/'
 SLEEP_TIME = 0.2
-WATCHDOG_TIMEOUT = 5
+WATCHDOG_TIMEOUT = 2
 exit_flag = False
 rssi = 0
 
@@ -61,25 +62,48 @@ def processLine(line):
     DEBUG frames will be ignored"""
     if len(line) > 0 and line[0] == '*' and line[-1] == '#':
         data = line.split("|")
-        if len(data) == NB_DATA:
+        if len(data) < NB_DATA:
+            print('received frame is not compliant with the expected data format')   
+        if len(data) >= NB_DATA:
             anchor_id = data[0][15:17]
             bot_id = data[1][14:17]
     
-            distance = float(data[2][:])
+            distance = data[2]
             # timestamps
             [ts1,ts2,ts3,ts4] = [int(data[3]), int(data[4]), int(data[5]), int(data[6]) ]
             
-            rssi = data[7][:-1]
+            rssi = data[7]
+           
+            if rssi[-1] == '#':
+            # rssi was the last element sent
+                rssi = rssi[:-1]
+            
             
             # publishing to MQTT
             print("publishing data to MQTT...")
-            mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/distance", str(distance) )
-            mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/rssi", str(rssi) )
+            mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/distance", distance )
+            mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/rssi", rssi )
+            for i,ts in enumerate([ts1,ts2,ts3,ts4]):
+                 mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/ts" + str(i+1), ts )
+                
+        if len(data)== NB_DATA_EXTENDED:
+            # EXTENDED MODE has to be enabled on DecaWino
+            # EXTENDED MODE provides additional physical data, e.g, temperature
+            fp_power = data[8]
+            fp_ampl2 = data[9]
+            std_noise = data[10]
+            temperature = data[11][:-1] # removing '#' at the end
+            
+            # publishing to MQTT
+            mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/fp_power",fp_power)
+            mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/fp_ampl2",fp_ampl2)
+            mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/std_noise",std_noise)
+            mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/temperature",temperature)
+            #print(ROOT + str(anchor_id) + "/" + str(bot_id) + "/temperature")
             
             
            
-        else:
-            print('received frame is not compliant with the expected data format')    
+ 
 
 
 
@@ -117,7 +141,10 @@ def readSerial(port):
                 timer = 0
                 line = port.readline().decode('utf-8').strip()
                 print(line)
-                processLine(line)
+                try:
+                    processLine(line)
+                except:
+                    print("process line failed")
             else:
                 time.sleep(SLEEP_TIME)
                 timer += SLEEP_TIME
@@ -128,6 +155,7 @@ def readSerial(port):
         except:
             print('An error occured, did you unplug the device ?')
             break;
+        
         
         # watchdog for serial disruption
         # reset teensy if nothing is received on serial port after WATCHDOG_TIMEOUT
@@ -193,16 +221,3 @@ def serialPool():
     
         
 serialPool()        
-    
-#waitSerialDevice(path)
-#
-#try:
-#    t = threading.Thread(target = handleSerialDevice, args = (path,) )
-#    t.daemon = True 
-#    t.start()
-#    t.join()
-#except KeyboardInterrupt:
-#    print(" received, quitting program...")
-
-
-

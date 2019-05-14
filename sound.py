@@ -13,6 +13,7 @@ semitone_coeff = 1.059
 
              
 class Sound:
+    """Allows generating customs sounds"""
     def __init__(self,frequency,duration):
         
         self.frequency = frequency
@@ -25,6 +26,7 @@ class Sound:
         t.start()
 
     def run(self):
+        """ plays the melody"""
         p = pyaudio.PyAudio()
 
         volume = 0.1    # range [0.0, 1.0]
@@ -66,11 +68,13 @@ class Melody:
             self.melody.append(Sound(float(frequency),float(duration) ))
 
     def run(self):
+        """ plays the notes programmed"""
         for sound in self.melody:
             sound.start()
             time.sleep(sound.duration)
 
     def note_to_frequency(self,note):
+        """ converts a note name to a frequency"""
         if (len(note)== 2):
             # natural note
             name = note[0]
@@ -104,9 +108,7 @@ class Melody:
 
 
 if __name__ == "__main__":
-
-    #score = {'440':0.25,'880':0.25,'1320':0.25}
-    #score = {'C#4':0.25,'E#4':0.25,'G#4':0.25}
+    # Testing
     score = [('E4',0.66),
              ('G#4',0.33),
              ('A4',0.33),

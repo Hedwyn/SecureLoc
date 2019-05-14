@@ -30,6 +30,9 @@ def read_config(configname = DEFAULT_CONF):
 		for line in f:
 			names = line.split()
 			i = 0
+			if (line[0] == '#'):
+                                # the line is commented
+                                continue
 			for name in names:
 				if (i == 0):
 					# Rasp hostname
@@ -152,16 +155,16 @@ def local_flash(hostname,username,password,anchors_list):
 		# flashing the anchors in anchor_list
 		for anchor in anchors_list:
 			print("flashing anchor " + anchor + "..." )
-			(stdin, stdout, stderr) = ssh.exec_command('nohup /home/pi/Desktop/teensy_loader_cli -mmcu=mk20dx256 -w -v ' + '/home/pi/Desktop/anchor' + anchor + '.hex')
+			(stdin, stdout, stderr) = ssh.exec_command('nohup /home/pi/Desktop/teensy_loader_cli -mmcu=mk20dx256 -s -v ' + '/home/pi/Desktop/anchor' + anchor + '.hex')
 			stdout.channel.recv_exit_status()
-			print('nohup ~/Desktop/teensy_loader_cli -mmcu=mk20dx256 -w -v ' + '~/Desktop/anchor' + anchor + '.hex')
+			
 			
 			for line in stdout.readlines():
 				print(line)
 			print("flashed !")
 			
 def local_clean(hostname,username,password):
-	"""triggers anchor flashing on the given rasp host"""
+	"""cleans the local hex files on the target hostname"""
 	#starting ssh client
 
 	#with paramiko.SSHClient() as ssh:
@@ -228,8 +231,14 @@ if __name__ == "__main__":
 	#local_flash('Rasp1','pi','raspberry',['A'])
 	
 	#global_clean('config2.txt')
-	deploy_hex_files('config2.txt')
-	global_flash('config2.txt')
+	
+    
+        
+    deploy_hex_files('config2.txt')
+    global_flash('config2.txt')
+    #clean()
+    #compilation(1)
+        
 	
 	
  

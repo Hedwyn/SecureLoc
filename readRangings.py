@@ -220,6 +220,7 @@ class Rangings:
 
 
 if __name__=="__main__":
+    # Testing
     rangings = Rangings('2018-11-20__14h49m11s.json')
     rangings.get_metadata()
     rangings.get_anchors()

@@ -53,9 +53,9 @@ class jsonLogs:
             dataset = ''
             # checking if a termination string has been sent
             while(dataset != 'stop'):
-                print('waiting for data...')
+                d_print('[JSON THREAD] waiting for data...')
                 dataset = self.pipe.recv()
-                print('data received !')
+                d_print('[JSON THREAD] data received !')
                 # dumping the dataset to json file
                 if (dataset != 'stop'):
                     json.dump(dataset, f)
@@ -98,6 +98,8 @@ class jsonLogs:
             
             with open(self.filename) as f:
                 for line in f:
+                    if line == '\n':
+                        continue
                     json_data = json.loads(line)
                     # ignoring metadata
                     # metadata are read by read_metadata method
@@ -119,26 +121,19 @@ class jsonLogs:
             data = []
             with open(self.filename) as f:
                 for line in f:
+                    if line =='\n':
+                        continue
                     json_data = json.loads(line)
-                    # ignoring metadata
-                    # metadata are read by read_metadata method
+                    # reading only metadata
+                    
                     if ("metadata" in json_data):                
                         data.append(json_data)
                     
         return(data)                
    
-        
-        
-
-            
-            
-
-
     
 if __name__ == "__main__":
-    #testing
-    
-    
+    #testing   
     dataset1 = dataset(100,'TWR','A','3',50,[1,5],90)
     dataset2 = dataset(101,'TWR','A','3',49,[1,4],88)
     log1 = jsonLogs( 'test.json','log_test','no comment')
@@ -160,20 +155,7 @@ if __name__ == "__main__":
     data = log1.read_metadata()
     print(data)
  
-    
-    
-   
-    
-    
-    #log1.write(dataset1)
-    #log1.read()
-    #print(json.dumps(dataset1.export() ))
-    #print(log1.read() )
-#    with open('13_09.json','r') as f:
-#        for line in f:
-#                print(f)
-        #data = json.load(f)
-     
+
         
         
        

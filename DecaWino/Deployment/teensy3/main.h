@@ -6,7 +6,7 @@
 
 //#define ANCHOR
 #include <DecaDuino.h>
-
+#define EXTENDED 1
 #define WAITTIME 100 // set frequency here 
 //#define _DEBUG_   //comment to disable debug mode
 #ifdef _DEBUG_
@@ -28,12 +28,13 @@
   #define RPRINTF(format, args...) ((void)0)
 #endif
 
-#define AIR_SPEED_OF_LIGHT 229702547.0
-//#define AIR_SPEED_OF_LIGHT 299700000.0
+#define ASCII_NUMBERS_OFFSET 48
+//#define AIR_SPEED_OF_LIGHT 229702547.0
+#define AIR_SPEED_OF_LIGHT 299700000.0
 #define DW1000_TIMEBASE 15.65E-12
-#define COEFF AIR_SPEED_OF_LIGHT*DW1000_TIMEBASE
+#define COEFF AIR_SPEED_OF_LIGHT*DW1000_TIMEBASE 
 
-#define X_CORRECTION 1.0000000
+#define X_CORRECTION 0.83
 //#define Y_CORRECTION 0.230000000 // correction de la ligne 96 du B ?
 #define Y_CORRECTION 0.000000000
 
@@ -59,6 +60,7 @@
 #define TWR_ENGINE_STATE_PREPARE_LOC 16
 
 #define TWR_ENGINE_STATE_INIT_OFFSET 17
+#define TWR_ENGINE_STATE_SERIAL 18
 
 #define TWR_MSG_TYPE_UNKNOWN 0
 #define TWR_MSG_TYPE_START 1

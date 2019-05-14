@@ -6,8 +6,7 @@ from parameters import *
 
 
 class MovingEntity(DirectObject):
-    """Class representing any entity that can move (i.e. which is not
-    an anchor)"""
+    """Moving tags"""
     def __init__(self, name, color='orange'):
         self.color = color
         self.name = name
@@ -19,7 +18,7 @@ class MovingEntity(DirectObject):
         # initializing to 0
         
         for x in range(0, POS_LIST_SIZE):
-            self.pos.append([0, 0, 0])
+            self.pos.append(DEFAULT_POS)
 
         # speed vector list needs SPEED_LIST-SIZE elements to avoid reading conflicts
         # initializing to 0
@@ -35,6 +34,7 @@ class MovingEntity(DirectObject):
 
         self.create_sphere()
         self.create_text()
+        
 
     def create_sphere(self):
         """Creates a sphere representing the robot in the 3D world"""
@@ -43,6 +43,7 @@ class MovingEntity(DirectObject):
         self.model.set_scale(0.1)
 
     def create_text(self):
+        """Generates the label of the anchor"""
         self.label = TextNode('anchor label {}'.format(self.name))
         self.label.set_text("x:"+str(self.get_pos()[0])+" y:"+str(self.get_pos()[1])+" z:"+str(self.get_pos()[2]))
         self.label.set_card_decal(True)
@@ -51,9 +52,11 @@ class MovingEntity(DirectObject):
         self.label_np.set_pos(float(self.get_pos()[0]-0.1), float(self.get_pos()[1]+0.2), float(self.get_pos()[2]))
         self.label_np.set_scale(0.2)
         self.label_np.look_at(-base.cam.get_x(), -base.cam.get_y(), -base.cam.get_z())
+        #self.show()
         taskMgr.add(self.update_text_task, 'update text {}'.format(self.name))
 
     def update_text_task(self, task):
+        """Modifies the text above the anchor"""
         (x,y,z) = self.get_pos()
         (a,b,c) = self.get_coord(x,y,z)
         self.label_np.look_at(-base.cam.get_x(), -base.cam.get_y(), -base.cam.get_z())
@@ -70,7 +73,8 @@ class MovingEntity(DirectObject):
 
     
     def get_coord(self,x,y,z):
-        """returns the coordinates of the robot on a tiled floor"""
+        """returns the coordinates of the robot on a tiled floor. 
+        The size of the tiles should be specified in parameters"""
         a = 0
         b = 0
         c = 0
@@ -116,6 +120,7 @@ class MovingEntity(DirectObject):
             self.shown = False
     
     def split_pos(self, position):
+        """graphical function; displays robot position"""
         result = ""
         x = 0
         for i in position:
@@ -149,17 +154,6 @@ class MovingEntity(DirectObject):
 
         self.pos.append(pos)
 
-#    def replace_pos(self,pos):
-#        self.pos.pop(POS_LIST_SIZE -1)
-#        self.pos.append(pos)
-#    def replace_speed(self,speed):
-#        self.speed_vector.pop(SPEED_LIST_SIZE -1)
-#        self.pos.append(speed)
-#
-#
-#    def replace_acc(self,acc):
-#        self.pos.pop(ACC_LIST_SIZE -1)
-#        self.pos.append(acc)
 
     def display_pos(self):
         """ displays the robot position in th 3D engine"""

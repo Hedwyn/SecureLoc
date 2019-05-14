@@ -5,19 +5,10 @@ from application import *
 from Filter import Filter
 from parameters import *
 import math
-
-
-threshold = -0.5
-ITERATE = True
-TwoD = False
-RANDOM_SEARCH = False
-
-
-
-
-
-
-
+import operator
+from GaussNewton import *
+import numpy as np
+import sympy as sp
 
 
 
@@ -92,21 +83,7 @@ class World:
                 
         return(anchors_name)
             
-    def gen_bots_id(self, nb_bots):
-        """generates a list of anchors id for the given total number of anchors"""
-
-        bots_id = []
-        rootid = '000100020003'
-        for i in range(nb_bots):
-            # generates successive letters starting from A
-            if (i > 9):
-                idb = rootid  + '00' + str(i)
-            else:
-                idb = rootid + '000' + str(i)
-                
-            bots_id.append(idb)
-                
-        return(bots_id)        
+     
             
             
     def get_target(self,robot):
@@ -116,11 +93,14 @@ class World:
     def update_anchor(self, name: str, distance: float,robot_id,options = None):
         """Updates distance between anchor and robot.
            Note that anchors names should be unique for this to work"""
+        
         for anchor in self.anchors:
             if anchor.name == name:
                 
+                
                 anchor.update_rangings(distance,robot_id)
                 anchor.set_raw_distance(distance,robot_id)
+                
 
                 if (options == "SW"):
                     # sliding window enabled
@@ -130,8 +110,10 @@ class World:
                     
                     
                     anchor.set_distance(filtered_distance,robot_id)
+                    
                 else:
                     anchor.set_distance(distance,robot_id)
+                    
                     
                     
                     
@@ -160,7 +142,7 @@ class World:
         return(distance)
 
     
-    def mmse(self,rangings,pos):
+    def mse(self,rangings,pos):
         """ Calculates the Mean Square Error of the given position.
         Error is defined as the difference between the ranging of the given position and the given rangings"""
      
@@ -179,33 +161,66 @@ class World:
 
         return(mean_error)
 
+    def gauss_newton(self,rangings,start_pos):
+        """applies Gauss-Newton on the set of rangings to find the tag's position. Uses the given position as starting point"""
+        xvals= []
+        yvals = []
+        zvals = []
+        # squaring the ranging to avoid computing square root in GN algorithm. This reduces the computation load. 
+        sq_rangings = [pow(ranging,2) for ranging in rangings]
+        
+        if RANDOM_SEARCH:
+            start_pos = DEFAULT_POS
+        
+        # getting the anchors coordinates
+        for anchor in self.anchors:
+            xvals.append(anchor.x)
+            yvals.append(anchor.y)
+            zvals.append(anchor.z)
+        #print("xvals: " + str(xvals))
+        #print("yvals: " + str(yvals))
+        
+        # creating the dataset
+        rangings_ds = GNdataset(
+               name = "Rangings",
+               expr = "((x-b1)**2 + (y-b2)**2 + (z-b3)**2)",
+            symbols = sp.symbols("x y z b1:4"),
+              xvals = np.array(xvals),
+              yvals = np.array(yvals),
+              zvals = np.array(zvals),
+              rangingvals = np.array(sq_rangings),
+              cvals = None,
+             starts = np.array((start_pos,))
+        )
+        
+        # solving Gauss-Newton
+        # Warning: Default parameters are used here; refer to GaussNewton class. 
+        sol, its = rangings_ds.solve(rangings_ds.starts[0])
+        v_print("Gauss-Newton solution: " + str(sol))
+        sol = tuple(sol)
+        mse = self.mse(rangings,sol)
+        
+        return(sol,mse)
 
 
-    def iterate(self,start_pos,rangings):
+    def iterate(self,rangings,start_pos):
         """ Finds the minimum MSE in the neighborhood of start_pos and repeats the process from that new position"""
         
         step = 0.01
-        # getting solution from basic multilateration
-        pos = start_pos
-
         # starting from the center if random search is enabled
         if (RANDOM_SEARCH):
-            NB_STEPS = 20
-            pos = (0.9,2.4,0)
-        else:
-            NB_STEPS = 5
-        
-        
+            
+            start_pos = DEFAULT_POS #center of the platform
 
+        # starting iterations
         k = 0
-        v_print("pos before :" + str(pos) )
+        pos = start_pos
         while (k < NB_STEPS ):
             (x,y,z) = pos
             
-            v_print("\n\n" + "current position :" + str(pos) )
-            # choosing direction
-
-            
+            v_print("position at iteration " + str(k) + ":\n:" + str(pos) )
+           
+            # choosing direction            
             directions = []
             for i in range(-10,11):
                 for j in range(-10,11):
@@ -217,7 +232,7 @@ class World:
             for (i,direction) in enumerate(directions):
                 
 
-                error = self.mmse(rangings, direction)
+                error = self.mse(rangings, direction)
                 mean_squared.append(error)
                 #v_print("mean squared for " + name_directions[i] + ": " + str(error))
 
@@ -232,114 +247,174 @@ class World:
 
             pos = directions[min_idx]
             k += 1
-
-        v_print("pos after:" + str(pos) )
-
-
-        d_print("pos mmse :" + str(ms) )
+        v_print("MSE :" + str(ms) )
 
         return(pos,ms)
 
     def localize(self,target):
         """localizes the given target"""
-        
-        (bary_pos,solutions) = self.multilateration_2D(target)
-        
-        solutions_list = []
-        
-
         rangings = []
         # getting ranging values from anchors
         for anchor in self.anchors:
-            distance = anchor.get_distance(target)
-            rangings.append(distance)
-            
-        if not(ITERATE):
-            v_print("Barycentric solution")
-            #self.update_correction(rangings,solution)
-            return(bary_pos)
+            distance = anchor.get_distance(target)                       
+            rangings.append(distance)       
 
-
+        # trilateration-based solutions
         
-        minimum = 1000
-        min_idx = 0
-
-
-        
-        (ite_pos, ite_ms) =  self.iterate(bary_pos,rangings)
-        bary_ms = self.mmse(rangings,bary_pos)
-        v_print("mse ite" + str(ite_ms)) 
-        v_print("mse bary" + str(bary_ms) )
-        (a,b,c) = ite_pos
-        (d,e,f) = bary_pos
-        #coef_bary = 0
-        # scoef_ite = 1.0
-
-        coef_bary =  (1 / bary_ms) / ( (1/bary_ms) + (1/ite_ms) ) 
-        coef_ite = (1 / ite_ms) / ( (1/bary_ms) + (1/ite_ms) )
-                            
-        x = coef_ite * a + coef_bary * d
-        y = coef_ite * b + coef_bary * e
-        z = coef_ite * c + coef_bary * f
-        pondered_pos = (x,y,z)
-        predicted_pos = self.predict_pos(self.target)
-        solutions_list.append(bary_pos)
-        solutions_list.append(ite_pos)
-        solutions_list.append(pondered_pos)
-        #for solution in solutions:
-        #    solutions_list.append(solution)
-        current_pos = self.target.get_pos()
-        #next_pos = self.chose_closest_solution(solutions_list,current_pos)
-        self.update_correction(rangings,current_pos)
-        return(pondered_pos)
-
-    def trilateration_2D(self,anchor,Rx,Ry):
-        """Computes the relative tag position  to the given anchor(X) and its right neighbor(Y). Rx/y denote the distance to both anchors.
-            Calculation is based on Pythagora's theorem and is done in 2D"""
-        # computing trilateration with anchor and its right neighbor
-        # getting the distances between both both anchors
-        dx = self.anchors[3].x
-        dy = self.anchors[1].y
-
-
-        if ( (anchor.name == '1') or (anchor.name == '3') ):
-            distance = dx
+        if len(self.anchors) < 2:
+            raise TooFewAnchors("There are not enough anchors")
+        elif len(self.anchors) == 2:
+            print("Only two anchors for position computation. Assuming that the tag is on the positive part of the y axis")
+            wc_solution = self.trilateration(target,self.anchors[0], self.anchors[1])[0]
         else:
-            distance = dy
-        
-        if (Rx < 0):
-            Rx = 0
-        if (Ry < 0):
-            Ry = 0
-            
-        X = (pow(Rx,2) - pow(Ry,2) + pow(distance,2)) / (2 * distance)
-        if (X < 0):
-            X = 0
-        if (pow(Rx,2) - pow(X,2) <= 0 ):
-            Y = 0
+            solutions = []
+            solutions_mse = []                                    
+            for i,anchor in enumerate(self.anchors):
+                j = i + 1
+                while j < len(self.anchors):                
+                    # finding which of the two solution is the most likely one
+                    (s,mse) = self.trilateration(target,self.anchors[i], self.anchors[j])
+                    solutions.append(s)
+                    solutions_mse.append(mse)
+                    j += 1
+           
+                mse_inv = [1/x for x in solutions_mse]
+                mse_sum = sum(solutions_mse)
+                mse_inv_sum = sum(mse_inv)
+                        
+                centroid = (0,0,0)
+                weighted_s = (0,0,0)
+                tuple(map(operator.add, centroid, weighted_s))
+                
+                for idx,s in enumerate(solutions):
+                    # mapping the + operation on tuples to a dimension by dimension sum 
+                   
+                    
+                    weight = mse_inv[idx] / mse_inv_sum
+                    weighted_s = (weight * coord for coord in s)
+                    centroid = tuple(a + b for a,b in zip(centroid,weighted_s) )
+
+                
+        # checking which localization method is enabled
+        if (GN):
+            pos,mse = self.gauss_newton(rangings,centroid)
+        elif (ITERATIVE):
+            pos,mse = self.iterate(rangings,centroid)
         else:
-            Y = math.sqrt( pow(Rx,2) - pow(X,2) )
+            # defaulting to weighted centroid
+            pos,mse = centroid,mse_sum
             
 
-        coordinates_change = [(X,Y),(Y, dy - X),(dx - X,dy - Y),( dx - Y,X)  ]
-        anchors = ['1','2','3','4']
-        (x,y) = coordinates_change[anchors.index(anchor.name)]
-        #print(X,Y)
-        #print(distance)
-
-        #print("anchor : " + anchor.name + " Rx : " + str(Rx) + "Ry :  " + str(Ry) + "pos " + str((x,y) ) )
-
-        return(x,y)
-
+        (x,y,z) = pos
+        anchors_mse = {}
+        
+        # calculating the MSE of each anchor
+        for idx,anchor in enumerate(self.anchors):
+            anchors_mse[anchor.name] = pow(self.ranging(x,y,z,idx) - anchor.get_distance(target),2)         
+            
+        
+        return(pos,mse,anchors_mse)
+        
+    def trilateration(self,target,anchor1,anchor2, mode = '2D'):
+        """computes the trilateration of target based on the rangings from anchor 1 and 2.
+        Two solutions are obtained based on Pythagora's theorem, both are returned"""
+        pos1 = (anchor1.x, anchor1.y, anchor1.z)
+        pos2 = (anchor2.x, anchor2.y, anchor2.z)
+        
+        # getting the distance between both anchors
+        base = self.get_distance(pos1, pos2)
+        
+        # applying Pythagora on the triangle (anchor1, anchor 2, target)
+        # considering the cartesian system of {anchor 1 (0,0);anchor 2 (0, base) }
+        # calculating dx = x and dy = |y| with (x,y) the tag's coordinates in the cartesian system of (anchor1, anchor 2)
+        r1 = anchor1.get_distance(target)
+        r2 = anchor2.get_distance(target)
+        
+        
+        dx = ( pow(r1,2) - pow(r2,2) + pow(base,2) ) / ( 2 * base)
+        
+        # if the rangings have been perturbated a negative solution may be obtained
+        # zeroing dx and dy in that case
+        
+        if dx < 0:
+            dx = 0
+        
+        dy = pow(r1,2) - pow(dx,2)
+        if (dy < 0):
+            dy = 0
+        else:
+            dy = math.sqrt(dy)
+            
+        ##print("base, dx, dy " + str(base) + "\n" + str(dx) + "\n" + str(dy))
+            
+        # coordinate changes -> calculating the coordiantes in the global cartesian system
+        # vect_o denotes the vector from the origin to anchor 1;
+        # vect_a denotes the vector from anchor 1 to the tag
+        
+        if mode == '2D':
+            # z is assumed to be 0
+            # calculations are exclusively based on x,y
+            
+            # calculating vect_base_x and vect_base_y coordinates in the global cartesian system
+            vect_base_x  = [(anchor2.x - anchor1.x) / base,(anchor2.y - anchor1.y) / base ]
+            vect_base_y = [-vect_base_x[1], vect_base_x[0]]
+            
+            ##print("vecteurs bases " + str(vect_base_x) + str(vect_base_y))
+            
+            
+            vect_o = [anchor1.x, anchor1.y]
+            
+            # computing first solution
+            vect_a = [dx, dy]
+            ##print("vect_a" + str(vect_a))
+            s1 = [vect_base_x[0] * vect_a[0] + vect_base_y[0] * vect_a[1]   , vect_base_x[1] * vect_a[0] + vect_base_y[1] * vect_a[1] ]
+            ##print("s1" + str(s1))
+            s1[0]+= vect_o[0]
+            s1[1]+= vect_o[1]
+            
+            # appending z coordinate
+            s1.append(0)
+            
+            
+            
+            # computing second solution
+            vect_a = [dx, -dy]
+            vect_a = [dx, dy]
+            s2 = [vect_base_x[0] * vect_a[0] + vect_base_y[0] * vect_a[1]   , vect_base_x[1] * vect_a[0] + vect_base_y[1] * vect_a[1] ]   
+            s2[0]+= vect_o[0]
+            s2[1]+= vect_o[1]           
+            # appending z coordinate
+            s2.append(0)  
+            
+            # determining which one of the two solution is the right one based on MSE of the other rangings
+            rangings = []
+            for anchor in (self.anchors):
+                if anchor.name == anchor1.name or anchor.name == anchor2.name:
+                    continue
+                rangings.append(anchor.get_distance(target))
+            # converting solutions from list to tuple
+            s1 = tuple(s1)
+            s2 = tuple(s2)
+            
+            #comapring the mean sqaured error for both solution and picking the best one
+            mse1 = self.mse(rangings, s1)
+            mse2 = self.mse(rangings, s2)
+            if mse1 > mse2:
+                return(s2,mse2)
+            else:
+                return(s1,mse1)
+        elif mode == '3D':
+            raise NotImplementedError
+        else:
+            raise ValueError("The specifed mode does not exist")
+        
+      
     def update_correction(self,rangings,solution):
         """dynamically corrects the offset applied to the rangings, by comparing the received ranging value to the estimated one.
             The correction is based on a ratio of the difference between the two values"""
        
         global correction_offset
-
-        # parameters
-        #ratio = 0.002
-        ratio = 0
+        ratio = 0 # disabled
         # Noise estimation
         (x,y,z) = solution
         for idx in range (len(self.anchors)):
@@ -353,7 +428,7 @@ class World:
         
         
     def predict_pos(self,robot):
-        """estimates the position at next iteration based on tag's speed"""
+        """estimates the position at the next iteration based on tag's speed"""
         
 
         (X,Y,Z) = robot.get_pos()
@@ -376,97 +451,4 @@ class World:
 
         return(solutions_list[min_idx])
             
-            
 
-    def multilateration_2D(self,target):
-        """computes the target position through a 2D calculation. Z is assumed to be 0"""
-        rangings = []
-        solutions = []
-        anchors_list = []
-        
-        coeff = [0.2,0.2,0.2,0.4]
-       
-
-        
-        
-        i = 1
-       
-        for anchor in self.anchors:
-            rangings.append(anchor.get_distance(target))
-            # appending anchors 1 to 4 to anchors list for square multilateration
-            if (i < 5):
-                anchors_list.append(anchor)
-            i+=1
-                
-                
-        # getting the rangings for the square centroid
-        [Ra,Rb,Rc,Rd] = [rangings[0], rangings[1], rangings[2], rangings[3]]
-        anchors = anchors_name
-
-        for (idx,anchor) in enumerate(anchors_list):
-            (Rx,Ry) =( rangings[idx],rangings[(idx - 1) % 4] )
-            (x,y) = self.trilateration_2D(anchor,Rx,Ry)
-            solutions.append( (x,y,0) )
-
-
-
-         # coeff calculation
-        mmse = []
-        sum_inv_mmse = 0
-        for solution in solutions:
-            error = self.mmse(rangings,solution)
-            mmse.append(error )
-            sum_inv_mmse += 1 / error
-
-        for (idx,error) in enumerate(mmse):
-            coeff[idx] = (1/error) / sum_inv_mmse
-        
-        
-        
-        
-            
-            
-
-        coeff = [0.25,0.25,0.25,0.25] 
-        mean_x = 0
-        mean_y = 0
-       
-
-        for idx,solution in enumerate(solutions):
-            (x,y,z) = solution
-            mean_x += x * coeff[idx]
-            mean_y += y * coeff[idx]
-        final_solution = (mean_x,mean_y,0)
-        
-            
-        #return( (solutions[3],solutions) )
-        return((final_solution,solutions))
-           
-            
-            
-            
-
-        
-        
-
-        
-        
-        
-                        
-        
-        
-        
-
-           
-
-
-    @staticmethod
-    def order_anchors(anchors: list) -> list:
-        """Regenerate anchors list to always have anchors in a easy-to-work
-        order"""
-        return anchors
-
-
-
-
-#testing
