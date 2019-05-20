@@ -25,8 +25,11 @@ class World:
         self.shown = False
         self.create_grid()
         self.create_anchors()
+
         
 
+        
+            
     def create_grid(self):
         """Create the ground grid"""
         format = GeomVertexFormat.getV3()

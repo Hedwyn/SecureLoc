@@ -1,14 +1,19 @@
 from serial import *
 import keyboard
 
-SERIALPATH = 'COM29'
+SERIALPATH = 'COM18'
 LOGS = 'SnifferLogs.txt'
 exit_flag = False
 line = ''
 
 
 with open(LOGS,'w+') as f:
-    port = Serial(SERIALPATH)
+    try:
+        port = Serial(SERIALPATH)
+    except:
+        print("unable to open Serial port")
+        
+        
     while not(exit_flag):
         try:
             if port.in_waiting > 0:

@@ -479,6 +479,7 @@ class Application(ShowBase):
         (pos,mse,anchors_mse) = self.world.localize(robotname)
         self.menu.update_mse(mse)
        
+       
 
         # applying saturation filter
         robot.set_pos(pos)

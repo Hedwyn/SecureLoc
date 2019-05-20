@@ -1,8 +1,11 @@
 from tkinter import *
+import tkinter as tk
+from tkinter import ttk
 from threading import Thread
 import time as time
 from parameters import *
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import sys
    
     
@@ -19,21 +22,31 @@ class Menu(Thread):
         self.mse = None
 
         self.start()
-        self.hidden = False
-
+        self.hidden = True
+        self.frame = None
+        self.MSE = []
+        self.canvas = None
         
-      
 
+    def update_mse(self,mse):
+        self.MSE.append(mse)
+        if len(self.MSE) == 20:
+            self.MSE.pop()
+        
+       
+        
+               
+    
     def update_param(self,value,idx):
         """handler for rangings correction parameters updating"""
         global correction_coeff
         global correction_offset
         
 
-        if (idx < 4):
+        if (idx < len(correction_coeff)):
             correction_coeff[ anchors_labels[idx] ] = float(value)
-        elif(idx < 8):
-            correction_offset[ anchors_labels[idx - 4 ]] = float(value)
+        elif(idx < 2 * len(correction_coeff)):
+            correction_offset[ anchors_labels[idx - len(correction_coeff) ]] = float(value)
         else:
             # acceleration
             
@@ -47,13 +60,9 @@ class Menu(Thread):
         """Initializes Tkinter window, scales & buttons"""
         
         self.root = Tk()
-
-
-
         
         # Window configuration
         self.root.configure(background = "#dcecf5")
-
 
         # creating display button
         display_button = Button(self.root, text = "Corrections",background = "#dcecf5", command = self.display_corrections)
@@ -78,11 +87,15 @@ class Menu(Thread):
                 # correction offset initialization
                 self.scale[i].set( correction_offset[ anchors_labels[i - 4] ] )
 
-            self.scale[i].pack(anchor = CENTER)
+            #☺self.scale[i].pack(anchor = CENTER)
             
         # creating reset button
         reset_button = Button(self.root, text = "Reset",background = "#dcecf5", command = self.reset)
         reset_button.pack()
+        
+        # creating show MSE button
+        graph_button = Button(self.root, text = "Show MSE",background = "#dcecf5", command = self.show_MSE)
+        graph_button.pack()
 
 
         
@@ -91,15 +104,11 @@ class Menu(Thread):
             accel_button = Scale(self.root, variable = acceleration, label = "Playback Speed",
                                     length = 200, orient = HORIZONTAL, from_ = 0.5 , to = 50,
                                     digits = 4, resolution = 0.5,background = "#dcecf5",
-                                    command = lambda value,idx = 8 : self.update_param(value,idx) )
+                                    command = lambda value,idx = (2 * len(correction_coeff)) : self.update_param(value,idx) )
             accel_button.set(ACCELERATION)
             accel_button.pack()
-            
-  
-
-
-        
-       
+              
+              
         self.root.mainloop()
      
         
@@ -114,23 +123,26 @@ class Menu(Thread):
                 s.pack_forget()
             self.hidden = True
             
-
-
-
-
-
-        
-    def update_mse(self,mse):
-        """updates MSE of the last localization"""
-        self.mse = mse
-        self.root.update_idletasks()
-        
-
+            
+    def show_MSE(self):
+        # deleting old frame
+        if self.frame is not(None):
+            self.frame.destroy()
+        self.frame = Frame(self.root,width=100,height=100)
+        f = plt.Figure(figsize=(5,5), dpi=100)
+        a = f.add_subplot(111)
+        a.plot([i for i in range(len(self.MSE))],self.MSE)        
         
 
+        
+        self.canvas = FigureCanvasTkAgg(f, self.frame)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+        
+        self.frame.pack()
+        
+            
        
-
-        
     def space(self):
         """draws a seperator"""
         separator = Frame(width=500, height=4, bd=1, relief=SUNKEN)

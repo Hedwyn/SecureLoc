@@ -89,14 +89,11 @@ DEFAULT_ACC_THOLD = 10 #THold for SAT filter
 STEP = 1 # Steps for SAT filter
 
 
-# correction factors
-CORRECTION_COEFF = {'01': 1.,'02':  1.,'03': 1.,'04':1.}
-CORRECTION_OFFSET = {'01':0.,'02':0.,'03':0.,'04':0.}
+# correction default factors
+correction_coeff = {'01': 1.,'02':  1.,'03': 1.,'04':1.}
+correction_offset = {'01':0.,'02':0.,'03':0.,'04':0.}
 
-correction_coeff = {'01': 1.,'02':  1.,'03': 1.,'04':1.,'05':1.,'06':1.,'07':1.,
-                    '08':1.,'09':1.,'10':1.,'11':1.,'12':1.,'13':1.,'14':1.,'15':1.,}
-correction_offset = {'01':0.,'02':0.,'03':0.,'04':0.,'05':0.,'06':0.,'07':0.,
-                    '8':0.,'9':0.,'10':0.,'11':0.,'12':0.,'13':0.,'14':0.,'15':0.}
+
 
 ## Menu parameters
 

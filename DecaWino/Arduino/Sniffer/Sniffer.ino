@@ -5,7 +5,8 @@
 AES aes ;
 
 
-
+#define DISPLAY_TIMESTAMPS 0
+#define TIMEOUT 6
 //#define _DEBUG_  
 #ifdef _DEBUG_
   #define DPRINTFLN  Serial.print
@@ -29,7 +30,7 @@ AES aes ;
 
 #define TWR_ENGINE_STATE_INIT 1
 #define TWR_ENGINE_STATE_RX_ON 2
-#define TWR_ENGINE_STATE_WAIT_FRAME 3
+#define TWR_ENGINE_STATE_WAIT_POLL 3
 #define TWR_ENGINE_STATE_MEMORISE_TIMESTAMP 4
 #define TWR_ENGINE_STATE_SEND_ACK 5
 #define TWR_ENGINE_STATE_WAIT_SENT 6
@@ -39,6 +40,9 @@ AES aes ;
 #define TWR_ENGINE_STATE_ENCRYPTION 10
 #define TWR_ENGINE_STATE_SERIAL 11
 #define TWR_ENGINE_STATE_SWITCH_RX_PARAMETERS 12
+#define TWR_ENGINE_STATE_ANSWER 13
+#define TWR_ENGINE_STATE_WAIT_FINAL 14
+#define TWR_ENGINE_STATE_REPORT 15
 
 #define TWR_MSG_TYPE_UNKNOWN 0
 #define TWR_MSG_TYPE_START 1
@@ -46,12 +50,13 @@ AES aes ;
 #define TWR_MSG_TYPE_DATA_REPLY 3
 
 #define TIME_SHIFT 500
-#define MAX_STACK_SIZE 100
+#define MAX_STACK_SIZE 20
 
 //control parameters for Swtich RX
 #define SWITCH_PLENGTH 0
 #define SWITCH_CHANNEL 0
 #define SWITCH_PCODE 0
+#define SWITCH_RX (SWITCH_PLENGTH ||SWITCH_CHANNEL || SWITCH_PCODE)
 
 #define PLENGTH_SWITCH_DELAY 4000
 #define PREAMBLE_SWITCH_DELAY 2000
@@ -63,52 +68,82 @@ AES aes ;
 #define PCODE_LIST_SIZE 20
 
 #define CHANNEL_LIST_SIZE 5
+#define TWR_POLL 0x01
+#define TWR_ANSWER 0x02
+#define TWR_FINAL 0x03
+#define TWR_REPORT 0x04
+
+#define DEFAULT_PRESSURE 1013
+#define DEFAULT_TEMP 25
+#define DEFAULT_ASL 0
+
+
+// Report struct
+typedef struct report_payload{
+  uint8_t pollRx[5];      // R1 timestamp
+  uint8_t answerTx[5];    // T2 timestamp
+  uint8_t finalRx[5];     // R3 timestamp
+ 
+  float pressure;         // Pressure measurement at the anchor
+  float temperature;      // Temperature of the pressure sensor
+  float asl;              // Above Sea Level altitude
+  uint8_t pressure_ok;    // Not 0 if the pressure information is correct
+}__attribute__((packed)) report_payload;
 
 typedef struct stack{
   uint64_t val[MAX_STACK_SIZE];
   int top;
 }stack;
 
-/* initializing timestamps stack */
+// initializing report payload
+report_payload report;
 
+
+// initializing timestamps stack 
 stack timestamps;
 
 
 
-uint64_t ts;
+uint64_t R1,T2,R3,picoclk_marker;
+
 
 DecaDuino decaduino;
 uint8_t txData[128];
-uint8_t rxData[128],serialData[128];
-
+uint8_t rxData[128],pollData[128],finalData[128];
+uint8_t mac_header[5] = {65,220,0,207,188};
 uint16_t rxLen;
 byte IdRobotRx [8]; //Id robot reçue
 byte IdAncre [8];   //Id de l'ancre émettrice 
-int state,serialFlag;
-int plengthClk,pcodeClk,channelClk,currentPLength = MIN_PLENGTH,currentPcode = 1,currentChannel = 0;
+int state,serialFlag,pollFlag,finalFlag;
+int plengthClk,pcodeClk,channelClk,currentPLength = MIN_PLENGTH,currentPcode = 1,currentChannel = 0,marker,teensy_clk,seq;
+bool received =  false;
 
 
 
+void encodeUint64On5Bytes(uint64_t from, uint8_t *to) {
+  int check_val = 0;
+  int pwr = 1;
+  for (int i = 0; i <5; i++) {
+    to[i] = (uint8_t) ( (from >> (32 - 8 * i))& 0x00000000000000FF );
+  }
 
-char * hex = "0123456789abcdef" ;
+  // check
+  /*
+  Serial.println("Encoding check:");
+  Serial.println((int) from);
+  for (int i = 0;i <5; i++) {
+   
+    check_val += (int) (to[4 - i] * pwr);
+    pwr *= 256;  
+  }
+  Serial.println(check_val);
+  */
+  
 
-
-void print_value (char * str, byte * a, int bits)
-{
-  Serial.print (str) ;
-  bits >>= 3 ;
-  for (int i = 0 ; i < bits ; i++)
-    {
-      byte b = a[i] ;
-      Serial.print (hex [b >> 4]) ;
-      Serial.print (hex [b & 15]) ;
-    }
-  Serial.println () ;
 }
 
-float return_clk_in_s(uint64_t ts) {
-  return((float) ts * DW1000_TIMEBASE);
-}
+
+
 
 
 /**
@@ -130,7 +165,7 @@ void setup() {
   //use pin 14 for A and B by uncommenting code lines above
   if ( !decaduino.init() ) {                    //En cas d'erreur on fait clignoter la LED
     error=decaduino.init();
-    print_value("ID receive = ", &error, 64); 
+   
     while(1) {
       digitalWrite(13, HIGH); 
       delay(50);    
@@ -139,10 +174,14 @@ void setup() {
     }
   
   }
-  decaduino.setPreambleLength(2048);
+  decaduino.setPreambleLength(64);
   decaduino.setRxPcode(9);
   decaduino.setRxPrf(2);
+  decaduino.setTxPcode(9);
+  decaduino.setTxPrf(2);
   decaduino.setDrxTune(64);
+  decaduino.setSfdTimeout(128);
+  decaduino.setPACSize(8);
   //ledecaduino.setTBR(110);
   
 
@@ -166,7 +205,8 @@ void setup() {
 
 
   //decaduino.setDrxTune(64);
-  state = TWR_ENGINE_STATE_INIT;
+  //state = TWR_ENGINE_STATE_INIT;
+  state = TWR_ENGINE_STATE_RX_ON;
   randomSeed(decaduino.getSystemTimeCounter());
 }
 
@@ -190,47 +230,85 @@ void loop() {
  */
 
     case TWR_ENGINE_STATE_RX_ON:
+      //decaduino.plmeRxDisableRequest();
       decaduino.plmeRxEnableRequest();
+      
       if (serialFlag) {
         state = TWR_ENGINE_STATE_SERIAL;
+        Serial.println("\nRX ON time:");
+        Serial.println((double) ((decaduino.getSystemTimeCounter() - picoclk_marker) * 15.65E-6));
       }
       else {
-        state = TWR_ENGINE_STATE_SWITCH_RX_PARAMETERS;
+        if (SWITCH_RX) {
+          state = TWR_ENGINE_STATE_SWITCH_RX_PARAMETERS;
+        }
+        else {
+          state = TWR_ENGINE_STATE_WAIT_POLL;
+        }
+       
       }
       break;
 
     case TWR_ENGINE_STATE_SERIAL:
       Serial.println("New UWB frame received:");
-      for (int i = 0; i < 45; i++) {
-        Serial.print((int) serialData[i]);
-        Serial.print("|");
-        
+
+      if (pollFlag) {
+        for (int i = 0; i < 45; i++) {
+          Serial.print((int) pollData[i]);
+          Serial.print("|");
+          
+        }
+        Serial.println();
+        pollFlag = 0;
       }
-      Serial.println();
+
+      if (finalFlag) {
+        for (int i = 0; i < 45; i++) {
+          Serial.print((int) finalData[i]);
+          Serial.print("|");
+          
+        }
+        Serial.println();
+        finalFlag = 0;
+      }
+
+
+   
       // printing timestamps in s
       /*
       Serial.println("Timestamps stack [raw]:");
       Serial.print("{");
       for (int i = 0; i < timestamps.top;i ++) {       
-        Serial.print(return_clk_in_s(timestamps.val[i]) );
+        Serial.print((double) (15.65 * 10E-12 * timestamps.val[i]) );
         Serial.print(";");       
       }
       Serial.println("}");
       */
+      
       // printing timestamps (raw clock value)
-      Serial.println("Timestamps stack [raw]:");
-      Serial.print("{");
-      for (int i = 1; i < timestamps.top;i ++) {       
-        Serial.print((int) (timestamps.val[i]- timestamps.val[i-1])  );
-        Serial.print(";");       
+      if (DISPLAY_TIMESTAMPS) {
+        Serial.println("Timestamps stack [raw]:");
+        Serial.print("{");
+        for (int i = 1; i < timestamps.top;i ++) {       
+          Serial.print((double) (15.65 * 10E-12 *  (timestamps.val[i]- timestamps.val[i-1]))  );
+          Serial.print(";");       
+        }
+        Serial.println("}");
       }
-      Serial.println("}");
-
-      state = TWR_ENGINE_STATE_SWITCH_RX_PARAMETERS;
+     
+      if (SWITCH_RX) {
+        state = TWR_ENGINE_STATE_SWITCH_RX_PARAMETERS;
+      }
+      else {
+        state = TWR_ENGINE_STATE_WAIT_POLL;
+        Serial.println("Serial time:");
+        Serial.println((double) ((decaduino.getSystemTimeCounter() - picoclk_marker) * 15.65E-6));
+        
+      }
       break;
       
 /**
- * Etat TWR_ENGINE_STATE_WAIT_FRAME : 
+ * Etat TWR_ENGINE_STATE_WAIT_POLL : 
  * on attends un message start de la part d'une ancre. Si on en reçoit un,
  * on récupère l'Id de l'ancre éméttrice, Id du robot destinataire et on le compare au notre
  * La trame start se décompose comme ci dessous :
@@ -278,23 +356,50 @@ void loop() {
           state = TWR_ENGINE_STATE_RX_ON;
         }               
       }
-      state = TWR_ENGINE_STATE_WAIT_FRAME;
+      state = TWR_ENGINE_STATE_WAIT_POLL;
       break;
       
-    case TWR_ENGINE_STATE_WAIT_FRAME:           //On regardera ici si la donnée nous est destiné ou non 
+    case TWR_ENGINE_STATE_WAIT_POLL:           //On regardera ici si la donnée nous est destiné ou non 
       //Serial.println(millis() - plengthClk);
+      
       if ( decaduino.rxFrameAvailable() ) {
-        for (int i = 0; i < 128; i++) {  
-          serialData[i] = rxData[i];
-          serialFlag = 1;
+        
+        if ((rxData[21] = TWR_POLL) ) {//&& (rxData[5] == 1)) {
+          seq = rxData[22];          
+          Serial.println("Period time:");
+          Serial.println((double) ((decaduino.getSystemTimeCounter() - picoclk_marker) * 15.65E-6));
+          Serial.println("Period time [Duino]:");
+          Serial.println(millis() - teensy_clk);          
+          Serial.print("SEQ number:");
+          Serial.println(seq);
+          picoclk_marker = decaduino.getSystemTimeCounter();
+          teensy_clk = millis();
+          
+          for (int i = 0; i < 128; i++) {  
+            pollData[i] = rxData[i];
+            pollFlag = 1;
+            serialFlag |= pollFlag;
+          }
+  
+          state = TWR_ENGINE_STATE_MEMORISE_TIMESTAMP;
         }
-
-        state = TWR_ENGINE_STATE_MEMORISE_TIMESTAMP;
-            
+       else {
+        //state = TWR_ENGINE_STATE_RX_ON;
+        decaduino.plmeRxEnableRequest();
+        Serial.print("not the right target: ");
+        Serial.println(rxData[5]);
+       }
+           
       }
       else {
-        state = TWR_ENGINE_STATE_SWITCH_RX_PARAMETERS;
+        if (SWITCH_RX) {
+          state = TWR_ENGINE_STATE_SWITCH_RX_PARAMETERS;
+        }
+        else {
+          state = TWR_ENGINE_STATE_WAIT_POLL;
+        }
       }
+      
       
       
       break;
@@ -303,17 +408,138 @@ void loop() {
  * On enregistre l'heure de réception du message start
  */
     case TWR_ENGINE_STATE_MEMORISE_TIMESTAMP:
-      ts = decaduino.getLastRxTimestamp();           //On enregistre l'heure de réception
-      timestamps.val[timestamps.top] = ts;
-      if ( (timestamps.top == MAX_STACK_SIZE) || (timestamps.val[timestamps.top] < timestamps.val[0]) ) {
-        timestamps.top = 0;
-      }
-      else {
-        timestamps.top++;
+      R1 = decaduino.getLastRxTimestamp();           //On enregistre l'heure de réception
+      
+      Serial.println((double) ((picoclk_marker - R1) * 15.65 *10E-6));
+      if (DISPLAY_TIMESTAMPS) {
+        timestamps.val[timestamps.top] = R1;
+        if ( (timestamps.top == MAX_STACK_SIZE) || (timestamps.val[timestamps.top] < timestamps.val[0]) ) {
+          timestamps.top = 0;
+        }
+        else {
+          timestamps.top++;
+        }
       }
 
+      //state = TWR_ENGINE_STATE_ANSWER;
       state = TWR_ENGINE_STATE_RX_ON;
       break;
+
+    case TWR_ENGINE_STATE_ANSWER:
+      // header
+      for (int i =0; i <5; i++) {
+        txData[i] = mac_header[i];
+      }
+      // dest addr
+      for (int i = 0; i < 8; i++) {
+        txData[5 + i] = rxData[13 + i];
+        txData[13 + i] = rxData[5 + i];
+      }
+      txData[21] = TWR_ANSWER;
+      txData[22] = rxData[22];
+      Serial.println("Sending ANSWER...");
+      decaduino.pdDataRequest(txData,23);
+      while (!decaduino.hasTxSucceeded());
+      Serial.println("ANSWER success !");
+      T2 = decaduino.getLastTxTimestamp(); 
+      state = TWR_ENGINE_STATE_WAIT_FINAL;
+      marker = millis();
+      
+      break;
+
+    case TWR_ENGINE_STATE_WAIT_FINAL:
+      decaduino.plmeRxEnableRequest();
+      
+      // back to waiting for a poll if timeout
+      state = TWR_ENGINE_STATE_RX_ON;
+
+      // waiting for a final frame
+      received = false;
+      while ((millis() -  marker < TIMEOUT) && !received)  {
+        if (decaduino.rxFrameAvailable()) {
+          Serial.println("FINAL received !");
+          Serial.print("SEQ number:");
+          Serial.println(rxData[22]);       
+          if ( (rxData[21] = TWR_FINAL) && (seq == rxData[22]) ) {
+            received = true;
+            for (int i = 0; i < 128; i++) {  
+              finalData[i] = rxData[i];
+              finalFlag = 1;
+              serialFlag |= finalFlag;
+              state = TWR_ENGINE_STATE_REPORT;           
+            }
+          }
+          else {
+            // not a final frame. Back to Rx ON
+            Serial.println("Missed final frame OR wrong SEQ number");
+            state =  TWR_ENGINE_STATE_RX_ON;
+            received = true;         
+          }
+        }
+      }
+      break;
+    
+    case TWR_ENGINE_STATE_REPORT:
+      // header
+      for (int i =0; i <5; i++) {
+        //txData[i] = mac_header[i];
+        txData[i] = rxData[i];
+      }
+      // dest addr
+      for (int i = 0; i < 8; i++) {
+        txData[5 + i] = rxData[13 + i];
+        txData[13 + i] = rxData[5 + i];
+      }
+      txData[21] = TWR_REPORT;
+      txData[22] = rxData[22];
+      // Payload
+      report.pressure = DEFAULT_PRESSURE;
+      report.temperature = DEFAULT_TEMP;
+      report.asl = DEFAULT_ASL;
+      report.pressure_ok = 0;
+
+      // memorizing timestamp
+   
+      R3 = decaduino.getLastRxTimestamp();   
+      if (DISPLAY_TIMESTAMPS) {
+        timestamps.val[timestamps.top] = R3;
+        if ( (timestamps.top == MAX_STACK_SIZE) || (timestamps.val[timestamps.top] < timestamps.val[0]) ) {
+          timestamps.top = 0;
+        }
+        else {
+          timestamps.top++;
+        }
+      }
+      
+      encodeUint64On5Bytes(R1,report.pollRx);      
+      encodeUint64On5Bytes(T2,report.answerTx);
+      encodeUint64On5Bytes(R3,report.finalRx );
+      Serial.print("Timestamps :");
+      Serial.println( (int) R1);
+      Serial.println( (int) T2);
+      Serial.println( (int) R3);
+      Serial.println((double) ((R3 - R1) * 15.65 *10E-6));
+      // writing the payload to rxData
+      memcpy((void *) txData + 23,(void *) &report,28);
+     
+
+
+      Serial.println("Sending REPORT...");
+      Serial.println("Total time:");
+      Serial.println((double) ((decaduino.getSystemTimeCounter() - picoclk_marker) * 15.65E-6));
+      // 21 bytes header + 2 bytes (TYPE + SEQ) + 28 bytes payload = 51 bytes
+      decaduino.pdDataRequest(txData,51);
+      while (!decaduino.hasTxSucceeded());
+      Serial.println("REPORT success !");
+
+      state = TWR_ENGINE_STATE_RX_ON;
+
+      break;    
+      
+      
+
+      
+      
 
     default:
        state = TWR_ENGINE_STATE_INIT;
