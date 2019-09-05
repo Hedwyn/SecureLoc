@@ -5,9 +5,11 @@ import sys
 import os
 import threading
 
-HOST = '169.254.1.1'
-PORT = 1883 # default mqtt port            
-SERIALPATH = '/dev/ttyACM0'
+#HOST = '169.254.1.1'
+HOST = '127.1.1.1'
+PORT = 1883 # default mqtt port              
+#SERIALPATH = '/dev/ttyACM0'
+SERIALPATH = 'COM22'
 SERIAL_ROOT = '/dev'
 
 

@@ -1,7 +1,7 @@
 from serial import *
 import keyboard
 
-SERIALPATH = 'COM18'
+SERIALPATH = 'COM15'
 LOGS = 'SnifferLogs.txt'
 exit_flag = False
 line = ''

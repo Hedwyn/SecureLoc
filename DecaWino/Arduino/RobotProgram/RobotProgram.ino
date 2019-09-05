@@ -9,7 +9,7 @@ AES aes ;
  * En commentant les bonnes lignes on affiche les messages du Debug ou du fonctionnement normal
  */
 
-//#define _DEBUG_   //commenter cette ligne pour "supprimer" les print de test
+#define _DEBUG_   //commenter cette ligne pour "supprimer" les print de test
 #ifdef _DEBUG_
   #define DPRINTF  Serial.print
 #else
@@ -56,7 +56,7 @@ byte succ;
 byte nbrand_et_id [N_BLOCK];     //nb aléa à crypter et son identifiant
 
 //byte identifiant[8] = {0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03};
-byte identifiant[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x02};
+byte identifiant[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x01};
 byte key [2*N_BLOCK] = { 0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03,
                          0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03,
                          0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03,
@@ -114,29 +114,36 @@ void setup() {
     while(1) {
       digitalWrite(13, HIGH); 
       delay(50);    
-      digitalWrite(13, LOW); 
+      digitalWrite(13, LOW);
       delay(50);    
     }
   }
-  decaduino.setPreambleLength(2048);
+
+
   /*decaduino.setRxPrf(2);
   decaduino.setTxPrf(2);
   decaduino.setDrxTune(64);
   decaduino.setRxPcode(9);
   decaduino.setTxPcode(9);*/
-  //decaduino.setTBR(110);  
-  decaduino.setChannel(5);
-  decaduino.setRxBuffer(rxData, &rxLen);
-  decaduino.plmeRxEnableRequest();
-  decaduino.setPhrPower(3,0);
-  decaduino.setSdPower(3,0);
+  /*
+  decaduino.setPreambleLength(256);
+  
+  decaduino.setTBR(110);  
+  decaduino.setChannel(3);
+  decaduino.setPACSize(16);
+  decaduino.setTxPrf(64);
+  decaduino.setRxPrf(64);
+  decaduino.displayRxTxConfig();
+  */
+  /*decaduino.setPhrPower(3,0);
+  decaduino.setSdPower(3,0);*/
   
   /*
   decaduino.setSmartTxPower(0);
   decaduino.setTxPower(18,15.5);
   */
 
-  
+  decaduino.setRxBuffer(rxData, &rxLen);
   
 
   succ = aes.set_key (key, 32) ;
@@ -190,6 +197,7 @@ void loop() {
       if ( decaduino.rxFrameAvailable() ) {  
             
         if ( rxData[0] == TWR_MSG_TYPE_START ) {    //trame ancre = dest | idAnchor | idNextAchor
+          Serial.println("start received");
           for (int i=0; i<8; i++){
            IdRobotRx [i] = rxData[i+1];         //On récupère l'id du robot destinataire
            

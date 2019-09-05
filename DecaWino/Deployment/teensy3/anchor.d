@@ -1,4 +1,4 @@
-main.o: main.cpp main.h AES_config.h Arduino.h WProgram.h \
+anchor.o: anchor.cpp main.h AES_config.h Arduino.h WProgram.h \
  C:\WinAVR-20100110\avr32\include/stdlib.h \
  C:\WinAVR-20100110\avr32\include/_ansi.h \
  C:\WinAVR-20100110\avr32\include/newlib.h \

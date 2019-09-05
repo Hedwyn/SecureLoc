@@ -5,7 +5,7 @@
 AES aes ;
 
 
-#define DISPLAY_TIMESTAMPS 0
+#define DISPLAY_TIMESTAMPS 1
 #define TIMEOUT 6
 //#define _DEBUG_  
 #ifdef _DEBUG_
@@ -54,9 +54,9 @@ AES aes ;
 
 //control parameters for Swtich RX
 #define SWITCH_PLENGTH 0
-#define SWITCH_CHANNEL 0
+#define SWITCH_CHANNEL 1
 #define SWITCH_PCODE 0
-#define SWITCH_RX (SWITCH_PLENGTH ||SWITCH_CHANNEL || SWITCH_PCODE)
+#define SWITCH_RX 0//(SWITCH_PLENGTH ||SWITCH_CHANNEL || SWITCH_PCODE)
 
 #define PLENGTH_SWITCH_DELAY 4000
 #define PREAMBLE_SWITCH_DELAY 2000
@@ -118,14 +118,19 @@ int state,serialFlag,pollFlag,finalFlag;
 int plengthClk,pcodeClk,channelClk,currentPLength = MIN_PLENGTH,currentPcode = 1,currentChannel = 0,marker,teensy_clk,seq;
 bool received =  false;
 
-
+long convertClk(uint64_t  clk1, uint64_t  clk2) {
+  return((clk2 - clk1)* 1565 / 1E8);
+   
+}
 
 void encodeUint64On5Bytes(uint64_t from, uint8_t *to) {
   int check_val = 0;
   int pwr = 1;
+  
   for (int i = 0; i <5; i++) {
-    to[i] = (uint8_t) ( (from >> (32 - 8 * i))& 0x00000000000000FF );
+    to[4 - i] = (uint8_t) ( (from >> (32 - 8 * i))& 0x00000000000000FF );
   }
+  // 
 
   // check
   /*
@@ -174,14 +179,16 @@ void setup() {
     }
   
   }
-  decaduino.setPreambleLength(64);
+  decaduino.setPreambleLength(128);
+
+  
   decaduino.setRxPcode(9);
-  decaduino.setRxPrf(2);
+  decaduino.setRxPrf(64);
   decaduino.setTxPcode(9);
-  decaduino.setTxPrf(2);
-  decaduino.setDrxTune(64);
-  decaduino.setSfdTimeout(128);
-  decaduino.setPACSize(8);
+  decaduino.setTxPrf(64);
+ 
+  //decaduino.setSfdTimeout(128);
+  //decaduino.setPACSize(64);
   //ledecaduino.setTBR(110);
   
 
@@ -230,13 +237,13 @@ void loop() {
  */
 
     case TWR_ENGINE_STATE_RX_ON:
-      //decaduino.plmeRxDisableRequest();
+      decaduino.plmeRxDisableRequest();
       decaduino.plmeRxEnableRequest();
       
       if (serialFlag) {
         state = TWR_ENGINE_STATE_SERIAL;
         Serial.println("\nRX ON time:");
-        Serial.println((double) ((decaduino.getSystemTimeCounter() - picoclk_marker) * 15.65E-6));
+        Serial.println(convertClk(picoclk_marker, decaduino.getSystemTimeCounter()));
       }
       else {
         if (SWITCH_RX) {
@@ -290,7 +297,8 @@ void loop() {
         Serial.println("Timestamps stack [raw]:");
         Serial.print("{");
         for (int i = 1; i < timestamps.top;i ++) {       
-          Serial.print((double) (15.65 * 10E-12 *  (timestamps.val[i]- timestamps.val[i-1]))  );
+          //Serial.print(convertClk(timestamps.val[i - 1], timestamps.val[i])) ;
+          Serial.print((long) (timestamps.val[i - 1], timestamps.val[i])) ;
           Serial.print(";");       
         }
         Serial.println("}");
@@ -302,7 +310,7 @@ void loop() {
       else {
         state = TWR_ENGINE_STATE_WAIT_POLL;
         Serial.println("Serial time:");
-        Serial.println((double) ((decaduino.getSystemTimeCounter() - picoclk_marker) * 15.65E-6));
+        Serial.println(convertClk(picoclk_marker, decaduino.getSystemTimeCounter()));
         
       }
       break;
@@ -363,31 +371,34 @@ void loop() {
       //Serial.println(millis() - plengthClk);
       
       if ( decaduino.rxFrameAvailable() ) {
+      
+        //if (true) {
+        if ((rxData[5] == 1) && (rxData[21] == TWR_POLL)) {
         
-        if ((rxData[21] = TWR_POLL) ) {//&& (rxData[5] == 1)) {
-          seq = rxData[22];          
-          Serial.println("Period time:");
-          Serial.println((double) ((decaduino.getSystemTimeCounter() - picoclk_marker) * 15.65E-6));
-          Serial.println("Period time [Duino]:");
-          Serial.println(millis() - teensy_clk);          
-          Serial.print("SEQ number:");
-          Serial.println(seq);
-          picoclk_marker = decaduino.getSystemTimeCounter();
-          teensy_clk = millis();
+            Serial.println("Period time:");
+            Serial.println(convertClk(picoclk_marker, decaduino.getSystemTimeCounter()));
+         
+            Serial.println("Period time [Duino]:");
+            Serial.println(millis() - teensy_clk);          
+            Serial.print("SEQ number:");
+            Serial.println(seq);
+            picoclk_marker = decaduino.getSystemTimeCounter();
+            teensy_clk = millis();
+            
+            for (int i = 0; i < 128; i++) {  
+              pollData[i] = rxData[i];
+              pollFlag = 1;
+              serialFlag |= pollFlag;
+            }
           
-          for (int i = 0; i < 128; i++) {  
-            pollData[i] = rxData[i];
-            pollFlag = 1;
-            serialFlag |= pollFlag;
-          }
   
           state = TWR_ENGINE_STATE_MEMORISE_TIMESTAMP;
         }
+        
        else {
         //state = TWR_ENGINE_STATE_RX_ON;
         decaduino.plmeRxEnableRequest();
-        Serial.print("not the right target: ");
-        Serial.println(rxData[5]);
+
        }
            
       }
@@ -408,11 +419,36 @@ void loop() {
  * On enregistre l'heure de réception du message start
  */
     case TWR_ENGINE_STATE_MEMORISE_TIMESTAMP:
-      R1 = decaduino.getLastRxTimestamp();           //On enregistre l'heure de réception
-      
-      Serial.println((double) ((picoclk_marker - R1) * 15.65 *10E-6));
+      switch (rxData[21]) {
+        case TWR_POLL:
+          R1 = decaduino.getLastRxTimestamp();
+          Serial.println("POLL");
+          break;
+        case TWR_ANSWER:
+          T2 = decaduino.getLastRxTimestamp();
+          Serial.println("ANSWER");
+          Serial.println("Elapsed time (T2 - R1):");
+          Serial.print("$");
+          Serial.println((long) (T2 - R1));          
+          break;
+        case TWR_FINAL:
+          Serial.println("FINAL");
+          R3 = decaduino.getLastRxTimestamp();
+          Serial.println("Elapsed time (R3 - T2):");
+          Serial.print("#");
+          Serial.println((long) (R3 - T2));
+          
+          break;
+        case TWR_REPORT:        
+          Serial.println("REPORT");
+          break;          
+        default:
+          Serial.println("Unknown frame type received");
+          break;
+      }         
+
       if (DISPLAY_TIMESTAMPS) {
-        timestamps.val[timestamps.top] = R1;
+        timestamps.val[timestamps.top] = decaduino.getLastRxTimestamp();
         if ( (timestamps.top == MAX_STACK_SIZE) || (timestamps.val[timestamps.top] < timestamps.val[0]) ) {
           timestamps.top = 0;
         }
@@ -420,6 +456,9 @@ void loop() {
           timestamps.top++;
         }
       }
+
+
+
 
       //state = TWR_ENGINE_STATE_ANSWER;
       state = TWR_ENGINE_STATE_RX_ON;
@@ -438,10 +477,14 @@ void loop() {
       txData[21] = TWR_ANSWER;
       txData[22] = rxData[22];
       Serial.println("Sending ANSWER...");
+      //decaduino.pdDataRequest(txData,23,1,R1 + 30000000);
       decaduino.pdDataRequest(txData,23);
-      while (!decaduino.hasTxSucceeded());
+      marker = millis();
+      while (!decaduino.hasTxSucceeded() && (millis() -  marker < TIMEOUT));
+ 
       Serial.println("ANSWER success !");
       T2 = decaduino.getLastTxTimestamp(); 
+
       state = TWR_ENGINE_STATE_WAIT_FINAL;
       marker = millis();
       
@@ -500,7 +543,10 @@ void loop() {
 
       // memorizing timestamp
    
-      R3 = decaduino.getLastRxTimestamp();   
+      R3 = decaduino.getLastRxTimestamp(); 
+      Serial.println("Elapsed time (T2 - R1)");
+      Serial.print("$");      
+      Serial.println((long)(T2- R1)); 
       if (DISPLAY_TIMESTAMPS) {
         timestamps.val[timestamps.top] = R3;
         if ( (timestamps.top == MAX_STACK_SIZE) || (timestamps.val[timestamps.top] < timestamps.val[0]) ) {
@@ -514,11 +560,6 @@ void loop() {
       encodeUint64On5Bytes(R1,report.pollRx);      
       encodeUint64On5Bytes(T2,report.answerTx);
       encodeUint64On5Bytes(R3,report.finalRx );
-      Serial.print("Timestamps :");
-      Serial.println( (int) R1);
-      Serial.println( (int) T2);
-      Serial.println( (int) R3);
-      Serial.println((double) ((R3 - R1) * 15.65 *10E-6));
       // writing the payload to rxData
       memcpy((void *) txData + 23,(void *) &report,28);
      
@@ -529,7 +570,8 @@ void loop() {
       Serial.println((double) ((decaduino.getSystemTimeCounter() - picoclk_marker) * 15.65E-6));
       // 21 bytes header + 2 bytes (TYPE + SEQ) + 28 bytes payload = 51 bytes
       decaduino.pdDataRequest(txData,51);
-      while (!decaduino.hasTxSucceeded());
+      marker = millis();
+      while (!decaduino.hasTxSucceeded() && (millis() -  marker < TIMEOUT));
       Serial.println("REPORT success !");
 
       state = TWR_ENGINE_STATE_RX_ON;

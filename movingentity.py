@@ -3,30 +3,31 @@ import utils
 from direct.showbase.DirectObject import DirectObject
 from panda3d.core import *
 from parameters import *
+from RenderingInterface import RenderedNode
 
 
-class MovingEntity(DirectObject):
+class MovingEntity(DirectObject,RenderedNode):
     """Moving tags"""
     def __init__(self, name, color='orange'):
-        self.color = color
-        self.name = name
-        self.pos = []
+
+        self.name = name # ID
+        self.positions = [] #
         self.speed_vector = []
         self.acc_vector = []
-    
-        # pos_list needs POS_LIST_SIZE elements to avoid reading conflicts
+        self.color = color
+
+        # POSITIONS_BUFFER_LENt needs POSITIONS_BUFFER_LENT_SIZE elements to avoid reading conflicts
         # initializing to 0
-        
-        for x in range(0, POS_LIST_SIZE):
-            self.pos.append(DEFAULT_POS)
+        for x in range(0, POSITIONS_BUFFER_LEN):
+            self.positions.append(DEFAULT_POS)
 
         # speed vector list needs SPEED_LIST-SIZE elements to avoid reading conflicts
         # initializing to 0
-        
-        for y in range(0, SPEED_LIST_SIZE):
+
+        for y in range(0, SPEED_BUFFER_LEN):
             self.speed_vector.append([0,0,0])
 
-        for z in range(0, ACC_LIST_SIZE):
+        for z in range(0, ACC_BUFFER_LEN):
             self.acc_vector.append([0,0,0])
 
         self.ready = False
@@ -34,47 +35,32 @@ class MovingEntity(DirectObject):
 
         self.create_sphere()
         self.create_text()
-        
-
-    def create_sphere(self):
-        """Creates a sphere representing the robot in the 3D world"""
-        self.model = loader.load_model("smiley")
-        self.model.set_color(utils.colors[self.color])
-        self.model.set_scale(0.1)
-
-    def create_text(self):
-        """Generates the label of the anchor"""
-        self.label = TextNode('anchor label {}'.format(self.name))
-        self.label.set_text("x:"+str(self.get_pos()[0])+" y:"+str(self.get_pos()[1])+" z:"+str(self.get_pos()[2]))
-        self.label.set_card_decal(True)
-        self.label.set_text_color(utils.colors[self.color])
-        self.label_np = render.attach_new_node(self.label)
-        self.label_np.set_pos(float(self.get_pos()[0]-0.1), float(self.get_pos()[1]+0.2), float(self.get_pos()[2]))
-        self.label_np.set_scale(0.2)
-        self.label_np.look_at(-base.cam.get_x(), -base.cam.get_y(), -base.cam.get_z())
-        #self.show()
-        taskMgr.add(self.update_text_task, 'update text {}'.format(self.name))
-
-    def update_text_task(self, task):
-        """Modifies the text above the anchor"""
-        (x,y,z) = self.get_pos()
-        (a,b,c) = self.get_coord(x,y,z)
-        self.label_np.look_at(-base.cam.get_x(), -base.cam.get_y(), -base.cam.get_z())
-        if (TILES):
-            self.label.set_text("x:" + self.split_pos(str(a) ) + " y:" + self.split_pos(str(b)) + " z:" + self.split_pos(str(c)))
-        else:
-            self.label.set_text("x:" + self.split_pos(str(x) ) + " y:" + self.split_pos(str(y)) + " z:" + self.split_pos(str(z)))
-
-        #self.label_np.set_pos(float(a), float(b), float(c) )        
-        self.label_np.set_pos(float(self.get_pos()[0] - 0.1), float(self.get_pos()[1] + 0.2), float(self.get_pos()[2]))
-        return task.cont
 
 
+    def get_coordinates(self):
+        return(self.get_current_pos())
 
-    
-    def get_coord(self,x,y,z):
-        """returns the coordinates of the robot on a tiled floor. 
-        The size of the tiles should be specified in parameters"""
+    def set_coordinates(self,x,y,z):
+        """Sets the tag coordinates. Should be used carefully; this will lead to errors in the localization algorithm.
+        Use move_node instead if you wish to move only the node representation in the 3D engine"""
+        self.positions.append((x,y,z))
+        if len(self.positions) > POSITIONS_BUFFER_LEN:
+            # removing oldest position
+            del self.positions[0]
+
+    def get_ID(self):
+        """returns tag ID"""
+        return(self.name)
+
+    def get_all_distances(self):
+        """return the distances of the anchor with every robot as a dictionary."""
+        # TODO: Returns currently empty list given that the tags do not localize other tags.
+        # Needs to be modified for cooperative approaches.
+        return({})
+
+    def get_discretized_coordinates(self,x,y,z,granularity = SQUARE_SIZE ):
+        """returns the coordinates of the robot on a tiled floor.
+        Granularity is defined as the length of a tile"""
         a = 0
         b = 0
         c = 0
@@ -82,82 +68,51 @@ class MovingEntity(DirectObject):
         distance = 0
 
         while (distance <= x):
-            distance += SQUARE_SIZE
-            if ( (x - distance) > - (SQUARE_SIZE / 2) ):
+            distance += granularity
+            if ( (x - distance) > - (granularity / 2) ):
                 a += 1
         distance = 0
 
         while (distance <= y):
-            distance += SQUARE_SIZE
-            if ( (y - distance) > - (SQUARE_SIZE / 2) ):
+            distance += granularity
+            if ( (y - distance) > - (granularity / 2) ):
                 b += 1
         distance = 0
 
         while (distance <= z):
-            distance += SQUARE_SIZE
-            if ( (z - distance) > - (SQUARE_SIZE / 2) ):
+            distance += granularity
+            if ( (z - distance) > - (granularity / 2) ):
                 c += 1
         distance = 0
-        
-        
-        
-        
-
         return(a,b,c)
 
-       
 
-    def show(self):
-        """Displays the robot's sphere"""
-        if self.ready and not self.shown:
-            self.model.reparent_to(render)
-            self.shown = True
-
-    def hide(self):
-        """Hides the robot's sphere"""
-        if self.shown:
-            self.model.detach_node()
-            self.shown = False
-    
-    def split_pos(self, position):
-        """graphical function; displays robot position"""
-        result = ""
-        x = 0
-        for i in position:
-            if x <= 4:
-                result += i
-                x += 1
-            else:
-                break
-        return result
-
-    def get_pos(self):
+    def get_current_pos(self):
         """ returns the most recent position in the position list"""
-        return(self.pos[POS_LIST_SIZE - 1])
-
-    def get_pre_pos(self):
-        """ returns previous position for speed calculation"""
-        return(self.pos[POS_LIST_SIZE - 2 ] )
-
-    def set_pos(self, pos,replace_last = False):
-        """Sets the robot position"""
-
-        # robot is considered to be ready once its position is set
-        if not self.ready:
-            self.ready = True
-        if (replace_last):
-            # removes last element in replace mode
-            self.pos.pop(POS_LIST_SIZE - 1 )
+        if self.positions:
+            return(self.positions[-1])
         else:
-            # removes first element to keep a list size of POS_LIST_SIZE
-            self.pos.pop(0)
+            print("Error: positions list is empty")
+            return (0,0,0)
 
-        self.pos.append(pos)
+    def get_previous_pos(self):
+        """ returns previous position for speed calculation"""
+        if len(self.positions) > 1:
+            return(self.positions[-2] )
+        else :
+            print("Error: not enough positions stored. Defaulting to current position")
+            return(self.get_current_pos())
 
+    def get_position(self):
+        """Calls get_coordinates"""
+        return(self.get_coordinates())
 
-    def display_pos(self):
-        """ displays the robot position in th 3D engine"""
-        self.model.set_pos(self.get_pos())
+    def set_position(self, pos):
+        """Takes position as a tuple in input.
+        Sets coordinates and displays the node at its new position in the 3D engine"""
+        (x,y,z) = pos
+        self.set_coordinates(x,y,z)
+
 
     def get_abs_speed(self):
         """computes the absolute speed from the speed vector"""
@@ -171,15 +126,15 @@ class MovingEntity(DirectObject):
         acc =  self.get_acc_vector()
         abs_acc = math.sqrt(pow(acc[0], 2) + pow(acc[1], 2) + pow(acc[2], 2))  # m/s
         return(abs_acc)
-        
+
     def set_speed_vector(self, speed_vector, replace_last=False):
-        """Appends current speed to speed list and 
-        removes the oldest speed data stored""" 
+        """Appends current speed to speed list and
+        removes the oldest speed data stored"""
         if replace_last:
             # removes last element in replace mode
-            self.speed_vector.pop(SPEED_LIST_SIZE - 1)
+            self.speed_vector.pop(SPEED_BUFFER_LEN - 1)
         else:
-            # removes first element to keep a list size of SPEED_LIST_SIZE
+            # removes first element to keep a list size of SPEED_BUFFER_LEN
             self.speed_vector.pop(0)
 
         self.speed_vector.append(speed_vector)
@@ -188,9 +143,9 @@ class MovingEntity(DirectObject):
         """Appends current acceleration to acceleration list and removes the oldes acceleration data stored"""
         if replace_last:
             #removes last element in replace mode
-            self.acc_vector.pop(ACC_LIST_SIZE -1)
+            self.acc_vector.pop(ACC_BUFFER_LEN -1)
         else:
-            # removes first element to keep a list size of SPEED_LIST_SIZE
+            # removes first element to keep a list size of SPEED_BUFFER_LEN
             self.acc_vector.pop(0)
 
         self.acc_vector.append(acc)
@@ -198,42 +153,40 @@ class MovingEntity(DirectObject):
     def get_speed_vector(self):
         """ returns the most recent speed vector in the speed vector list"""
 
-        return(self.speed_vector[SPEED_LIST_SIZE - 1])
+        return(self.speed_vector[SPEED_BUFFER_LEN - 1])
 
     def get_acc_vector(self):
         """ returns the most recent acceleration vector in the acceleration vector list"""
 
-        return(self.acc_vector[ACC_LIST_SIZE - 1])
+        return(self.acc_vector[ACC_BUFFER_LEN - 1])
 
     def compute_speed(self,replace_mode = False):
         """calculates the speed after each position update"""
-        pos = self.get_pos()
-        pre_pos = self.get_pre_pos()
+        pos = self.get_position()
+        pre_pos = self.get_previous_pos()
 
         # coordinates of the current position
-        
+
         x = pos[0]
         y = pos[1]
         z = pos[2]
 
         # coordinates of the previous position
-
         pre_x = pre_pos[0]
         pre_y = pre_pos[1]
         pre_z = pre_pos[2]
 
-        # calculates the speed as (position vector / sample time ) 
+        # calculates the speed as (position vector / sample time )
         speed_vector = [(x - pre_x)/T, (y - pre_y)/T, (z - pre_z) / T]
 
-        # set the speed  of the robot
-                
+        # sets the speed  of the robot
         self.set_speed_vector(speed_vector, replace_mode)
         v_print("robot " + self.name + " speed: " + str(self.get_abs_speed()) + " m/s")
 
     def compute_acc(self, replace_mode=False):
         """calculates the acceleration after each position update"""
         speed = self.get_speed_vector()
-        pre_speed = self.speed_vector[SPEED_LIST_SIZE - 2]
+        pre_speed = self.speed_vector[SPEED_BUFFER_LEN - 2]
 
         v_x = speed[0]
         v_y = speed[1]
@@ -246,4 +199,3 @@ class MovingEntity(DirectObject):
         acc = [(v_x - pre_v_x) / T, (v_y - pre_v_y) / T, (v_z - pre_v_z) / T]
         self.set_acc_vector(acc, replace_mode)
         v_print("robot " + self.name + " acceleration: " + str(self.get_abs_acc()) + " m/s²" + "\n" )
-

@@ -1,0 +1,6537 @@
+not the right target: 4
+not the right target: 5
+not the right target: 7
+Period time:
+24435
+Period time [Duino]:
+24
+SEQ number:81
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:81
+Elapsed time (T2 - R1)
+$22687942
+Sending REPORT...
+Total time:
+851.82
+REPORT success !
+
+RX ON time:
+1198
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|81|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|81|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12540;849;46263;12550;126471|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|209|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11165;12564;12544;843;11706;851;22898;844;11386;35941;845;11308;24461;}
+Serial time:
+4127
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12632
+Period time [Duino]:
+13
+SEQ number:217
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:218
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2303
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|217|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11165;12564;12544;843;11706;851;22898;844;11386;35941;845;11308;24461;12671;}
+Serial time:
+2641
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+12520
+Period time [Duino]:
+12
+SEQ number:225
+Delay on timestamp:
+196
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:225
+Elapsed time (T2 - R1)
+$23270502
+Sending REPORT...
+Total time:
+859.78
+REPORT success !
+
+RX ON time:
+1203
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|225|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|225|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11165;12564;12544;843;11706;851;22898;844;11386;35941;845;11308;24461;12671;12552;849;}
+Serial time:
+1924
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 5
+not the right target: 0
+Period time:
+23644
+Period time [Duino]:
+24
+SEQ number:241
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:241
+Elapsed time (T2 - R1)
+$22924816
+Sending REPORT...
+Total time:
+853.79
+REPORT success !
+
+RX ON time:
+1200
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|241|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|241|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11165;12564;12544;843;11706;851;22898;844;11386;35941;845;11308;24461;12671;12552;849;22833;842;}
+Serial time:
+1860
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 7
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+35555
+Period time [Duino]:
+36
+SEQ number:9
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:12
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+5232
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|9|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11165;12564;12544;843;11706;851;22898;844;11386;35941;845;11308;24461;12671;12552;849;22833;842;34746;}
+Serial time:
+5604
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+12632
+Period time [Duino]:
+12
+SEQ number:17
+Delay on timestamp:
+196
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:18
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2321
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|17|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+2529
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12525
+Period time [Duino]:
+13
+SEQ number:25
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:25
+Elapsed time (T2 - R1)
+$22639067
+Sending REPORT...
+Total time:
+851.74
+REPORT success !
+
+RX ON time:
+1198
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{838;}
+Serial time:
+1706
+not the right target: 2
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+23657
+Period time [Duino]:
+23
+SEQ number:41
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:41
+Elapsed time (T2 - R1)
+$23281511
+Sending REPORT...
+Total time:
+861.86
+REPORT success !
+
+RX ON time:
+1205
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|41|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|41|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{838;22851;848;}
+Serial time:
+1733
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+11976
+Period time [Duino]:
+12
+SEQ number:49
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:50
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2330
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|49|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{838;22851;848;11160;}
+Serial time:
+2572
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+12534
+Period time [Duino]:
+13
+SEQ number:57
+Delay on timestamp:
+191
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:57
+Elapsed time (T2 - R1)
+$22815450
+Sending REPORT...
+Total time:
+862.24
+REPORT success !
+
+RX ON time:
+1210
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|57|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|57|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{838;22851;848;11160;12568;847;}
+Serial time:
+1802
+not the right target: 2
+not the right target: 5
+not the right target: 7
+Period time:
+11948
+Period time [Duino]:
+12
+SEQ number:65
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:67
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3917
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|65|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{838;22851;848;11160;12568;847;11134;}
+Serial time:
+4188
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12697
+Period time [Duino]:
+13
+SEQ number:73
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:76
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+5237
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|73|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{838;22851;848;11160;12568;847;11134;12734;}
+Serial time:
+5513
+not the right target: 7
+not the right target: 2
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+24253
+Period time [Duino]:
+24
+SEQ number:89
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:89
+Elapsed time (T2 - R1)
+$23062193
+Sending REPORT...
+Total time:
+863.45
+REPORT success !
+
+RX ON time:
+1212
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|89|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|89|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{838;22851;848;11160;12568;847;11134;12734;24285;849;}
+Serial time:
+1798
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+11962
+Period time [Duino]:
+12
+SEQ number:97
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+
+RX ON time:
+5503
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|97|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{838;22851;848;11160;12568;847;11134;12734;24285;849;11147;}
+Serial time:
+5802
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+12498
+Period time [Duino]:
+13
+SEQ number:105
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:105
+Elapsed time (T2 - R1)
+$22968588
+Sending REPORT...
+Total time:
+864.70
+REPORT success !
+
+RX ON time:
+1209
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|105|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|105|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{838;22851;848;11160;12568;847;11134;12734;24285;849;11147;12533;854;}
+Serial time:
+1827
+not the right target: 2
+not the right target: 3
+not the right target: 6
+not the right target: 0
+Period time:
+11954
+Period time [Duino]:
+12
+SEQ number:113
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:114
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2395
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|113|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{838;22851;848;11160;12568;847;11134;12734;24285;849;11147;12533;854;11134;}
+Serial time:
+2728
+not the right target: 4
+not the right target: 6
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 4
+not the right target: 7
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 0
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+71547
+Period time [Duino]:
+71
+SEQ number:161
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:162
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2311
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|161|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{838;22851;848;11160;12568;847;11134;12734;24285;849;11147;12533;854;11134;71580;}
+Serial time:
+2656
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+12592
+Period time [Duino]:
+13
+SEQ number:169
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:169
+Elapsed time (T2 - R1)
+$23006011
+Sending REPORT...
+Total time:
+853.86
+REPORT success !
+
+RX ON time:
+1194
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|169|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|169|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{838;22851;848;11160;12568;847;11134;12734;24285;849;11147;12533;854;11134;71580;12626;844;}
+Serial time:
+1885
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11960
+Period time [Duino]:
+12
+SEQ number:177
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:177
+Elapsed time (T2 - R1)
+$22834227
+Sending REPORT...
+Total time:
+856.74
+REPORT success !
+
+RX ON time:
+1200
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|177|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|177|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{838;22851;848;11160;12568;847;11134;12734;24285;849;11147;12533;854;11134;71580;12626;844;11151;846;}
+Serial time:
+1870
+not the right target: 2
+not the right target: 3
+not the right target: 6
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 2
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+35395
+Period time [Duino]:
+35
+SEQ number:201
+Delay on timestamp:
+196
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:202
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2304
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|201|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+2512
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12514
+Period time [Duino]:
+13
+SEQ number:209
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:210
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2308
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|209|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+2516
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+12509
+Period time [Duino]:
+12
+SEQ number:217
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:217
+Elapsed time (T2 - R1)
+$22645643
+Sending REPORT...
+Total time:
+851.95
+REPORT success !
+
+RX ON time:
+1195
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|217|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|217|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12547;840;}
+Serial time:
+1712
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 0
+Period time:
+11946
+Period time [Duino]:
+12
+SEQ number:225
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:225
+Elapsed time (T2 - R1)
+$23007454
+Sending REPORT...
+Total time:
+857.83
+REPORT success !
+
+RX ON time:
+1204
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|225|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|225|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12547;840;11135;845;}
+Serial time:
+1741
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+11950
+Period time [Duino]:
+12
+SEQ number:233
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:234
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2308
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|233|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12547;840;11135;845;11139;}
+Serial time:
+2561
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12531
+Period time [Duino]:
+13
+SEQ number:241
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+
+RX ON time:
+5738
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|241|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12547;840;11135;845;11139;12568;}
+Serial time:
+5992
+not the right target: 5
+not the right target: 6
+Period time:
+12522
+Period time [Duino]:
+12
+SEQ number:249
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:249
+Elapsed time (T2 - R1)
+$22827973
+Sending REPORT...
+Total time:
+863.87
+REPORT success !
+
+RX ON time:
+1211
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|249|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|249|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12547;840;11135;845;11139;12568;12557;846;}
+Serial time:
+1781
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 5
+not the right target: 0
+Period time:
+23689
+Period time [Duino]:
+24
+SEQ number:9
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:9
+Elapsed time (T2 - R1)
+$23126728
+Sending REPORT...
+Total time:
+860.45
+REPORT success !
+
+RX ON time:
+1204
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|9|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|9|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12547;840;11135;845;11139;12568;12557;846;22874;847;}
+Serial time:
+1794
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+23748
+Period time [Duino]:
+24
+SEQ number:25
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:26
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2306
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12547;840;11135;845;11139;12568;12557;846;22874;847;22936;}
+Serial time:
+2613
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12604
+Period time [Duino]:
+12
+SEQ number:33
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:34
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2311
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|33|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12547;840;11135;845;11139;12568;12557;846;22874;847;22936;12640;}
+Serial time:
+2664
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12683
+Period time [Duino]:
+13
+SEQ number:41
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:41
+Elapsed time (T2 - R1)
+$22781965
+Sending REPORT...
+Total time:
+850.65
+REPORT success !
+
+RX ON time:
+1194
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|41|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|41|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12547;840;11135;845;11139;12568;12557;846;22874;847;22936;12640;12715;840;}
+Serial time:
+1859
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+Period time:
+11927
+Period time [Duino]:
+12
+SEQ number:49
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:51
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3773
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|49|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12547;840;11135;845;11139;12568;12557;846;22874;847;22936;12640;12715;840;11124;}
+Serial time:
+4117
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+24356
+Period time [Duino]:
+25
+SEQ number:65
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:65
+Elapsed time (T2 - R1)
+$23203984
+Sending REPORT...
+Total time:
+882.99
+REPORT success !
+
+RX ON time:
+1226
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|65|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|65|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12547;840;11135;845;11139;12568;12557;846;22874;847;22936;12640;12715;840;11124;24390;870;}
+Serial time:
+1823
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+Period time:
+47127
+Period time [Duino]:
+47
+SEQ number:97
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:98
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2305
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|97|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12547;840;11135;845;11139;12568;12557;846;22874;847;22936;12640;12715;840;11124;24390;870;46291;}
+Serial time:
+2756
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12537
+Period time [Duino]:
+12
+SEQ number:105
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:105
+Elapsed time (T2 - R1)
+$22783485
+Sending REPORT...
+Total time:
+850.61
+REPORT success !
+
+RX ON time:
+1195
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|105|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|105|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+1600
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11958
+Period time [Duino]:
+12
+SEQ number:113
+Delay on timestamp:
+196
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:114
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2313
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|113|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+2602
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 0
+Period time:
+12517
+Period time [Duino]:
+13
+SEQ number:121
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:121
+Elapsed time (T2 - R1)
+$22999597
+Sending REPORT...
+Total time:
+857.62
+REPORT success !
+
+RX ON time:
+1201
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|121|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|121|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12554;848;}
+Serial time:
+1719
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+23950
+Period time [Duino]:
+24
+SEQ number:137
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:137
+Elapsed time (T2 - R1)
+$22815312
+Sending REPORT...
+Total time:
+855.28
+REPORT success !
+
+RX ON time:
+1199
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|137|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|137|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12554;848;23137;845;}
+Serial time:
+1737
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+11928
+Period time [Duino]:
+12
+SEQ number:145
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:146
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2322
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|145|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12554;848;23137;845;11119;}
+Serial time:
+2579
+not the right target: 0
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+36022
+Period time [Duino]:
+36
+SEQ number:169
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:169
+Elapsed time (T2 - R1)
+$22867377
+Sending REPORT...
+Total time:
+856.07
+REPORT success !
+
+RX ON time:
+1197
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|169|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|169|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12554;848;23137;845;11119;36058;844;}
+Serial time:
+1757
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+Period time:
+11999
+Period time [Duino]:
+12
+SEQ number:177
+Delay on timestamp:
+190
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:177
+Elapsed time (T2 - R1)
+$22677482
+Sending REPORT...
+Total time:
+860.86
+REPORT success !
+
+RX ON time:
+1204
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|177|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|177|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12554;848;23137;845;11119;36058;844;11193;844;}
+Serial time:
+1787
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+23688
+Period time [Duino]:
+24
+SEQ number:193
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:193
+Elapsed time (T2 - R1)
+$22820066
+Sending REPORT...
+Total time:
+853.49
+REPORT success !
+
+RX ON time:
+1197
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|193|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|193|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12554;848;23137;845;11119;36058;844;11193;844;22876;842;}
+Serial time:
+1795
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11955
+Period time [Duino]:
+12
+SEQ number:201
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:201
+Elapsed time (T2 - R1)
+$23123958
+Sending REPORT...
+Total time:
+859.32
+REPORT success !
+
+RX ON time:
+1203
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|201|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|201|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12554;848;23137;845;11119;36058;844;11193;844;22876;842;11148;846;}
+Serial time:
+1858
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 7
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+47279
+Period time [Duino]:
+47
+SEQ number:233
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:233
+Elapsed time (T2 - R1)
+$23121448
+Sending REPORT...
+Total time:
+857.16
+REPORT success !
+
+RX ON time:
+1204
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|233|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|233|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12554;848;23137;845;11119;36058;844;11193;844;22876;842;11148;846;46465;847;}
+Serial time:
+1837
+not the right target: 2
+not the right target: 4
+not the right target: 7
+not the right target: 2
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+35399
+Period time [Duino]:
+35
+SEQ number:1
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:2
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2311
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|1|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12554;848;23137;845;11119;36058;844;11193;844;22876;842;11148;846;46465;847;34585;}
+Serial time:
+2660
+not the right target: 4
+not the right target: 6
+not the right target: 7
+Period time:
+12523
+Period time [Duino]:
+13
+SEQ number:9
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:11
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3770
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|9|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12554;848;23137;845;11119;36058;844;11193;844;22876;842;11148;846;46465;847;34585;12557;}
+Serial time:
+4170
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 0
+Period time:
+24379
+Period time [Duino]:
+24
+SEQ number:25
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:26
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2308
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12554;848;23137;845;11119;36058;844;11193;844;22876;842;11148;846;46465;847;34585;12557;24417;}
+Serial time:
+2679
+not the right target: 3
+not the right target: 4
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+24466
+Period time [Duino]:
+25
+SEQ number:41
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:43
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3776
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|41|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12554;848;23137;845;11119;36058;844;11193;844;22876;842;11148;846;46465;847;34585;12557;24417;24500;}
+Serial time:
+4196
+not the right target: 4
+Period time:
+12529
+Period time [Duino]:
+12
+SEQ number:49
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:49
+Elapsed time (T2 - R1)
+$22810710
+Sending REPORT...
+Total time:
+854.20
+REPORT success !
+
+RX ON time:
+1199
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|49|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|49|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+1601
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+Period time:
+11959
+Period time [Duino]:
+12
+SEQ number:57
+Delay on timestamp:
+188
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:57
+Elapsed time (T2 - R1)
+$22789974
+Sending REPORT...
+Total time:
+869.49
+REPORT success !
+
+RX ON time:
+1214
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|57|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|57|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11156;849;}
+Serial time:
+1728
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+11954
+Period time [Duino]:
+12
+SEQ number:65
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:65
+Elapsed time (T2 - R1)
+$23060631
+Sending REPORT...
+Total time:
+860.95
+REPORT success !
+
+RX ON time:
+1208
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|65|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|65|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11156;849;11132;845;}
+Serial time:
+1740
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+11974
+Period time [Duino]:
+12
+SEQ number:73
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:74
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2309
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|73|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11156;849;11132;845;11164;}
+Serial time:
+2562
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+Period time:
+12536
+Period time [Duino]:
+13
+SEQ number:81
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:82
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2307
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|81|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11156;849;11132;845;11164;12570;}
+Serial time:
+2570
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12506
+Period time [Duino]:
+12
+SEQ number:89
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:89
+Elapsed time (T2 - R1)
+$23169372
+Sending REPORT...
+Total time:
+859.82
+REPORT success !
+
+RX ON time:
+1203
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|89|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|89|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11156;849;11132;845;11164;12570;12541;847;}
+Serial time:
+1720
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+11971
+Period time [Duino]:
+12
+SEQ number:97
+Delay on timestamp:
+188
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:99
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3775
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|97|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11156;849;11132;845;11164;12570;12541;847;11163;}
+Serial time:
+4061
+not the right target: 4
+not the right target: 5
+not the right target: 7
+Period time:
+12546
+Period time [Duino]:
+13
+SEQ number:105
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:105
+Elapsed time (T2 - R1)
+$23115464
+Sending REPORT...
+Total time:
+864.04
+REPORT success !
+
+RX ON time:
+1208
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|105|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|105|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11156;849;11132;845;11164;12570;12541;847;11163;12574;853;}
+Serial time:
+1803
+not the right target: 2
+not the right target: 6
+Period time:
+12017
+Period time [Duino]:
+12
+SEQ number:113
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:115
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3778
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|113|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11156;849;11132;845;11164;12570;12541;847;11163;12574;853;11197;}
+Serial time:
+4094
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+47729
+Period time [Duino]:
+48
+SEQ number:145
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:145
+Elapsed time (T2 - R1)
+$22697685
+Sending REPORT...
+Total time:
+850.65
+REPORT success !
+
+RX ON time:
+1197
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|145|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|145|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11156;849;11132;845;11164;12570;12541;847;11163;12574;853;11197;47766;839;}
+Serial time:
+1824
+not the right target: 2
+not the right target: 3
+not the right target: 7
+Period time:
+11977
+Period time [Duino]:
+12
+SEQ number:153
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:154
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2310
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|153|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11156;849;11132;845;11164;12570;12541;847;11163;12574;853;11197;47766;839;11173;}
+Serial time:
+2653
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+35937
+Period time [Duino]:
+36
+SEQ number:177
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:180
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+5312
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|177|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11156;849;11132;845;11164;12570;12541;847;11163;12574;853;11197;47766;839;11173;35971;}
+Serial time:
+5662
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+24307
+Period time [Duino]:
+24
+SEQ number:193
+Delay on timestamp:
+196
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:195
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3782
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|193|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11156;849;11132;845;11164;12570;12541;847;11163;12574;853;11197;47766;839;11173;35971;24342;}
+Serial time:
+4146
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12540
+Period time [Duino]:
+13
+SEQ number:201
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:201
+Elapsed time (T2 - R1)
+$22833989
+Sending REPORT...
+Total time:
+852.24
+REPORT success !
+
+RX ON time:
+1199
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|201|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|201|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11156;849;11132;845;11164;12570;12541;847;11163;12574;853;11197;47766;839;11173;35971;24342;12577;841;}
+Serial time:
+1870
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11956
+Period time [Duino]:
+12
+SEQ number:209
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:212
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+5231
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|209|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+5437
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+12504
+Period time [Duino]:
+12
+SEQ number:217
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:220
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+5249
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|217|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+5456
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+12539
+Period time [Duino]:
+13
+SEQ number:225
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:226
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+1463
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|225|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12577;}
+Serial time:
+1680
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 6
+not the right target: 0
+Period time:
+23378
+Period time [Duino]:
+23
+SEQ number:241
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:241
+Elapsed time (T2 - R1)
+$22899922
+Sending REPORT...
+Total time:
+860.28
+REPORT success !
+
+RX ON time:
+1205
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|241|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|241|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12577;23409;847;}
+Serial time:
+1768
+not the right target: 2
+not the right target: 4
+not the right target: 6
+not the right target: 0
+Period time:
+11963
+Period time [Duino]:
+12
+SEQ number:249
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:249
+Elapsed time (T2 - R1)
+$23200706
+Sending REPORT...
+Total time:
+859.24
+REPORT success !
+
+RX ON time:
+1202
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|249|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|249|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12577;23409;847;11151;847;}
+Serial time:
+1746
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11947
+Period time [Duino]:
+12
+SEQ number:1
+Delay on timestamp:
+196
+Sending ANSWER...
+ANSWER success !
+
+RX ON time:
+5300
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|1|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12577;23409;847;11151;847;11133;}
+Serial time:
+5593
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12547
+Period time [Duino]:
+13
+SEQ number:9
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:9
+Elapsed time (T2 - R1)
+$22658418
+Sending REPORT...
+Total time:
+850.41
+REPORT success !
+
+RX ON time:
+1197
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|9|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|9|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12577;23409;847;11151;847;11133;12586;839;}
+Serial time:
+1767
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+23654
+Period time [Duino]:
+23
+SEQ number:25
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:26
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2310
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12577;23409;847;11151;847;11133;12586;839;22849;}
+Serial time:
+2599
+not the right target: 3
+not the right target: 5
+not the right target: 7
+Period time:
+12510
+Period time [Duino]:
+12
+SEQ number:33
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:33
+Elapsed time (T2 - R1)
+$22923823
+Sending REPORT...
+Total time:
+853.82
+REPORT success !
+
+RX ON time:
+1197
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|33|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|33|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12577;23409;847;11151;847;11133;12586;839;22849;12545;843;}
+Serial time:
+1793
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+11990
+Period time [Duino]:
+12
+SEQ number:41
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:42
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2306
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|41|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12577;23409;847;11151;847;11133;12586;839;22849;12545;843;11182;}
+Serial time:
+2622
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+24300
+Period time [Duino]:
+24
+SEQ number:57
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:57
+Elapsed time (T2 - R1)
+$23155351
+Sending REPORT...
+Total time:
+866.82
+REPORT success !
+
+RX ON time:
+1210
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|57|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|57|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12577;23409;847;11151;847;11133;12586;839;22849;12545;843;11182;24335;852;}
+Serial time:
+1834
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 0
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 0
+Period time:
+47284
+Period time [Duino]:
+48
+SEQ number:89
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:90
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2312
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|89|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12577;23409;847;11151;847;11133;12586;839;22849;12545;843;11182;24335;852;46464;}
+Serial time:
+2657
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 7
+not the right target: 0
+Period time:
+24301
+Period time [Duino]:
+24
+SEQ number:105
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:105
+Elapsed time (T2 - R1)
+$23069822
+Sending REPORT...
+Total time:
+859.83
+REPORT success !
+
+RX ON time:
+1206
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|105|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|105|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12577;23409;847;11151;847;11133;12586;839;22849;12545;843;11182;24335;852;46464;24334;845;}
+Serial time:
+1860
+not the right target: 2
+not the right target: 6
+not the right target: 0
+Period time:
+11993
+Period time [Duino]:
+12
+SEQ number:113
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:115
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3766
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|113|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12577;23409;847;11151;847;11133;12586;839;22849;12545;843;11182;24335;852;46464;24334;845;11179;}
+Serial time:
+4136
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12510
+Period time [Duino]:
+13
+SEQ number:121
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:122
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2313
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|121|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12577;23409;847;11151;847;11133;12586;839;22849;12545;843;11182;24335;852;46464;24334;845;11179;12545;}
+Serial time:
+2773
+not the right target: 3
+not the right target: 5
+not the right target: 0
+not the right target: 3
+not the right target: 4
+not the right target: 7
+not the right target: 0
+not the right target: 3
+not the right target: 4
+not the right target: 7
+Period time:
+36001
+Period time [Duino]:
+36
+SEQ number:145
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:145
+Elapsed time (T2 - R1)
+$22842989
+Sending REPORT...
+Total time:
+863.79
+REPORT success !
+
+RX ON time:
+1207
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|145|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|145|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+1615
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11968
+Period time [Duino]:
+12
+SEQ number:153
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:153
+Elapsed time (T2 - R1)
+$23155033
+Sending REPORT...
+Total time:
+861.04
+REPORT success !
+
+RX ON time:
+1205
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|153|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|153|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11148;846;}
+Serial time:
+1759
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+23634
+Period time [Duino]:
+23
+SEQ number:169
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:169
+Elapsed time (T2 - R1)
+$22868782
+Sending REPORT...
+Total time:
+855.66
+REPORT success !
+
+RX ON time:
+1203
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|169|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|169|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11148;846;22824;842;}
+Serial time:
+1816
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11984
+Period time [Duino]:
+12
+SEQ number:177
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:177
+Elapsed time (T2 - R1)
+$23073197
+Sending REPORT...
+Total time:
+856.70
+REPORT success !
+
+RX ON time:
+1199
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|177|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|177|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11148;846;22824;842;11177;845;}
+Serial time:
+1751
+not the right target: 2
+not the right target: 4
+not the right target: 6
+Period time:
+11939
+Period time [Duino]:
+12
+SEQ number:185
+Delay on timestamp:
+190
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:186
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2309
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|185|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11148;846;22824;842;11177;845;11128;}
+Serial time:
+2581
+not the right target: 3
+not the right target: 4
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+24285
+Period time [Duino]:
+25
+SEQ number:201
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:202
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2310
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|201|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11148;846;22824;842;11177;845;11128;24317;}
+Serial time:
+2628
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+Period time:
+12536
+Period time [Duino]:
+12
+SEQ number:209
+Delay on timestamp:
+197
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:209
+Elapsed time (T2 - R1)
+$23205945
+Sending REPORT...
+Total time:
+857.11
+REPORT success !
+
+RX ON time:
+1203
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|209|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|209|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11148;846;22824;842;11177;845;11128;24317;12564;847;}
+Serial time:
+1789
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+11953
+Period time [Duino]:
+12
+SEQ number:217
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:217
+Elapsed time (T2 - R1)
+$23245129
+Sending REPORT...
+Total time:
+859.41
+REPORT success !
+
+RX ON time:
+1205
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|217|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|217|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11148;846;22824;842;11177;845;11128;24317;12564;847;11141;848;}
+Serial time:
+1845
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+11940
+Period time [Duino]:
+12
+SEQ number:225
+Delay on timestamp:
+196
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:225
+Elapsed time (T2 - R1)
+$23111338
+Sending REPORT...
+Total time:
+858.36
+REPORT success !
+
+RX ON time:
+1202
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|225|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|225|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11148;846;22824;842;11177;845;11128;24317;12564;847;11141;848;11128;850;}
+Serial time:
+1824
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 7
+not the right target: 0
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+35346
+Period time [Duino]:
+36
+SEQ number:249
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:249
+Elapsed time (T2 - R1)
+$23120529
+Sending REPORT...
+Total time:
+866.11
+REPORT success !
+
+RX ON time:
+1209
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|249|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|249|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11148;846;22824;842;11177;845;11128;24317;12564;847;11141;848;11128;850;34535;852;}
+Serial time:
+1850
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+Period time:
+11978
+Period time [Duino]:
+12
+SEQ number:1
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:1
+Elapsed time (T2 - R1)
+$22986573
+Sending REPORT...
+Total time:
+857.70
+REPORT success !
+
+RX ON time:
+1199
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|1|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|1|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11148;846;22824;842;11177;845;11128;24317;12564;847;11141;848;11128;850;34535;852;11160;845;}
+Serial time:
+1855
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 0
+Period time:
+11942
+Period time [Duino]:
+12
+SEQ number:9
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:10
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2313
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|9|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11148;846;22824;842;11177;845;11128;24317;12564;847;11141;848;11128;850;34535;852;11160;845;11132;}
+Serial time:
+2691
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12595
+Period time [Duino]:
+12
+SEQ number:17
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:17
+Elapsed time (T2 - R1)
+$22858320
+Sending REPORT...
+Total time:
+854.99
+REPORT success !
+
+RX ON time:
+1201
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|17|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|17|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+1604
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+12050
+Period time [Duino]:
+12
+SEQ number:25
+Delay on timestamp:
+196
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:25
+Elapsed time (T2 - R1)
+$22896566
+Sending REPORT...
+Total time:
+852.03
+REPORT success !
+
+RX ON time:
+1195
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11241;844;}
+Serial time:
+1751
+not the right target: 2
+not the right target: 3
+not the right target: 6
+not the right target: 7
+Period time:
+11967
+Period time [Duino]:
+12
+SEQ number:33
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:34
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2312
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|33|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11241;844;11158;}
+Serial time:
+2546
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 0
+Period time:
+12564
+Period time [Duino]:
+13
+SEQ number:41
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:43
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3777
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|41|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11241;844;11158;12602;}
+Serial time:
+4018
+not the right target: 4
+not the right target: 7
+Period time:
+12507
+Period time [Duino]:
+12
+SEQ number:49
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:51
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3770
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|49|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11241;844;11158;12602;12543;}
+Serial time:
+4020
+not the right target: 7
+not the right target: 0
+Period time:
+12560
+Period time [Duino]:
+13
+SEQ number:57
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:58
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2310
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|57|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11241;844;11158;12602;12543;12592;}
+Serial time:
+2572
+not the right target: 4
+not the right target: 5
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+24363
+Period time [Duino]:
+24
+SEQ number:73
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:73
+Elapsed time (T2 - R1)
+$22994702
+Sending REPORT...
+Total time:
+853.91
+REPORT success !
+
+RX ON time:
+1198
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|73|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|73|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11241;844;11158;12602;12543;12592;24397;844;}
+Serial time:
+1772
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+11975
+Period time [Duino]:
+12
+SEQ number:81
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:81
+Elapsed time (T2 - R1)
+$22673883
+Sending REPORT...
+Total time:
+857.32
+REPORT success !
+
+RX ON time:
+1201
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|81|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|81|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11241;844;11158;12602;12543;12592;24397;844;11167;844;}
+Serial time:
+1788
+not the right target: 2
+not the right target: 4
+not the right target: 6
+not the right target: 0
+Period time:
+11937
+Period time [Duino]:
+12
+SEQ number:89
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:89
+Elapsed time (T2 - R1)
+$22774087
+Sending REPORT...
+Total time:
+853.99
+REPORT success !
+
+RX ON time:
+1198
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|89|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|89|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11241;844;11158;12602;12543;12592;24397;844;11167;844;11126;846;}
+Serial time:
+1802
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11985
+Period time [Duino]:
+12
+SEQ number:97
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:97
+Elapsed time (T2 - R1)
+$22911984
+Sending REPORT...
+Total time:
+860.37
+REPORT success !
+
+RX ON time:
+1205
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|97|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|97|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11241;844;11158;12602;12543;12592;24397;844;11167;844;11126;846;11174;845;}
+Serial time:
+1828
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11971
+Period time [Duino]:
+12
+SEQ number:105
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:107
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3785
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|105|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11241;844;11158;12602;12543;12592;24397;844;11167;844;11126;846;11174;845;11159;}
+Serial time:
+4169
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12551
+Period time [Duino]:
+13
+SEQ number:113
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:114
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2318
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|113|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11241;844;11158;12602;12543;12592;24397;844;11167;844;11126;846;11174;845;11159;12586;}
+Serial time:
+2670
+not the right target: 5
+not the right target: 6
+Period time:
+12521
+Period time [Duino]:
+12
+SEQ number:121
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:121
+Elapsed time (T2 - R1)
+$22998045
+Sending REPORT...
+Total time:
+860.32
+REPORT success !
+
+RX ON time:
+1204
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|121|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|121|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{11241;844;11158;12602;12543;12592;24397;844;11167;844;11126;846;11174;845;11159;12586;12552;844;}
+Serial time:
+1904
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11958
+Period time [Duino]:
+11
+SEQ number:129
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:129
+Elapsed time (T2 - R1)
+$23113525
+Sending REPORT...
+Total time:
+861.45
+REPORT success !
+
+RX ON time:
+1205
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|129|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|129|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+1745
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+Period time:
+23760
+Period time [Duino]:
+23
+SEQ number:145
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:145
+Elapsed time (T2 - R1)
+$23162549
+Sending REPORT...
+Total time:
+860.03
+REPORT success !
+
+RX ON time:
+1205
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|145|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|145|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;}
+Serial time:
+1715
+not the right target: 2
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 3
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+23640
+Period time [Duino]:
+24
+SEQ number:161
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+
+RX ON time:
+5551
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|161|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;22827;}
+Serial time:
+5771
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+24226
+Period time [Duino]:
+24
+SEQ number:177
+Delay on timestamp:
+196
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:178
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2319
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|177|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;22827;24260;}
+Serial time:
+2554
+not the right target: 3
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+24292
+Period time [Duino]:
+25
+SEQ number:193
+Delay on timestamp:
+196
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:194
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2309
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|193|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;22827;24260;24328;}
+Serial time:
+2552
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12514
+Period time [Duino]:
+12
+SEQ number:201
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:202
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2300
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|201|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;22827;24260;24328;12553;}
+Serial time:
+2554
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+12543
+Period time [Duino]:
+13
+SEQ number:209
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:209
+Elapsed time (T2 - R1)
+$23232882
+Sending REPORT...
+Total time:
+861.41
+REPORT success !
+
+RX ON time:
+1205
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|209|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|209|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;22827;24260;24328;12553;12574;848;}
+Serial time:
+1811
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 0
+Period time:
+11963
+Period time [Duino]:
+12
+SEQ number:217
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:217
+Elapsed time (T2 - R1)
+$22942308
+Sending REPORT...
+Total time:
+867.12
+REPORT success !
+
+RX ON time:
+1213
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|217|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|217|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;22827;24260;24328;12553;12574;848;11152;855;}
+Serial time:
+1779
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+35475
+Period time [Duino]:
+35
+SEQ number:241
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:242
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2317
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|241|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;22827;24260;24328;12553;12574;848;11152;855;34653;}
+Serial time:
+2654
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+12535
+Period time [Duino]:
+13
+SEQ number:249
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:250
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2310
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|249|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;22827;24260;24328;12553;12574;848;11152;855;34653;12572;}
+Serial time:
+2615
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+12527
+Period time [Duino]:
+12
+SEQ number:1
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:2
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2314
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|1|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;22827;24260;24328;12553;12574;848;11152;855;34653;12572;12559;}
+Serial time:
+2631
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+24216
+Period time [Duino]:
+25
+SEQ number:17
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:17
+Elapsed time (T2 - R1)
+$22829860
+Sending REPORT...
+Total time:
+857.40
+REPORT success !
+
+RX ON time:
+1201
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|17|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|17|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;22827;24260;24328;12553;12574;848;11152;855;34653;12572;12559;24248;844;}
+Serial time:
+1822
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+12050
+Period time [Duino]:
+12
+SEQ number:25
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:25
+Elapsed time (T2 - R1)
+$23058064
+Sending REPORT...
+Total time:
+865.33
+REPORT success !
+
+RX ON time:
+1212
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;22827;24260;24328;12553;12574;848;11152;855;34653;12572;12559;24248;844;11240;849;}
+Serial time:
+1855
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+23647
+Period time [Duino]:
+23
+SEQ number:41
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:42
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2310
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|41|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;22827;24260;24328;12553;12574;848;11152;855;34653;12572;12559;24248;844;11240;849;22831;}
+Serial time:
+2670
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+12515
+Period time [Duino]:
+13
+SEQ number:49
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:50
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2309
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|49|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;22827;24260;24328;12553;12574;848;11152;855;34653;12572;12559;24248;844;11240;849;22831;12547;}
+Serial time:
+2718
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+Period time:
+36057
+Period time [Duino]:
+36
+SEQ number:73
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:73
+Elapsed time (T2 - R1)
+$23144078
+Sending REPORT...
+Total time:
+860.12
+REPORT success !
+
+RX ON time:
+1205
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|73|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|73|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+1708
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+23638
+Period time [Duino]:
+24
+SEQ number:89
+Delay on timestamp:
+191
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:89
+Elapsed time (T2 - R1)
+$22973500
+Sending REPORT...
+Total time:
+867.03
+REPORT success !
+
+RX ON time:
+1208
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|89|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|89|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{853;}
+Serial time:
+1715
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11969
+Period time [Duino]:
+12
+SEQ number:97
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:97
+Elapsed time (T2 - R1)
+$23206152
+Sending REPORT...
+Total time:
+864.36
+REPORT success !
+
+RX ON time:
+1208
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|97|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|97|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{853;11147;851;}
+Serial time:
+1735
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 7
+not the right target: 0
+Period time:
+11951
+Period time [Duino]:
+12
+SEQ number:105
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:105
+Elapsed time (T2 - R1)
+$23034482
+Sending REPORT...
+Total time:
+869.95
+REPORT success !
+
+RX ON time:
+1214
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|105|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|105|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{853;11147;851;11134;858;}
+Serial time:
+1703
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+23668
+Period time [Duino]:
+23
+SEQ number:121
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:122
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2316
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|121|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{853;11147;851;11134;858;22843;}
+Serial time:
+2576
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12627
+Period time [Duino]:
+13
+SEQ number:129
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:129
+Elapsed time (T2 - R1)
+$22682276
+Sending REPORT...
+Total time:
+850.45
+REPORT success !
+
+RX ON time:
+1193
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|129|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|129|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{853;11147;851;11134;858;22843;12664;839;}
+Serial time:
+1673
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 3
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 7
+Period time:
+47932
+Period time [Duino]:
+48
+SEQ number:161
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:161
+Elapsed time (T2 - R1)
+$22972175
+Sending REPORT...
+Total time:
+856.62
+REPORT success !
+
+RX ON time:
+1199
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|161|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|161|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{853;11147;851;11134;858;22843;12664;839;47127;843;}
+Serial time:
+1785
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+Period time:
+23820
+Period time [Duino]:
+24
+SEQ number:177
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:179
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3903
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|177|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{853;11147;851;11134;858;22843;12664;839;47127;843;23008;}
+Serial time:
+4212
+not the right target: 4
+not the right target: 6
+not the right target: 0
+Period time:
+12640
+Period time [Duino]:
+12
+SEQ number:185
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:186
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2311
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|185|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{853;11147;851;11134;858;22843;12664;839;47127;843;23008;12677;}
+Serial time:
+2627
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+12690
+Period time [Duino]:
+13
+SEQ number:193
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:193
+Elapsed time (T2 - R1)
+$23263852
+Sending REPORT...
+Total time:
+860.07
+REPORT success !
+
+RX ON time:
+1200
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|193|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|193|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{853;11147;851;11134;858;22843;12664;839;47127;843;23008;12677;12724;848;}
+Serial time:
+1691
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+Period time:
+12504
+Period time [Duino]:
+13
+SEQ number:201
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:201
+Elapsed time (T2 - R1)
+$22783405
+Sending REPORT...
+Total time:
+856.86
+REPORT success !
+
+RX ON time:
+1200
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|201|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|201|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{853;11147;851;11134;858;22843;12664;839;47127;843;23008;12677;12724;848;11692;845;}
+Serial time:
+1844
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 4
+not the right target: 5
+not the right target: 7
+Period time:
+23733
+Period time [Duino]:
+23
+SEQ number:217
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:217
+Elapsed time (T2 - R1)
+$22814658
+Sending REPORT...
+Total time:
+851.28
+REPORT success !
+
+RX ON time:
+1195
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|217|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|217|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{853;11147;851;11134;858;22843;12664;839;47127;843;23008;12677;12724;848;11692;845;22923;841;}
+Serial time:
+1855
+not the right target: 2
+not the right target: 3
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11984
+Period time [Duino]:
+12
+SEQ number:225
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:225
+Elapsed time (T2 - R1)
+$22954067
+Sending REPORT...
+Total time:
+854.08
+REPORT success !
+
+RX ON time:
+1195
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|225|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|225|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+1735
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+11958
+Period time [Duino]:
+12
+SEQ number:233
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:233
+Elapsed time (T2 - R1)
+$22998349
+Sending REPORT...
+Total time:
+853.28
+REPORT success !
+
+RX ON time:
+1197
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|233|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|233|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;}
+Serial time:
+1705
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+11999
+Period time [Duino]:
+12
+SEQ number:241
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:241
+Elapsed time (T2 - R1)
+$23268788
+Sending REPORT...
+Total time:
+871.36
+REPORT success !
+
+RX ON time:
+1215
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|241|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|241|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11190;860;}
+Serial time:
+1743
+not the right target: 2
+not the right target: 7
+not the right target: 0
+Period time:
+12104
+Period time [Duino]:
+12
+SEQ number:249
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:249
+Elapsed time (T2 - R1)
+$23107615
+Sending REPORT...
+Total time:
+860.16
+REPORT success !
+
+RX ON time:
+1203
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|249|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|249|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11190;860;11280;845;}
+Serial time:
+1749
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+12010
+Period time [Duino]:
+12
+SEQ number:1
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:1
+Elapsed time (T2 - R1)
+$22692401
+Sending REPORT...
+Total time:
+856.57
+REPORT success !
+
+RX ON time:
+1203
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|1|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|1|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11190;860;11280;845;11200;844;}
+Serial time:
+1760
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 7
+Period time:
+12097
+Period time [Duino]:
+12
+SEQ number:9
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:10
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2305
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|9|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11190;860;11280;845;11200;844;11287;}
+Serial time:
+2582
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+12503
+Period time [Duino]:
+12
+SEQ number:17
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:17
+Elapsed time (T2 - R1)
+$23075894
+Sending REPORT...
+Total time:
+859.53
+REPORT success !
+
+RX ON time:
+1206
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|17|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|17|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11190;860;11280;845;11200;844;11287;12535;845;}
+Serial time:
+1793
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11969
+Period time [Duino]:
+12
+SEQ number:25
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:25
+Elapsed time (T2 - R1)
+$23105838
+Sending REPORT...
+Total time:
+859.66
+REPORT success !
+
+RX ON time:
+1203
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11190;860;11280;845;11200;844;11287;12535;845;11155;845;}
+Serial time:
+1794
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+11954
+Period time [Duino]:
+12
+SEQ number:33
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:33
+Elapsed time (T2 - R1)
+$22759485
+Sending REPORT...
+Total time:
+850.32
+REPORT success !
+
+RX ON time:
+1193
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|33|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|33|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11190;860;11280;845;11200;844;11287;12535;845;11155;845;11142;840;}
+Serial time:
+1816
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+Period time:
+11944
+Period time [Duino]:
+12
+SEQ number:41
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:41
+Elapsed time (T2 - R1)
+$22922661
+Sending REPORT...
+Total time:
+858.28
+REPORT success !
+
+RX ON time:
+1206
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|41|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|41|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11190;860;11280;845;11200;844;11287;12535;845;11155;845;11142;840;11136;843;}
+Serial time:
+1845
+not the right target: 2
+not the right target: 6
+not the right target: 7
+Period time:
+11959
+Period time [Duino]:
+12
+SEQ number:49
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:49
+Elapsed time (T2 - R1)
+$23098028
+Sending REPORT...
+Total time:
+867.66
+REPORT success !
+
+RX ON time:
+1212
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|49|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|49|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11190;860;11280;845;11200;844;11287;12535;845;11155;845;11142;840;11136;843;11149;852;}
+Serial time:
+1911
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+23695
+Period time [Duino]:
+24
+SEQ number:65
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:65
+Elapsed time (T2 - R1)
+$22795614
+Sending REPORT...
+Total time:
+850.28
+REPORT success !
+
+RX ON time:
+1197
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|65|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|65|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+1732
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 0
+Period time:
+47097
+Period time [Duino]:
+47
+SEQ number:97
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:99
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3767
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|97|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+3975
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+12527
+Period time [Duino]:
+13
+SEQ number:105
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:106
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2307
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|105|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12563;}
+Serial time:
+2563
+not the right target: 3
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12537
+Period time [Duino]:
+12
+SEQ number:113
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:113
+Elapsed time (T2 - R1)
+$22899791
+Sending REPORT...
+Total time:
+859.49
+REPORT success !
+
+RX ON time:
+1204
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|113|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|113|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12563;12573;846;}
+Serial time:
+1730
+not the right target: 2
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+12002
+Period time [Duino]:
+12
+SEQ number:121
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:121
+Elapsed time (T2 - R1)
+$23107758
+Sending REPORT...
+Total time:
+872.66
+REPORT success !
+
+RX ON time:
+1219
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|121|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|121|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12563;12573;846;11187;858;}
+Serial time:
+1765
+not the right target: 2
+not the right target: 5
+not the right target: 0
+not the right target: 2
+not the right target: 4
+not the right target: 6
+not the right target: 0
+Period time:
+23673
+Period time [Duino]:
+24
+SEQ number:137
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:138
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2319
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|137|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12563;12573;846;11187;858;22846;}
+Serial time:
+2581
+not the right target: 3
+not the right target: 4
+not the right target: 7
+not the right target: 0
+Period time:
+12522
+Period time [Duino]:
+13
+SEQ number:145
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:145
+Elapsed time (T2 - R1)
+$22664392
+Sending REPORT...
+Total time:
+850.61
+REPORT success !
+
+RX ON time:
+1198
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|145|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|145|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12563;12573;846;11187;858;22846;12560;839;}
+Serial time:
+1768
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 6
+not the right target: 0
+Period time:
+23750
+Period time [Duino]:
+23
+SEQ number:161
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:161
+Elapsed time (T2 - R1)
+$23167130
+Sending REPORT...
+Total time:
+865.79
+REPORT success !
+
+RX ON time:
+1212
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|161|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|161|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12563;12573;846;11187;858;22846;12560;839;22941;853;}
+Serial time:
+1800
+not the right target: 2
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+23646
+Period time [Duino]:
+24
+SEQ number:177
+Delay on timestamp:
+196
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:179
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3768
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|177|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12563;12573;846;11187;858;22846;12560;839;22941;853;22827;}
+Serial time:
+4077
+not the right target: 5
+Period time:
+12507
+Period time [Duino]:
+13
+SEQ number:185
+Delay on timestamp:
+190
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:188
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+5228
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|185|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12563;12573;846;11187;858;22846;12560;839;22941;853;22827;12546;}
+Serial time:
+5584
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+12534
+Period time [Duino]:
+12
+SEQ number:193
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:194
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2306
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|193|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12563;12573;846;11187;858;22846;12560;839;22941;853;22827;12546;12565;}
+Serial time:
+2629
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+24263
+Period time [Duino]:
+24
+SEQ number:209
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:211
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3771
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|209|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12563;12573;846;11187;858;22846;12560;839;22941;853;22827;12546;12565;24297;}
+Serial time:
+4108
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 0
+Period time:
+24388
+Period time [Duino]:
+24
+SEQ number:225
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:225
+Elapsed time (T2 - R1)
+$23069473
+Sending REPORT...
+Total time:
+861.53
+REPORT success !
+
+RX ON time:
+1207
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|225|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|225|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12563;12573;846;11187;858;22846;12560;839;22941;853;22827;12546;12565;24297;24423;846;}
+Serial time:
+1851
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12007
+Period time [Duino]:
+12
+SEQ number:233
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:233
+Elapsed time (T2 - R1)
+$22799717
+Sending REPORT...
+Total time:
+853.03
+REPORT success !
+
+RX ON time:
+1198
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|233|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|233|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12563;12573;846;11187;858;22846;12560;839;22941;853;22827;12546;12565;24297;24423;846;11195;842;}
+Serial time:
+1899
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+12092
+Period time [Duino]:
+12
+SEQ number:241
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:243
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3772
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|241|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{12563;12573;846;11187;858;22846;12560;839;22941;853;22827;12546;12565;24297;24423;846;11195;842;11282;}
+Serial time:
+4150
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+12696
+Period time [Duino]:
+13
+SEQ number:249
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:249
+Elapsed time (T2 - R1)
+$22990804
+Sending REPORT...
+Total time:
+858.70
+REPORT success !
+
+RX ON time:
+1200
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|249|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|249|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+1607
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 7
+not the right target: 3
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+47060
+Period time [Duino]:
+47
+SEQ number:25
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:25
+Elapsed time (T2 - R1)
+$22986755
+Sending REPORT...
+Total time:
+856.16
+REPORT success !
+
+RX ON time:
+1201
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{46246;844;}
+Serial time:
+1720
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 2
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+23653
+Period time [Duino]:
+24
+SEQ number:41
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:42
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+1462
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|41|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{46246;844;22843;}
+Serial time:
+1696
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11697
+Period time [Duino]:
+11
+SEQ number:49
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:50
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2309
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|49|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{46246;844;22843;11728;}
+Serial time:
+2552
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 7
+not the right target: 0
+Period time:
+59364
+Period time [Duino]:
+60
+SEQ number:89
+Delay on timestamp:
+191
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:89
+Elapsed time (T2 - R1)
+$22998732
+Sending REPORT...
+Total time:
+860.33
+REPORT success !
+
+RX ON time:
+1204
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|89|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|89|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{46246;844;22843;11728;59400;844;}
+Serial time:
+1757
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+23711
+Period time [Duino]:
+23
+SEQ number:105
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:106
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2311
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|105|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{46246;844;22843;11728;59400;844;22901;}
+Serial time:
+2579
+not the right target: 4
+not the right target: 5
+not the right target: 0
+Period time:
+12510
+Period time [Duino]:
+13
+SEQ number:113
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:114
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2312
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|113|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{46246;844;22843;11728;59400;844;22901;12543;}
+Serial time:
+2670
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+24294
+Period time [Duino]:
+24
+SEQ number:129
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:131
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3774
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|129|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{46246;844;22843;11728;59400;844;22901;12543;24329;}
+Serial time:
+4061
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12635
+Period time [Duino]:
+13
+SEQ number:137
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:138
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2307
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|137|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{46246;844;22843;11728;59400;844;22901;12543;24329;12669;}
+Serial time:
+2607
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12515
+Period time [Duino]:
+13
+SEQ number:145
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:145
+Elapsed time (T2 - R1)
+$23136408
+Sending REPORT...
+Total time:
+881.07
+REPORT success !
+
+RX ON time:
+1225
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|145|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|145|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{46246;844;22843;11728;59400;844;22901;12543;24329;12669;12547;867;}
+Serial time:
+1830
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+11966
+Period time [Duino]:
+12
+SEQ number:153
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:154
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2304
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|153|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{46246;844;22843;11728;59400;844;22901;12543;24329;12669;12547;867;11132;}
+Serial time:
+2629
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+12540
+Period time [Duino]:
+12
+SEQ number:161
+Delay on timestamp:
+196
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:162
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2304
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|161|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{46246;844;22843;11728;59400;844;22901;12543;24329;12669;12547;867;11132;12575;}
+Serial time:
+2682
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 0
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+36158
+Period time [Duino]:
+36
+SEQ number:185
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:185
+Elapsed time (T2 - R1)
+$23222160
+Sending REPORT...
+Total time:
+857.78
+REPORT success !
+
+RX ON time:
+1202
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|185|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|185|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{46246;844;22843;11728;59400;844;22901;12543;24329;12669;12547;867;11132;12575;36194;847;}
+Serial time:
+1847
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 7
+Period time:
+11939
+Period time [Duino]:
+12
+SEQ number:193
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:194
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2336
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|193|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{46246;844;22843;11728;59400;844;22901;12543;24329;12669;12547;867;11132;12575;36194;847;11129;}
+Serial time:
+2698
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+Period time:
+24322
+Period time [Duino]:
+25
+SEQ number:209
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:209
+Elapsed time (T2 - R1)
+$23111323
+Sending REPORT...
+Total time:
+868.33
+REPORT success !
+
+RX ON time:
+1212
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|209|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|209|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{46246;844;22843;11728;59400;844;22901;12543;24329;12669;12547;867;11132;12575;36194;847;11129;24353;851;}
+Serial time:
+1922
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 7
+Period time:
+23722
+Period time [Duino]:
+23
+SEQ number:225
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:226
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2394
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|225|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+2682
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 0
+Period time:
+12654
+Period time [Duino]:
+13
+SEQ number:233
+Delay on timestamp:
+196
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:233
+Elapsed time (T2 - R1)
+$22914947
+Sending REPORT...
+Total time:
+855.82
+REPORT success !
+
+RX ON time:
+1199
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|233|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|233|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;}
+Serial time:
+1710
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11961
+Period time [Duino]:
+12
+SEQ number:241
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:241
+Elapsed time (T2 - R1)
+$23195767
+Sending REPORT...
+Total time:
+864.28
+REPORT success !
+
+RX ON time:
+1205
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|241|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|241|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;11152;852;}
+Serial time:
+1732
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11996
+Period time [Duino]:
+12
+SEQ number:249
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:250
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2303
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|249|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;11152;852;11180;}
+Serial time:
+2545
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+Period time:
+12502
+Period time [Duino]:
+13
+SEQ number:1
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:1
+Elapsed time (T2 - R1)
+$23000592
+Sending REPORT...
+Total time:
+870.95
+REPORT success !
+
+RX ON time:
+1217
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|1|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|1|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;11152;852;11180;12536;861;}
+Serial time:
+1765
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+12185
+Period time [Duino]:
+12
+SEQ number:9
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:9
+Elapsed time (T2 - R1)
+$23109398
+Sending REPORT...
+Total time:
+859.28
+REPORT success !
+
+RX ON time:
+1204
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|9|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|9|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;11152;852;11180;12536;861;11360;846;}
+Serial time:
+1773
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+11955
+Period time [Duino]:
+12
+SEQ number:17
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:17
+Elapsed time (T2 - R1)
+$23010346
+Sending REPORT...
+Total time:
+859.16
+REPORT success !
+
+RX ON time:
+1207
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|17|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|17|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;11152;852;11180;12536;861;11360;846;11143;849;}
+Serial time:
+1833
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+11954
+Period time [Duino]:
+12
+SEQ number:25
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:25
+Elapsed time (T2 - R1)
+$23168336
+Sending REPORT...
+Total time:
+859.20
+REPORT success !
+
+RX ON time:
+1202
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;11152;852;11180;12536;861;11360;846;11143;849;11139;846;}
+Serial time:
+1808
+not the right target: 2
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+23706
+Period time [Duino]:
+24
+SEQ number:41
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:41
+Elapsed time (T2 - R1)
+$22775789
+Sending REPORT...
+Total time:
+866.94
+REPORT success !
+
+RX ON time:
+1211
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|41|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|41|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;11152;852;11180;12536;861;11360;846;11143;849;11139;846;22895;856;}
+Serial time:
+1834
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+23811
+Period time [Duino]:
+23
+SEQ number:57
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:57
+Elapsed time (T2 - R1)
+$22751359
+Sending REPORT...
+Total time:
+853.11
+REPORT success !
+
+RX ON time:
+1196
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|57|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|57|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;11152;852;11180;12536;861;11360;846;11143;849;11139;846;22895;856;22990;841;}
+Serial time:
+1838
+not the right target: 2
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11943
+Period time [Duino]:
+12
+SEQ number:65
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:66
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2303
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|65|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;11152;852;11180;12536;861;11360;846;11143;849;11139;846;22895;856;22990;841;11135;}
+Serial time:
+2661
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+12517
+Period time [Duino]:
+13
+SEQ number:73
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:75
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3781
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|73|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{847;11152;852;11180;12536;861;11360;846;11143;849;11139;846;22895;856;22990;841;11135;12552;}
+Serial time:
+4192
+not the right target: 7
+not the right target: 0
+Period time:
+12546
+Period time [Duino]:
+13
+SEQ number:81
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:81
+Elapsed time (T2 - R1)
+$23044995
+Sending REPORT...
+Total time:
+862.12
+REPORT success !
+
+RX ON time:
+1203
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|81|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|81|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+1741
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+23655
+Period time [Duino]:
+23
+SEQ number:97
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:97
+Elapsed time (T2 - R1)
+$23107349
+Sending REPORT...
+Total time:
+862.33
+REPORT success !
+
+RX ON time:
+1206
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|97|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|97|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{846;}
+Serial time:
+1752
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+12011
+Period time [Duino]:
+12
+SEQ number:105
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:106
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2307
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|105|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{846;11199;}
+Serial time:
+2570
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+12616
+Period time [Duino]:
+13
+SEQ number:113
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:113
+Elapsed time (T2 - R1)
+$22649436
+Sending REPORT...
+Total time:
+857.58
+REPORT success !
+
+RX ON time:
+1201
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|113|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|113|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{846;11199;12653;843;}
+Serial time:
+1737
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+11951
+Period time [Duino]:
+12
+SEQ number:121
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:122
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2320
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|121|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{846;11199;12653;843;11142;}
+Serial time:
+2612
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+12525
+Period time [Duino]:
+12
+SEQ number:129
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:130
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2310
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|129|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{846;11199;12653;843;11142;12560;}
+Serial time:
+2571
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+12518
+Period time [Duino]:
+13
+SEQ number:137
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:137
+Elapsed time (T2 - R1)
+$22774643
+Sending REPORT...
+Total time:
+853.95
+REPORT success !
+
+RX ON time:
+1197
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|137|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|137|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{846;11199;12653;843;11142;12560;12555;841;}
+Serial time:
+1635
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+12521
+Period time [Duino]:
+13
+SEQ number:145
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:145
+Elapsed time (T2 - R1)
+$23214215
+Sending REPORT...
+Total time:
+859.95
+REPORT success !
+
+RX ON time:
+1206
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|145|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|145|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{846;11199;12653;843;11142;12560;12555;841;11709;847;}
+Serial time:
+1833
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+Period time:
+11991
+Period time [Duino]:
+12
+SEQ number:153
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:153
+Elapsed time (T2 - R1)
+$22773484
+Sending REPORT...
+Total time:
+851.03
+REPORT success !
+
+RX ON time:
+1192
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|153|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|153|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{846;11199;12653;843;11142;12560;12555;841;11709;847;11179;840;}
+Serial time:
+1800
+not the right target: 2
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+35556
+Period time [Duino]:
+35
+SEQ number:177
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:177
+Elapsed time (T2 - R1)
+$22805289
+Sending REPORT...
+Total time:
+851.24
+REPORT success !
+
+RX ON time:
+1196
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|177|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|177|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{846;11199;12653;843;11142;12560;12555;841;11709;847;11179;840;34750;841;}
+Serial time:
+1822
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+11933
+Period time [Duino]:
+12
+SEQ number:185
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:188
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+5243
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|185|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{846;11199;12653;843;11142;12560;12555;841;11709;847;11179;840;34750;841;11128;}
+Serial time:
+5583
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12520
+Period time [Duino]:
+13
+SEQ number:193
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:193
+Elapsed time (T2 - R1)
+$23073711
+Sending REPORT...
+Total time:
+861.78
+REPORT success !
+
+RX ON time:
+1205
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|193|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|193|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{846;11199;12653;843;11142;12560;12555;841;11709;847;11179;840;34750;841;11128;12556;846;}
+Serial time:
+1858
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+23809
+Period time [Duino]:
+24
+SEQ number:209
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:210
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2308
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|209|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{846;11199;12653;843;11142;12560;12555;841;11709;847;11179;840;34750;841;11128;12556;846;22992;}
+Serial time:
+2677
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 0
+Period time:
+59508
+Period time [Duino]:
+59
+SEQ number:249
+Delay on timestamp:
+197
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:249
+Elapsed time (T2 - R1)
+$23139681
+Sending REPORT...
+Total time:
+856.49
+REPORT success !
+
+RX ON time:
+1200
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|249|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|249|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+1607
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+11989
+Period time [Duino]:
+12
+SEQ number:1
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:1
+Elapsed time (T2 - R1)
+$23005653
+Sending REPORT...
+Total time:
+856.12
+REPORT success !
+
+RX ON time:
+1200
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|1|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|1|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;}
+Serial time:
+1708
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+11964
+Period time [Duino]:
+12
+SEQ number:9
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:9
+Elapsed time (T2 - R1)
+$23068877
+Sending REPORT...
+Total time:
+856.15
+REPORT success !
+
+RX ON time:
+1199
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|9|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|9|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11154;845;}
+Serial time:
+1758
+not the right target: 2
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12144
+Period time [Duino]:
+12
+SEQ number:17
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:18
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2308
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|17|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11154;845;11335;}
+Serial time:
+2591
+not the right target: 3
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+12521
+Period time [Duino]:
+13
+SEQ number:25
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:25
+Elapsed time (T2 - R1)
+$22718850
+Sending REPORT...
+Total time:
+850.82
+REPORT success !
+
+RX ON time:
+1196
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|25|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11154;845;11335;12555;840;}
+Serial time:
+1749
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 3
+not the right target: 4
+not the right target: 7
+not the right target: 0
+Period time:
+23664
+Period time [Duino]:
+24
+SEQ number:41
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:42
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2304
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|41|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11154;845;11335;12555;840;22859;}
+Serial time:
+2616
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+12615
+Period time [Duino]:
+12
+SEQ number:49
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+
+RX ON time:
+5323
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|49|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11154;845;11335;12555;840;22859;12649;}
+Serial time:
+5594
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 7
+not the right target: 0
+Period time:
+24387
+Period time [Duino]:
+25
+SEQ number:65
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:65
+Elapsed time (T2 - R1)
+$22868616
+Sending REPORT...
+Total time:
+945.29
+REPORT success !
+
+RX ON time:
+1292
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|65|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|65|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11154;845;11335;12555;840;22859;12649;24422;935;}
+Serial time:
+1879
+not the right target: 2
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 3
+not the right target: 4
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+23806
+Period time [Duino]:
+23
+SEQ number:81
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:81
+Elapsed time (T2 - R1)
+$23269707
+Sending REPORT...
+Total time:
+860.69
+REPORT success !
+
+RX ON time:
+1207
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|81|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|81|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11154;845;11335;12555;840;22859;12649;24422;935;22903;848;}
+Serial time:
+1811
+not the right target: 2
+not the right target: 4
+not the right target: 5
+not the right target: 0
+Period time:
+11951
+Period time [Duino]:
+12
+SEQ number:89
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:89
+Elapsed time (T2 - R1)
+$22781553
+Sending REPORT...
+Total time:
+863.74
+REPORT success !
+
+RX ON time:
+1210
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|89|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|89|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11154;845;11335;12555;840;22859;12649;24422;935;22903;848;11138;853;}
+Serial time:
+1823
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+not the right target: 0
+Period time:
+11985
+Period time [Duino]:
+12
+SEQ number:97
+Delay on timestamp:
+192
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:98
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2304
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|97|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11154;845;11335;12555;840;22859;12649;24422;935;22903;848;11138;853;11168;}
+Serial time:
+2644
+not the right target: 3
+not the right target: 4
+not the right target: 0
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 6
+not the right target: 7
+not the right target: 0
+Period time:
+24283
+Period time [Duino]:
+25
+SEQ number:113
+Delay on timestamp:
+193
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:114
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+2309
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|113|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11154;845;11335;12555;840;22859;12649;24422;935;22903;848;11138;853;11168;24317;}
+Serial time:
+2700
+not the right target: 3
+not the right target: 4
+not the right target: 5
+not the right target: 7
+Period time:
+12701
+Period time [Duino]:
+13
+SEQ number:121
+Delay on timestamp:
+195
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:123
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3778
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|121|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11154;845;11335;12555;840;22859;12649;24422;935;22903;848;11138;853;11168;24317;12732;}
+Serial time:
+4138
+not the right target: 4
+not the right target: 5
+not the right target: 6
+Period time:
+12519
+Period time [Duino]:
+12
+SEQ number:129
+Delay on timestamp:
+194
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:129
+Elapsed time (T2 - R1)
+$23191047
+Sending REPORT...
+Total time:
+862.62
+REPORT success !
+
+RX ON time:
+1203
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|129|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|3|129|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{844;11154;845;11335;12555;840;22859;12649;24422;935;22903;848;11138;853;11168;24317;12732;12555;847;}
+Serial time:
+1953
+not the right target: 2
+not the right target: 5
+not the right target: 6
+not the right target: 0
+Period time:
+11970
+Period time [Duino]:
+12
+SEQ number:137
+Delay on timestamp:
+196
+Sending ANSWER...
+ANSWER success !
+FINAL received !
+SEQ number:139
+Missed final frame OR wrong SEQ number
+
+RX ON time:
+3777
+New UWB frame received:
+65|220|0|207|188|1|0|0|0|0|0|207|188|8|0|0|0|0|0|207|188|1|137|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
+Timestamps stack [raw]:
+{}
+Serial time:
+3982
+not the right target: 5
+not the right target: 6
+not the right target: 7
+Period time:
+12523
+Period time [Duino]:
+13
+SEQ number:145
+Delay on timestamp:

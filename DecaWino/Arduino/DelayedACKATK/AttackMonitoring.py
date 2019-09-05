@@ -9,14 +9,14 @@ import threading
 
 
 
-SERIALPATH = 'COM18'
+SERIALPATH = 'COM29'
 line = ''
 ANCHORS_TABFILE = 'C:/Users/pestourb/Documents/GitHub/SecureLoc/anchors.tab'
 DWM1000_TIMEBASE = 15.65E-12
 SPEED_OF_LIGHT = 2.5E8
 exit_flag = False
 STEP = 0.25 #m
-START_POS = (0.9,2.4,0.)
+START_POS = (0.6,2.8,0.)
 buffer = []
 
 
@@ -156,9 +156,9 @@ def run():
     # # # Setting the axes properties
     map_ax.set_xlim3d([0.0, 2.0])
     map_ax.set_ylim3d([0.0, 5.0])
-    map_ax.set_zlim3d([0.0, 2.0])
+    map_ax.set_zlim3d([0.0, 1])
      
-    hl, = map_ax.plot3D([0], [0], [0])
+    hl, = map_ax.plot3D([START_POS[0]], [START_POS[1]], [START_POS[2]])
     
     update_line(hl, target)    
     plt.show(block=False)
