@@ -33,8 +33,10 @@ class MovingEntity(DirectObject,RenderedNode):
         self.ready = False
         self.shown = False
 
+
         self.create_sphere()
         self.create_text()
+        self.show()
 
 
     def get_coordinates(self):

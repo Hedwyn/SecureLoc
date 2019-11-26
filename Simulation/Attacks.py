@@ -5,6 +5,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)
 import json
 import random
+from anchor import Anchor
 
 class AttackSimulation:
     """Simulates the effects of an attack from the SYS perspective.
@@ -18,12 +19,17 @@ class AttackSimulation:
          random.seed()
 
 
-    def modify_distance(self,distance):
+    def modify_distance(self,distance, ancher_id):
         """applies the attack distribution to the distance"""
         ## # TODO: AWGN
+        if(ancher_id == '02' or ancher_id == '03'):
+           distance = distance + 2
+        elif (ancher_id == '01' or ancher_id =='04'):
+            distance = distance - 2
+
         return(distance + self.distribution)
 
-    def applies_attack_on_1sample(self,distance):
+    def applies_attack_on_1sample(self,distance, ancher_id):
         """simulates the attack on one distance sample"""
         # checking that the probabilities are valid
         if (self.success_rate + self.dos_rate) > 1:
@@ -49,7 +55,7 @@ class AttackSimulation:
 
         if (SUCCESS):
             # modify distance
-            modified_distance = self.modify_distance(distance)
+            modified_distance = self.modify_distance(distance, ancher_id)
 
         # check if it's a DoS
         elif (DoS):
@@ -93,7 +99,7 @@ class LogsAttacks(AttackSimulation):
                     distance = json_sample["distance"]
                     if distance is None:
                         continue
-                    modified_distance = self.applies_attack_on_1sample(distance)
+                    modified_distance = self.applies_attack_on_1sample(distance, json_sample["anchorID"])
                     if (modified_distance) != -1:
                         # debug
                         print("distance read: " + str(distance))
@@ -117,8 +123,8 @@ class LogsAttacks(AttackSimulation):
 
 # creating an Attack
 #TODO: lire le dernier fichier déposé dans un répertoire sépcifique
-LOGIN = 'C:/Users/pestourb/Documents/GitHub/SecureLoc/json/mqtt/2019-03-21__11h48m16s.json'
-LOGOUT_FOLDER= 'OutputLogs'
+LOGIN = "../Playback/2019-05-17__16h54m32s.json"
+LOGOUT_FOLDER= '../PLAYBACK'
 LOGOUT = LOGOUT_FOLDER + '/' + 'log1.json' #TODO: number or date in the filename
 distance_shift = LogsAttacks(0.5,0.5,5,"Distance Shift")
 distance_shift.simulate_attack(LOGIN,LOGOUT)

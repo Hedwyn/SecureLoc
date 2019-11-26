@@ -28,7 +28,7 @@ fig = plt.figure("MSE")
 
 ax1 = fig.add_subplot(111)
 
-plt.ylabel("MSE (m²)")
+plt.ylabel("RME (m²)")
 plt.xlabel("Time(s)")
 
 time = [0.33 * i for i in range(len(mse_list))]

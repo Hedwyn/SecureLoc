@@ -23,7 +23,7 @@ class Renderer(ABC,ShowBase):
         render.set_shader_auto()
         render.set_antialias(AntialiasAttrib.MAuto)
         """Set the overview parameters"""
-        base.cam.set_pos(5, 9, 3)
+        base.cam.set_pos(4, 10, 3)
         base.cam.look_at(0, 0, 0)
 
 
@@ -129,7 +129,8 @@ class RenderedNode(ABC):
         # creating the text with the distances
         self.text = ''
         while (distances_list):
-                self.text += str(distances_list.pop())
+            # define printing the first 4 digits each time
+                self.text += str(distances_list.pop())[:4]
                 # checing if it's the last one of the list
                 if (distances_list):
                     self.text += '/ '
@@ -137,7 +138,8 @@ class RenderedNode(ABC):
     def get_position_as_str(self):
         """converts the node position into a string"""
         (x,y,z) = self.get_coordinates()
-        self.text = ("(" + str(x) + "," + str(y) + "," +str(z) + str(")") )
+        # printing only the first 4 digits
+        self.text = ("(" + str(x)[:4] + "," + str(y)[:4] + "," +str(z)[:4] + str(")") )
 
 
 

@@ -49,7 +49,7 @@ AES aes ;
 
 
 #define ASCII_NUMBERS_OFFSET 48
-
+int time;
 
 
 int nb_targets = 4;
@@ -57,15 +57,15 @@ int rxFrames;
 byte succ;
 byte nbrand_et_id [N_BLOCK];     //nb aléa à crypter et son identifiant
 
-byte identifiant[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x02};
+byte identifiant[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x01};
 byte ID_1[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
 byte ID_2[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02};
 byte ID_3[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03};
 byte ID_4[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04};
 
 byte *ID_TARGETS[10]= {ID_2,ID_1,ID_3,ID_4};
-uint64_t timeshifts[] = {3000,8000,3000,3000};
-
+//uint64_t timeshifts[] = {3000,8000,3000,3000};
+uint64_t timeshifts[] = {0,0,0,0};
 
 
 byte key [2*N_BLOCK] = { 0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03,
@@ -150,15 +150,28 @@ void setup() {
     Serial.println("succeeded to set Channel");
   } 
 
+    
+  if (!decaduino.setSmartTxPower(0) ) {
+    Serial.println("$wrong argument for set STP");
+  }
+
+  if (decaduino.getSmartTxPower() != 0) {
+    Serial.println("$STP failed");
+  }
+
+  decaduino.setPhrPower(18,15.5);
+  decaduino.setSdPower(18,15.5);
+
 
    /* setting up Pulse Repetition Frequency */
-  decaduino.setTxPrf(1);
-  decaduino.setRxPrf(1);
-  //decaduino.setDrxTune(64);
-
- if (!decaduino.setPreambleLength(128)) {
-  DPRINTFLN("Failed to set Rx PRF to 64");
- }
+//  decaduino.setTxPrf(1);
+//  decaduino.setRxPrf(1);
+//  //decaduino.setDrxTune(64);
+//
+// if (!decaduino.setPreambleLength(128)) {
+//  DPRINTFLN("Failed to set Rx PRF to 64");
+// }
+  decaduino.setPreambleLength(256);
  
   state = TWR_ENGINE_STATE_INIT;
   randomSeed(decaduino.getSystemTimeCounter());
@@ -276,6 +289,7 @@ void loop() {
       if ( decaduino.rxFrameAvailable() ) {  
             
         if ( rxData[0] == TWR_MSG_TYPE_START ) {    //trame ancre = dest | idAnchor | idNextAchor
+          //Serial.println("$Start received");
           for (int i=0; i<8; i++){
            IdRobotRx [i] = rxData[i+1];         //On récupère l'id du robot destinataire
            
@@ -290,7 +304,7 @@ void loop() {
           while (!isTarget && (target_idx++ < nb_targets) ) {
             if (  *(uint64_t*)IdAncre == *(uint64_t *)(ID_TARGETS[target_idx]) ) {
               isTarget = 1;
-              //Serial.println("Target found");
+              //Serial.println("$Target found");
               
             }
           }
@@ -336,8 +350,17 @@ void loop() {
         txData[1+i] = IdAncre[i];
         txData[9+i] = IdRobotRx[i];
       }
-      decaduino.pdDataRequest(txData, 18,1, t2 + 30000000 + timeshifts[target_idx]);
-      state = TWR_ENGINE_STATE_WAIT_SENT;
+      
+      if (timeshifts[target_idx] != 0) {
+        Serial.println("$Sending ACK");
+        decaduino.pdDataRequest(txData, 18,1, t2 + 100000000 + timeshifts[target_idx]);
+        state = TWR_ENGINE_STATE_WAIT_SENT;
+      }
+      else {
+        state = TWR_ENGINE_STATE_INIT;
+        time = millis();
+      }  
+      
       break;
 
 /**
@@ -346,6 +369,10 @@ void loop() {
  */
 
     case TWR_ENGINE_STATE_WAIT_SENT:
+      if (millis() - time > 200) {
+        Serial.println("$Timeout !\n");
+        state = TWR_ENGINE_STATE_INIT;
+      }
       if ( decaduino.hasTxSucceeded() )
         state = TWR_ENGINE_STATE_MEMORISE_T3;  //si l'état précédent est réussi on continue
       break;

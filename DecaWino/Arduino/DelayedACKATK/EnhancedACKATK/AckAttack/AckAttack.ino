@@ -143,12 +143,12 @@ void setup() {
 
 
 
-  decaduino.setPreambleLength(1024);
+  //decaduino.setPreambleLength(1024);
   /*decaduino.setRxPrf(2);
   decaduino.setTxPrf(2);
   decaduino.setDrxTune(64);*/
 
-  decaduino.setTBR(110);  
+  //decaduino.setTBR(110);  
   decaduino.setChannel(5);
   decaduino.setRxBuffer(rxData, &rxLen);
   decaduino.plmeRxEnableRequest();
@@ -410,8 +410,8 @@ void loop() {
         txData[9+i] = IdRobotRx[i];
       }
 
-      decaduino.pdDataRequest(txData, 18,1, t2 + 500000000 + timeshifts[target_idx]);
-      //decaduino.pdDataRequest(txData, 18,1, t_pre + 131000000 + timeshifts[target_idx]);
+      //decaduino.pdDataRequest(txData, 18,1, t2 + 500000000 + timeshifts[target_idx]);
+      decaduino.pdDataRequest(txData, 18,1, t_pre + 131000000 + timeshifts[target_idx]);
       /*if (!decaduino.pdDataRequest(txData, 18,1, t_to + 115000000 + timeshifts[target_idx])) {
         Serial.println("PRE 1024 failed");
       }*/

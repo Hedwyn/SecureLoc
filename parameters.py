@@ -3,7 +3,7 @@ HEADLESS = False
 DEBUG = 0
 VERBOSE = 0
 ENABLE_LOGS = 1
-PLAYBACK = True
+PLAYBACK = False
 MEASURING = False
 HOST = '169.254.1.1'   # IP address of the MQTT broker
 
@@ -49,7 +49,7 @@ def is_bot_id(ID):
     """checks if the id provided refers to a bot"""
     return( (len(ID) > 2) and (ID[-3] == 'b') )
 
-NB_BOTS = 2
+NB_BOTS = 1
 anchors_labels = ['01',
                   '02',
                   '03',
@@ -81,10 +81,10 @@ ROOT = 'SecureLoc/anchors_data/'
 
 # If both GN and ITERATIVE are disabled the position is calulated only with weighted centroid
 RANDOM_SEARCH = False # notifies that GN and iterative algorithm should use the default pos as starting point
-GN = False # notifies that Gauss-Newton algorithm should be used for position computation
+GN = True # notifies that Gauss-Newton algorithm should be used for position computation
 ITERATIVE = False # used only when GN is disabled. Notifies that iterative localization should be used for position computation
 DEFAULT_POS = (0.9,2.4,0) # default position; center of the platform
-NB_STEPS = 20 #Steps number for position iterative resolution
+NB_STEPS = 10 #Steps number for position iterative resolution
 
 # Filters & speed/acceleration computation parameters
 SPEED_BUFFER_LEN = 5 #size of the list storing the last speed measurements
@@ -96,7 +96,7 @@ STEP = 1 # Steps for SAT filter
 
 
 # correction default factors
-correction_coeff = {'01': 0.7,'02':  0.7,'03': 0.7,'04':0.7}
+correction_coeff = {'01': 1,'02': 1,'03': 1,'04':1}
 correction_offset = {'01':0.,'02':0.,'03':0.,'04':0.}
 
 

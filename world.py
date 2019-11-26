@@ -65,7 +65,7 @@ class World(RenderedWorld):
                 if (options == "SW"):
                     # sliding window enabled
 
-                    sliding_windows = Filter("SW",[anchor.rangings[robot_id],20,12,0])
+                    sliding_windows = Filter("SW",[anchor.rangings[robot_id],15,8,0])
                     filtered_distance = sliding_windows.apply()[0] # output(s) of filters are returned as a list
 
 

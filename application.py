@@ -183,7 +183,7 @@ class Application(Renderer):
 
                 self.anchors.append( Anchor(x,y,z,name,color) )
        # creating the graphic world in the 3D engine. First 2 args define the size
-        self.world = World(8, 8, self.anchors)
+        self.world = World(20, 20, self.anchors)
 
 
 
@@ -193,7 +193,7 @@ class Application(Renderer):
         v_print("creating moving entities \n:")
         #bots_id = self.world.gen_bots_id(NB_BOTS)
         for i in range(NB_BOTS):
-            colors = ['blue','orange']
+            colors = ['orange','blue']
             self.robots[ bots_id[i] ]  = MovingEntity( bots_id[i], colors[i] )
         self.processed_robot = bots_id[0]
 
@@ -473,12 +473,6 @@ class Application(Renderer):
         # computing tag speed and acceleration
         robot.compute_speed()
         robot.compute_acc()
-
-
-
-
-
-
 
 
         # writing position in logs

@@ -243,8 +243,8 @@ void loop() {
         txData[1+i] = IdAncre[i];
         txData[9+i] = IdRobotRx[i];
       }
-      decaduino.pdDataRequest(txData, 18);
-      //decaduino.pdDataRequest(txData, 18,1,t2 + 500000000);
+      //decaduino.pdDataRequest(txData, 18);
+      decaduino.pdDataRequest(txData, 18,1,t2 + 30000000);
       state = TWR_ENGINE_STATE_WAIT_SENT;
       break;
 

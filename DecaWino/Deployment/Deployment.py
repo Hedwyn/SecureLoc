@@ -1,10 +1,12 @@
 # Cleans the directory, compiles anchor code and generates a different hex for each ID.
 import subprocess
+from subprocess import Popen, PIPE, STDOUT
 import os
 import fabric
 import paramiko
 import spur
 import time
+
 
 SHELL_ON = True
 DEFAULT_NB_ANCHORS = 15
@@ -15,19 +17,59 @@ HOSTPATH = '/home/pi/Desktop'
 CONFIG_PATH = 'Config'
 DEFAULT_CONF = 'config.txt'
 
+DEFAULT_PROJECT_NAME = 'Anchor'
+hex_name = 'anchor'
+
+
+PROJECTS_DIR = 'Projects'
+BIN_DIR = 'bin'
+ID_LENGTH = 1
+
+class Console():
+	_console = None
+	@property
+	def console(self):
+		return Console._console
+	@console.setter
+	def console(self,p):
+		Console._console = p
+
+	def shell_exec(self,cmd):
+		"""executes the given command in a shell.
+		Can display the output into the compilation menu console if passed in argument."""
+		#subprocess.run(cmd, SHELL_ON)
+		if self.console == None:
+
+			p = Popen(cmd,shell = SHELL_ON)
+			p.wait()
+		else:
+			self.console.console_handler(cmd)
+	def print(self, msg):
+		"""prints the message in the current console. Defaults to the current shell"""
+		if self.console == None:
+			print(msg)
+		else:
+			self.console.console_display(msg)
+
+console = Console()
+
 def read_config(configname = DEFAULT_CONF):
-	"""reads and extracts the data from config file, i.e. Raspberry host and user names, 
+	"""reads and extracts the data from config file, i.e. Raspberry host and user names,
 	anchors names, and raspberry/anchors association"""
+
 	hosts_list = []
 	usernames = {}
 	passwords = {}
 	anchors_names = []
 	anchors_table = {}
-	
+
 	filename = CONFIG_PATH + "/" + configname
-	
+
 	with open(filename) as f:
 		for line in f:
+			if line[0] == '#':
+				# comment
+				continue
 			names = line.split()
 			i = 0
 			for name in names:
@@ -44,70 +86,77 @@ def read_config(configname = DEFAULT_CONF):
 				else:
 					# anchor name
 					anchors_names.append(name)
-					
+
 					# creating an entry in anchors/raspberry association table dictionary
 					if not(hostname in anchors_table):
 						#creating the entry
 						anchors_table[hostname] = []
 					anchors_table[hostname].append(name)
-						
+
 				i += 1
 	return([hosts_list,usernames,passwords,anchors_names,anchors_table])
-					
-				
-				
+
+
+
 
 
 
 def gen_anchors_id(nb_anchors = DEFAULT_NB_ANCHORS):
 	"""generates a list of id. The number of ids is given in args"""
 	if (nb_anchors > 26):
-		print("cannot handle " + str(nb_anchors) + "\n")
-		print("the number of anchors should be below 26")
-			
+		console.print("cannot handle " + str(nb_anchors) + "\n")
+		console.print("the number of anchors should be below 26")
+
 	else:
 		anchors_name = []
 		for i in range(nb_anchors):
 			# generates successive letters starting from A
 			anchors_name.append( str(chr(65 + i) ) )
-			
+
 	return (anchors_name)
-	
-		
-	
-	
 
-def clean():
+def shell_exec(cmd):
+	"""executes the given command in a shell.
+	Can display the output into the compilation menu console if passed in argument."""
+	#subprocess.run(cmd, SHELL_ON)
+
+	p = Popen(cmd,shell = SHELL_ON)
+	p.wait()
+
+def clean(project_name):
 	"""removes all previous compiled files from directory"""
-	subprocess.run("make clean",shell = SHELL_ON)
+	console.shell_exec("cd teensy3 && make softclean PROJECTNAME=" + project_name)
 
 
-def compilation(nb_anchors):
+
+def compilation(nb_anchors, project_name = DEFAULT_PROJECT_NAME):
 	"""compiles main.cpp and generates one specific anchor{ID}.hex with a unique ID for each anchor"""
-	
-	anchors_id = gen_anchors_id(nb_anchors);
+	anchors_id = gen_anchors_id(nb_anchors)
 	id_idx = 1
+
 	for id in anchors_id:
 		# .elf files generation
 		# dependencies will be compiled only the first time
-		subprocess.run("make anchor" + id + ".elf " + "TARGET=" + "anchor" + id + " NB_ANCHORS=" + str(nb_anchors) + " ANCHORID=" + str(id_idx) , shell = SHELL_ON )
-		
+
+
 		# .hex files generation
-		subprocess.run("make anchor" + id + ".hex " + "TARGET=" + "anchor" + id + " NB_ANCHORS=" + str(nb_anchors) + " ANCHORID=" + str(id_idx), shell = SHELL_ON)
-		
+		console.shell_exec("cd teensy3 && make PROJECTNAME=" + project_name + " BINNAME=" + hex_name + id  + " NB_ANCHORS=" + str(nb_anchors) + " ANCHORID=" + str(id_idx))
+
 		id_idx += 1
 		# deletes main.o such as reassembling main.o at the next iteration
-		subprocess.run("make softclean", shell = SHELL_ON)
-		
+		clean(project_name)
 
-def send_hex_file(file, destination,password,path):
+
+def send_hex_file(file, destination,password,path, project_name):
 	"""sends hex file to raspberry with the given ip address"""
-	p = subprocess.Popen("pscp -scp -pw " + password + " " + file + " " + destination + ":" + path)
-	out, err = p.communicate()
-	errcode = p.returncode
-	
-	
-def deploy_hex_files(config = DEFAULT_CONF):
+	# retrieving hex file's path
+	# filename = $(PROJECTNAME)$(ID).hex
+	#project_name = file.split('.')[0][:-ID_LENGTH]
+	file_path = PROJECTS_DIR + '/' + project_name + '/' + BIN_DIR + '/' + file
+	console.shell_exec("pscp -scp -pw " + password + " " + file_path + " " + destination + ":" + path)
+
+
+def deploy_hex_files(config = DEFAULT_CONF, project_name = DEFAULT_PROJECT_NAME):
 	"""triggers the compilation and deploys the hex files on the raspberry hosts"""
 
 	# getting config
@@ -115,26 +164,25 @@ def deploy_hex_files(config = DEFAULT_CONF):
 	nb_anchors = len(anchors_names)
 
 	# cleaning previous local hex files
-	clean()
-	
+	clean(project_name)
+
 	# compiling main file, generating an hex file with unique ID for each anchor
-	compilation(nb_anchors)
+	compilation(nb_anchors, project_name)
 	for host in hosts_list:
 		# flushing previous hex files
 		local_clean(host, usernames[host],passwords[host])
-	
-	
-	
+
+
+
 	for host in hosts_list:
-	
 		for anchor in anchors_table[host]:
-			filename = "anchor" + anchor + ".hex"
-			destination = usernames[host] + "@" + host  
+			filename = hex_name + anchor + ".hex"
+			destination = usernames[host] + "@" + host
 			path = HOSTPATH
 			pwd = passwords[host]
-			send_hex_file(filename, destination,pwd,path)
-	
-	
+			send_hex_file(filename, destination,pwd,path,project_name)
+
+
 def local_flash(hostname,username,password,anchors_list):
 	"""triggers anchor flashing on the given rasp host"""
 	#starting ssh client
@@ -144,22 +192,22 @@ def local_flash(hostname,username,password,anchors_list):
 		ssh.load_system_host_keys()
 		ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 		ssh.connect(hostname,port =22,username = username, password = password)
-		
+
 		# cleaning previous hex files
 		(stdin, stdout, stderr) = ssh.exec_command('ls')
 
-			
+
 		# flashing the anchors in anchor_list
 		for anchor in anchors_list:
-			print("flashing anchor " + anchor + "..." )
-			(stdin, stdout, stderr) = ssh.exec_command('nohup /home/pi/Desktop/teensy_loader_cli -mmcu=mk20dx256 -w -v ' + '/home/pi/Desktop/anchor' + anchor + '.hex')
+			console.print("flashing anchor " + anchor + "..." )
+			(stdin, stdout, stderr) = ssh.exec_command('nohup /home/pi/Desktop/teensy_loader_cli -mmcu=mk20dx256 -s -v ' + '/home/pi/Desktop/anchor' + anchor + '.hex')
 			stdout.channel.recv_exit_status()
-			print('nohup ~/Desktop/teensy_loader_cli -mmcu=mk20dx256 -w -v ' + '~/Desktop/anchor' + anchor + '.hex')
-			
+			console.print('nohup ~/Desktop/teensy_loader_cli -mmcu=mk20dx256 -s -v ' + '~/Desktop/anchor' + anchor + '.hex')
+
 			for line in stdout.readlines():
-				print(line)
-			print("flashed !")
-			
+				console.print(line)
+			console.print("flashed !")
+
 def local_clean(hostname,username,password):
 	"""triggers anchor flashing on the given rasp host"""
 	#starting ssh client
@@ -169,73 +217,55 @@ def local_clean(hostname,username,password):
 	ssh = paramiko.SSHClient()
 	ssh.load_system_host_keys()
 	ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-	print(hostname,username,password)
+	console.print(hostname + " " + username)
 	ssh.connect(hostname = hostname,port =22,username = username, password = password,timeout = 3)
-	
-	
+
+
 	# cleaning previous hex files
 	(stdin, stdout, stderr) = ssh.exec_command('ls')
 
-		
+
 	# flushing the anchors in anchor_list
-	
+
 	(stdin, stdout, stderr) = ssh.exec_command('rm  ~/Desktop/*.hex')
 	stdout.channel.recv_exit_status()
 	ssh.close()
-		
+
 def global_clean(config = DEFAULT_CONF):
 	[hosts_list,usernames,passwords,anchors_names,anchors_table] = read_config(config)
 	for host in hosts_list:
 		local_clean(host,usernames[host],passwords[host])
 
-		
-			
-		
-			
+
+
+
+
 def global_flash(config = DEFAULT_CONF):
 	"""triggers every local flash given in the config file"""
 	[hosts_list,usernames,passwords,anchors_names,anchors_table] = read_config(config)
-	
+
 	for host in hosts_list:
 		# getting the anchors associated to the host
 		anchors_list = anchors_table[host]
-		print(anchors_list)
-		print(host)
-		print(usernames[host])
-		print(passwords[host])
-		
+		console.print(anchors_list)
+		console.print(host)
+		console.print(usernames[host])
+		console.print(passwords[host])
+
 		# flashing the anchors given in the config file
-		
+
 		local_flash(host, usernames[host],passwords[host],anchors_list)
-	
-		
-		
-	
-	
-	
 
-		
-	
-	
-		
+
+
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
-	
-	
-	#
-	
-
-	#send_hex_file('anchorA.hex','pi@Rasp1','raspberry',HOSTPATH)
-	#local_flash('Rasp1','pi','raspberry',['A'])
-	
-	#global_clean('config2.txt')
-
-    deploy_hex_files('config2.txt')
+	deploy_hex_files('config2.txt', 'Anchor_c')
 	global_flash('config2.txt')
-	
-	
- 
-
-
-
-
-

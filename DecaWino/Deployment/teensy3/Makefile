@@ -29,32 +29,36 @@
 
 # set your MCU type here, or make command line `make MCU=MK20DX256`
 MCU=MK20DX256
+CPU_SPEED = 72000000 #default
 #MCU=MKL26Z64
 #MCU=MK64FX512
 #MCU=MK66FX1M0
-
+PROJECTNAME= Anchor
+BINNAME= $(PROJECTNAME)
+PROJECTPATH= ../Projects/$(PROJECTNAME)
 # make it lower case
 LOWER_MCU := $(subst A,a,$(subst B,b,$(subst C,c,$(subst D,d,$(subst E,e,$(subst F,f,$(subst G,g,$(subst H,h,$(subst I,i,$(subst J,j,$(subst K,k,$(subst L,l,$(subst M,m,$(subst N,n,$(subst O,o,$(subst P,p,$(subst Q,q,$(subst R,r,$(subst S,s,$(subst T,t,$(subst U,u,$(subst V,v,$(subst W,w,$(subst X,x,$(subst Y,y,$(subst Z,z,$(MCU)))))))))))))))))))))))))))
 MCU_LD = $(LOWER_MCU).ld
 
-# The name of your project (used to name the compiled .hex file)
+
 TARGET = main
 
-# anchor ID should be given in args of make command. Default value A
-ANCHORID = 7
+# anchor ID should be given in args of make command. Default value 1
+ANCHORID = 1
 NB_ANCHORS = 4
 
 # Those that specify a NO_ARDUINO environment variable will
 # be able to use this Makefile with no Arduino dependency.
 # Please note that if ARDUINOPATH was set, it will override
 # the NO_ARDUINO behaviour.
+#NO_ARDUINO = 1
 ifndef NO_ARDUINO
 # Path to your arduino installation
 ARDUINOPATH ?= ../../../../..
 endif
 
 # configurable options
-OPTIONS = -DF_CPU=48000000 -DUSB_SERIAL -DLAYOUT_US_ENGLISH -DUSING_MAKEFILE -DANCHOR=$(ANCHORID) -DNB_ANCHORS=$(NB_ANCHORS)
+OPTIONS = -DF_CPU=$(CPU_SPEED) -DUSB_SERIAL -DLAYOUT_US_ENGLISH -DUSING_MAKEFILE -DANCHOR=$(ANCHORID) -DNB_ANCHORS=$(NB_ANCHORS)
 
 # options needed by many Arduino libraries to configure for Teensy 3.x
 OPTIONS += -D__$(MCU)__ -DARDUINO=10805 -DTEENSYDUINO=141
@@ -79,9 +83,8 @@ CPUARCH = cortex-m4
 #************************************************************************
 
 ifdef ARDUINOPATH
-PROJECTPATH = "C:\Users\pestourb\Documents\Plateforme src\Compilation\teensy3"
-TARGETPATH = "C:\Users\pestourb\Documents\Plateforme src\Compilation\teensy3\main.hex"
 
+TARGETPATH = "C:\Users\pestourb\Documents\Plateforme src\Compilation\teensy3\main.hex"
 # path location for Teensy Loader, teensy_post_compile and teensy_reboot (on Linux)
 #TOOLSPATH = $(abspath $(ARDUINOPATH)/hardware/tools)
 TOOLSPATH  = "C:\Program Files (x86)\Arduino\hardware\tools"
@@ -102,9 +105,9 @@ endif
 #************************************************************************
 # Settings below this point usually do not need to be edited
 #************************************************************************
-
+INCLUDE = -I$(LIBS_H_PATH) -I$(PROJECTS_H_PATH)
 # CPPFLAGS = compiler options for C and C++
-CPPFLAGS = -Wall -g -Os -mcpu=$(CPUARCH) -mthumb -MMD $(OPTIONS) -I. -I $(LIBRARYPATH) -I "C:\Users\pestourb\Documents\Arduino\libraries\DecaDuino-master" -I "C:\Program Files (x86)\Arduino\hardware\teensy\avr\libraries\SPI" -I "C:\WinAVR-20100110\avr32\include"
+CPPFLAGS = -Wall -g -Os -mcpu=$(CPUARCH) -mthumb -MMD $(OPTIONS) -I. -I $(LIBRARYPATH) $(INCLUDE) -I "C:\Users\pestourb\Documents\Arduino\libraries\DecaDuino-master" -I "C:\Program Files (x86)\Arduino\hardware\teensy\avr\libraries\SPI" -I "C:\WinAVR-20100110\avr32\include"
 
 # compiler options for C++ only
 CXXFLAGS = -std=gnu++14 -felide-constructors -fno-exceptions -fno-rtti
@@ -125,42 +128,95 @@ CXX = $(COMPILERPATH)/arm-none-eabi-g++
 OBJCOPY = $(COMPILERPATH)/arm-none-eabi-objcopy
 SIZE = $(COMPILERPATH)/arm-none-eabi-size
 
+# Project subdirectories
+BINDIR = bin
+OBJDIR = obj
+SRCDIR = src
+HEADERDIR = header
+CPPDIR = cpp
+
 # automatically create lists of the sources and objects
-# TODO: this does not handle Arduino libraries yet...
-C_FILES := $(wildcard *.c)
-CPP_FILES := $(wildcard *.cpp)
-OBJS := $(C_FILES:.c=.o) $(CPP_FILES:.cpp=.o)
+# Arduino Libs
+LIBS_H_PATH = $(SRCDIR)/$(HEADERDIR)
+LIBSPATH = $(SRCDIR)/$(CPPDIR)
+LIBS_C_FILES := $(wildcard $(LIBSPATH)/*.c)
+LIBS_CPP_FILES := $(wildcard $(LIBSPATH)/*.cpp)
+LIBS_OBJS_FILES = $(notdir $(LIBS_C_FILES:.c=.o)) $(notdir $(LIBS_CPP_FILES:.cpp=.o))
+LIBS_OBJS = $(foreach obj,$(LIBS_OBJS_FILES),$(OBJDIR)/$(obj) )
+
+# Project files
+PROJECTS_H_PATH = $(PROJECTPATH)/$(SRCDIR)/$(HEADERDIR)
+PROJECT_C_FILES :=  $(wildcard $(PROJECTPATH)/$(SRCDIR)/$(CPPDIR)/*.c)
+PROJECT_CPP_FILES :=  $(wildcard $(PROJECTPATH)/$(SRCDIR)/$(CPPDIR)/*.cpp)
+PROJECT_OBJS_FILES = $(notdir $(PROJECT_CPP_FILES:.cpp=.o))
+PROJECT_OBJS = $(foreach obj,$(PROJECT_OBJS_FILES),$(PROJECTPATH)/$(OBJDIR)/$(obj) )
+
+# global list of object files
+#OBJS = $(foreach obj,$(LIBS_OBJS),$(OBJDIR)/$(obj)) $(foreach obj,$(PROJECT_OBJS),$(PROJECTPATH)/$(OBJDIR)/$(obj))
+OBJS = $(LIBS_OBJS) $(PROJECT_OBJS)
+
+
+
 
 
 # the actual makefile rules (all .o files built by GNU make's default implicit rules)
 
-all: $(TARGET).hex
+all: $(BINNAME).hex
 
-$(TARGET).elf: $(OBJS) $(MCU_LD) 
-	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
-
-%.hex: %.elf
+$(BINNAME).hex: $(PROJECTPATH)/$(BINDIR)/$(PROJECTNAME).elf
 	$(SIZE) $<
-	$(OBJCOPY) -O ihex -R .eeprom $< $@
+	$(OBJCOPY) -O ihex -R .eeprom $< $(PROJECTPATH)/$(BINDIR)/$@
 ifneq (,$(wildcard $(TOOLSPATH)))
+	@echo compiling dependencies
 	$(TOOLSPATH)/teensy_post_compile -file=$(basename $@) -path=$(shell pwd) -tools=$(TOOLSPATH)
 	-$(TOOLSPATH)/teensy_reboot
 endif
-	
+
+${OBJDIR}/%.o:	$(SRCDIR)/$(CPPDIR)/%.cpp
+	@echo $@
+	@echo compiling arduino libs objects file
+	@echo $<
+	$(CXX) $(LDFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+${OBJDIR}/%.o:	$(SRCDIR)/$(CPPDIR)/%.c
+	@echo $@
+	@echo compiling arduino libs objects file
+	@echo $<
+	$(CC) $(LDFLAGS) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+${PROJECTPATH}/${OBJDIR}/%.o:	$(PROJECTPATH)/$(SRCDIR)/$(CPPDIR)/%.cpp
+	@echo $@
+	@echo compiling projects objects file
+	@echo $<
+	$(CXX) $(LDFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+${PROJECTPATH}/${OBJDIR}/%.o:	$(PROJECTPATH)/$(SRCDIR)/$(CPPDIR)/%.c
+	@echo $@
+	@echo compiling projects objects file
+	@echo $<
+	$(CC) $(LDFLAGS) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+${PROJECTPATH}/${BINDIR}/$(PROJECTNAME).elf: $(OBJS) $(MCU_LD)
+	@echo making elf file
+	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+
+build: $(LIBS_OBJS)
+	@echo Arduino libraries built
 
 # compiler generated dependency info
 -include $(OBJS:.o=.d)
 
-
-	
-		
-	
-	
-		
-	
-
 clean:
-	rm -f *.o *.d *.elf *.hex
-	
+	@echo cleaning previous built
+	rm -f  *.o *.d *.hex *.elf $(OBJDIR)/*.o  $(OBJDIR)/*.d
+	rm -f $(PROJECTPATH)/$(OBJDIR)/*.o $(PROJECTPATH)/$(OBJDIR)/*.d $(PROJECTPATH)/$(BINDIR)/*.elf $(PROJECTPATH)/$(BINDIR)/*.hex
+
 softclean:
-	rm -f main.o
+	rm -f $(PROJECTPATH)/$(OBJDIR)/$(PROJECTNAME).o
+	rm -f $(PROJECTPATH)/$(OBJDIR)/$(PROJECTNAME).d
+	rm -f $(PROJECTPATH)/$(BINDIR)/$(PROJECTNAME).elf
+	
+
+test:
+	@echo $(LIBS_C_FILES)
+	@echo $(LIBS_CPP_FILES)
