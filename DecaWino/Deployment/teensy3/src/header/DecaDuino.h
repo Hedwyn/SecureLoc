@@ -1,12 +1,12 @@
 // DecaDuino.h
-// 
+//
 // Another DecaWave DW1000 driver for Arduino
 // See the README file in this directory for documentation
-//  
+//
 /// \mainpage DecaDuino library for Arduino
-/// 
+///
 /// Get the latest version of this documentation here: https://www.irit.fr/~Adrien.Van-Den-Bossche/decaduino/
-/// 
+///
 /// DecaDuino is an Arduino library which provides a driver for the DecaWave DW1000 transceiver and modules based on this transceiver, such as DecaWave DWM1000. Since the DW1000 is based on a Ultra Wide Band (UWB) Physical layer, in addition to wireless communication, DecaDuino supports Time-of-Flight (ToF) ranging and can be used as an open framework for protocol evaluation.
 ///
 /// DecaDuino supports the PJRC Teensy 3.2/3.1/3.0. Others Arduino boards have not been tested yet. User feedback on the topic will be greatly appreciated. For this purpose, please use the contact address indicated in the "Contact, feedback and users forum" section of this documentation.
@@ -22,13 +22,13 @@
 /// \par Download
 ///
 /// Get the <a href='https://github.com/irit-irt/DecaDuino'>current release of the library on github.com</a>. Previous versions (before github.com hosting) are also available in the "Revision History" section of this documentation.
-/// 
+///
 /// \par Installation
-/// 
+///
 /// To use DecaDuino on a PJRC Teensy 3.2/3.1/3.0, install the <a href='http://www.pjrc.com/teensy/teensyduino.html'>Teensyduino add-on</a> first. Then, download DecaDuino, unzip the files into the libraries sub-directory and relaunch the Arduino environment; you should see the library in the Sketch->Import Library menu, and example sketches in File->Examples->DecaDuino.
 ///
 /// \par Usage
-/// 
+///
 /// Remember to import the SPI and Decaduino libraries in your sketches:
 /// \code
 /// #include <SPI.h>
@@ -37,53 +37,53 @@
 /// For more details, please checkout the examples in the File->Examples->DecaDuino menu in the Arduino IDE. The sketches include both frame send/receive examples and ranging protocols implementation examples.
 ///
 /// \par Contact, feedback and users forum
-/// 
-/// Please contact <a href='mailto:vandenbo_nospam@irit.fr?subject=[DecaDuino] '>Adrien van den Bossche</a> (remove _nospam) for any question concerning DecaDuino. 
 ///
-/// \par Demonstrations 
+/// Please contact <a href='mailto:vandenbo_nospam@irit.fr?subject=[DecaDuino] '>Adrien van den Bossche</a> (remove _nospam) for any question concerning DecaDuino.
+///
+/// \par Demonstrations
 ///
 /// <a href='https://www.irit.fr/~Adrien.Van-Den-Bossche/DecaWiNo/20150914-DecaWiNo-SDS-TWR-RGB-strip-low_res.mp4'>In this video</a>, a fixed node running DecaDuino executes a ranging session every 100ms with another node, using the TWR protocol. Once the distance to the other node is estimated, the fixed node represents the distance by driving an RGB LED strip: the LED corresponding to the estimated distance is powered up in blue. Note that the strip used in the video is 1m-long and the leds are spaced by 1.65cm. Using a LED strip gives a direct and real-time feedback of the ranging precision and accuracy using DecaDuino.
 /// \htmlonly <a href='https://www.irit.fr/~Adrien.Van-Den-Bossche/DecaWiNo/20150914-DecaWiNo-SDS-TWR-RGB-strip-low_res.mp4'> \endhtmlonly
 /// \image html TWR_led_strip.jpg
 /// \htmlonly </a> \endhtmlonly
-/// 
+///
 /// \par Revision History
-/// 
+///
 /// - <a href='https://github.com/irit-irt/DecaDuino'>Current release on github.com</a>
 ///
 /// - <a href='https://www.irit.fr/~Adrien.Van-Den-Bossche/decaduino/download/decaduino-1.0.zip'>1.0 (19/03/2016) Initial release</a>
-/// 
+///
 /// \par Academic Publications
 ///
 /// DecaDuino has been presented in this academic publication: <a target='_blank' href='https://www.irit.fr/~Adrien.Van-Den-Bossche/papers/WD2016_AVDB_RD_IF_TV_OpenWiNo.pdf'>Adrien Van den Bossche, Rejane Dalce, Nezo Ibrahim Fofana, Thierry Val, <i>DecaDuino: An Open Framework for Wireless Time-of-Flight Ranging Systems</i></a>, IFIP Wireless Days (WD 2016) conference, Toulouse, 23/03/2016-25/03/2016.
 ///
 /// Academic Publications that references DecaDuino <a href='https://www.irit.fr/~Adrien.Van-Den-Bossche/projets_decaduino.php'>are listed here</a>. Please contact <a href='mailto:vandenbo_nospam@irit.fr?subject=[DecaDuino] '>Adrien van den Bossche</a> (remove _nospam) if you want to add your work to this list.
-/// 
+///
 /// \par Licence
 ///
 /// DecaDuino's use is subject to licensing, GPL_V3 (http://www.gnu.org/copyleft/gpl.html) or Commercial. Please contact <a href='mailto:vandenbo_nospam@irit.fr?subject=[DecaDuino] '>Adrien van den Bossche</a> (remove _nospam) for Commercial Licensing.
 ///
 /// \page Hardware
-/// 
+///
 /// \par Supported Hardware
 ///
-/// DecaDuino supports PJRC Teensy 3.2/3.1/3.0 MCU and DecaWave DM1000 chip and DWM1000 module. 
+/// DecaDuino supports PJRC Teensy 3.2/3.1/3.0 MCU and DecaWave DM1000 chip and DWM1000 module.
 ///
 /// Please report any successfull operation on others Arduino boards by using the contact address indicated in the "Contact, feedback and users forum" section of this documentation.
-/// 
+///
 /// \par Wiring
-/// 
+///
 /// A wiring example between Teensy 3.2 and DWM1000 module is given here.
-/// 
+///
 /// \image html Wiring.png
-/// 
+///
 /// Notes:
-/// - In the reception state, the DWM1000 consumes 110mA+ which is more than the Teensy 3.1 can provide. You may add a DC-DC converter on the board to supply VDD 3.3V to the DWM1000. The Teensy 3.2 solves this issue as it embeds an DC-DC converter that can provide 250mA+ on the 3.3V pin. 
+/// - In the reception state, the DWM1000 consumes 110mA+ which is more than the Teensy 3.1 can provide. You may add a DC-DC converter on the board to supply VDD 3.3V to the DWM1000. The Teensy 3.2 solves this issue as it embeds an DC-DC converter that can provide 250mA+ on the 3.3V pin.
 /// - On the Teensy 3.2/3.1, the default SPI clock pin (SCK) is the pin 13, which the same pin than the onboard LED. We recommend using an alternative SPI clock pin (SCK_, pin 14) on the Teensy. This configuration can be achieved using the following instruction:
 /// \code
 /// SPI.setSCK(14);
 /// \endcode
-/// 
+///
 /// \par Hardware examples
 ///
 /// - <a target='_blank' href='http://wino.cc/decawino'>DecaWiNo: <i>Deca-Wireless Node</i></a>. The <a target='_blank' href='http://wino.cc/decawino'>DecaWiNo</a> is the first DecaDuino-compliant hardware built in our facility (IRIT). It includes a PJRC Teensy 3.1, a DecaWave DWM1000 module, a MCP1825 3.3V DC-DC converter and a 5mm RGB LED.
@@ -239,10 +239,10 @@
 #define DWM1000_REGISTER_OFFSET_DRX_SFDTOC					0x20
 
 #define DW1000_REGISTER_ANALOG_RF_CONFIGURATION 		  	0x28
-#define DW1000_REGISTER_OFFSET_RF_RXCTRL					0x0B	
-#define DW1000_REGISTER_OFFSET_RF_TXCTRL					0x0C	
+#define DW1000_REGISTER_OFFSET_RF_RXCTRL					0x0B
+#define DW1000_REGISTER_OFFSET_RF_TXCTRL					0x0C
 
-#define DW1000_REGISTER_TRANSMITTER_CALIBRATION_BLOCK		0x2A  
+#define DW1000_REGISTER_TRANSMITTER_CALIBRATION_BLOCK		0x2A
 #define DW1000_REGISTER_OFFSET_TC_PGDELAY					0x0B
 
 #define DW1000_REGISTER_FREQUENCY_SYNTHESISER_BLOCK_CONTROL	0x2B
@@ -261,6 +261,14 @@
 #define DW1000_REGISTER_AON_CFG0_WAKE_CNT_MASK		0x08
 #define DW1000_REGISTER_AON_CFG0_LPDIV_EN_MASK		0x10
 
+
+#define DW1000_REGISTER_OFFSET_AON_WCFG		0x00
+#define DW1000_REGISTER_AON_WCFG_PRES_SLEEP_MASK	0x01
+#define DW1000_REGISTER_AON_WCFG_ONW_LDC_MASK			0x40
+#define DW1000_REGISTER_AON_WCFG_WAKE_SPI_MASK		0x04
+#define DW1000_REGISTER_AON_WCFG_WAKE_CNT_MASK		0x08
+#define DW1000_REGISTER_AON_WCFG_LPDIV_EN_MASK		0x10
+
 #define DWM1000_REGISTER_DIGITAL_DIAGNOSTICS_INTERFACE 0x2F
 #define DWM1000_REGISTER_OFFSET_EVC_STO 			0x10
 #define DWM1000_REGISTER_OFFSET_EVC_EN 				0x00
@@ -271,6 +279,8 @@
 
 #define DW1000_REGISTER_PMSC_CTRL1			0x36
 #define DW1000_REGISTER_OFFSET_PMSC_CTRL1		0x04
+#define DW1000_REGISTER_ATXSLP_MASK 0x08
+
 
 #define DWM1000_REGISTER_OTP 					0x2D
 #define DWM1000_REGISTER_OFFSET_OTP_ADDR		0x04
@@ -308,7 +318,7 @@
 #define DWM1000_TC_PGDELAY_C7 	0x93
 
 #define DWM1000_FS_PLLCFG_C1 	0x09000407
-#define DWM1000_FS_PLLCFG_C24 	0x08400508	
+#define DWM1000_FS_PLLCFG_C24 	0x08400508
 #define DWM1000_FS_PLLCFG_C3 	0x08401009
 #define DWM1000_FS_PLLCFG_C57 	0x0800041D
 
@@ -441,7 +451,7 @@ class DecaDuino {
 		* @author Adrien van den Bossche
 		* @date 20141115
 		*/
-		void setShortAddressAndPanId(uint16_t shortAddress, uint16_t panId); 
+		void setShortAddressAndPanId(uint16_t shortAddress, uint16_t panId);
 
 		/**
 		* @brief Sets both the ShortAddress and the PanId in the DW1000's RAM
@@ -453,7 +463,7 @@ class DecaDuino {
 		int setShortAddressAndPanId(uint32_t shortAddressPanId);
 
 		/**
-		* @brief Returns the currently configured radio channels 
+		* @brief Returns the currently configured radio channels
 		* @return A byte which MSB is the X channel and the LSB is the X channel
 		* @author Réjane Dalce
 		* @date 20160109
@@ -468,15 +478,15 @@ class DecaDuino {
 		*/
  		uint8_t getChannel(void);
 
-		
+
 		/**
 		* @brief Returns the currently configured Tx Pulse Repetition Frequency
 		* @return The PRF value as an int
 		* @author Baptiste Pestourie
 		* @date 20190624
 		*/
-		int getTxPrf(void);		
-		
+		int getTxPrf(void);
+
 		/**
 		* @brief Returns the currently configured Rx Pulse Repetition Frequency
 		* @return The PRF value as an int
@@ -484,16 +494,16 @@ class DecaDuino {
 		* @date 20161003
 		*/
 		int getRxPrf(void);
-		
-		
+
+
 		/**
 		* @brief Returns first path index
 		* @return fp index an uint16
 		* @author Baptiste Pestourie
 		* @date 20190503
 		*/
-		
-		uint16_t getFpIndex(void);	
+
+		uint16_t getFpIndex(void);
 
 		/**
 		* @brief Returns the currently configured Tx Preamble Code
@@ -501,19 +511,19 @@ class DecaDuino {
 		* @author Réjane Dalce
 		* @date 20161003
 		*/
-		
+
 		uint8_t getTxPcode(void);
-		
-			
+
+
 		/**
 		* @brief Returns first path amplitude point 1
 		* @return the amplitude as an uint8
 		* @author Baptiste Pestourie
 		* @date 20180614
 		*/
-		
+
 		uint8_t getFpAmpl1(void);
-		
+
 		/**
 		* @brief Returns first path amplitude point 2
 		* @return the amplitude as an uint16
@@ -521,9 +531,9 @@ class DecaDuino {
 		* @date 20180614
 		*/
 		uint16_t getFpAmpl2(void);
-		
-		
-		
+
+
+
 		/**
 		* @brief Returns first path amplitude point 3
 		* @return the amplitude as an uint16
@@ -531,8 +541,8 @@ class DecaDuino {
 		* @date 20180614
 		*/
 		uint16_t getFpAmpl3(void);
-		
-		
+
+
 		/**
 		* @brief Returns preamble accumulation count
 		* @return preamble accumulation count as an uint16
@@ -540,8 +550,8 @@ class DecaDuino {
 		* @date 20180614
 		*/
 		uint16_t getRxPacc(void);
-		
-		
+
+
 		/**
 		* @brief Returns first path amplitude power
 		* @return first path amplitude power as a double (dBm)
@@ -550,7 +560,7 @@ class DecaDuino {
 		*/
 		double getFpPower(void);
 
-		
+
 		/**
 		* @brief Returns Channel Impulse Response Power
 		* @return CIRP as uint16
@@ -558,8 +568,8 @@ class DecaDuino {
 		* @date 20180614
 		*/
 		uint16_t getCirp(void);
-		
-		
+
+
 		/**
 		* @brief Returns Standard Deviation of Channel Impulse Response Estimation
 		* @return CIRE as uint16
@@ -567,8 +577,8 @@ class DecaDuino {
 		* @date 20180614
 		*/
 		uint16_t getCire(void);
-		
-		
+
+
 		/**
 		* @brief Returns received signal power
 		* @return RSSI as double (dBm)
@@ -576,18 +586,18 @@ class DecaDuino {
 		* @date 20180614
 		*/
 		double getRSSI(void);
-		
-		
-		
+
+
+
 		/**
 		* @brief Returns signal to noise ratio
 		* @return SNR as float
 		* @author Baptiste Pestourie
 		* @date 20180614
 		*/
-		float getSNR(void);	
-						
- 
+		float getSNR(void);
+
+
 		/**
 		* @brief Returns the currently configured Rx Preamble Code
 		* @return The Preamble Code value as an unsigned byte
@@ -595,14 +605,14 @@ class DecaDuino {
 		* @date 20161003
 		*/
 		uint8_t getRxPcode(void);
-		
+
 		/**
 		* @brief returns the current data rate
 		* @return Transmit Bit Rate in bbps. Three data rate are available 110 kps, 850 kps and 6.8 Mbps (6800 kbps).
 		* @author Baptiste Pestourie
 		* @date 20190424
 		*/
-		
+
 		int getTBR();
 
 		/**
@@ -613,9 +623,9 @@ class DecaDuino {
 		* @date 20190424
 		*/
 
-		
+
 		bool setTBR(int bitRate);
-		
+
 		/**
 		* @brief Configures transceiver for 110 kps reception
 		* @param 1 to enable 0 to disable.
@@ -623,10 +633,10 @@ class DecaDuino {
 		* @author Baptiste Pestourie
 		* @date 20190424
 		*/
-		
+
 		bool setRx110k(bool enable);
 
-		
+
 		/**
 		* @brief Sets both SD and PHR amplification power at the same vlaue
 		* @param coarse and fine grain. Valid values are: -3,0,3,6,...,18 for coarse grain; 0.5,1,...,15.5 for fine grain. Use -3 for coarse grain to disable output.
@@ -634,12 +644,12 @@ class DecaDuino {
 		* @author Baptiste Pestourie
 		* @date 20190424
 		*/
-		
-		
 
 
-		bool setTxPower(int coarse,float fine);	
-		
+
+
+		bool setTxPower(int coarse,float fine);
+
 		/**
 		* @brief Sets SD Tx Power
 		* @param coarse and fine grain. Valid values are: -3,0,3,6,...,18 for coarse grain; 0.5,1,...,15.5 for fine grain. Use -3 for coarse grain to disable output.
@@ -650,7 +660,7 @@ class DecaDuino {
 
 
 
-		bool setSdPower(int coarse,float fine);	
+		bool setSdPower(int coarse,float fine);
 
 		/**
 		* @brief Sets PHR Tx Power
@@ -660,39 +670,39 @@ class DecaDuino {
 		* @date 20190424
 		*/
 
-		bool setPhrPower(int coarse,float fine);	
-		
+		bool setPhrPower(int coarse,float fine);
+
 		/**
-		* @brief Returns TX POWSD amplification value		
+		* @brief Returns TX POWSD amplification value
 		* @return TX POWSD register value as uint8_t
 		* @author Baptiste Pestourie
 		* @date 20190425
-		*/	
+		*/
 
-		
+
 		uint8_t readTxPowsd();
-		
+
 		/**
-		* @brief Returns TX POWPHR amplification value		
+		* @brief Returns TX POWPHR amplification value
 		* @return TX POWPHR register value as uint8_t
 		* @author Baptiste Pestourie
 		* @date 20190425
-		*/	
+		*/
 
-		
+
 		uint8_t readTxPowphr();
-		
+
 		/**
-		* @brief Returns Smart Tx Power State		
+		* @brief Returns Smart Tx Power State
 		* @return True if STP is enabled, false otherwise
 		* @author Baptiste Pestourie
 		* @date 20190425
-		*/				
-	
+		*/
+
 		bool getSmartTxPower();
-		
+
 		/**
-		* @brief Enables/Disables Smart Transmit Power function. Should be disabled to exceed regulations. 
+		* @brief Enables/Disables Smart Transmit Power function. Should be disabled to exceed regulations.
 		* @param 0 to disable, 1 to enable
 		* @return True if the configuration was successful, false otherwise
 		* @author Baptiste Pestourie
@@ -708,30 +718,30 @@ class DecaDuino {
 		* @date 20190329
 		*/
  		bool setChannel(uint8_t channel);
-	
+
 
 
 
  		/**
-		* @brief Sets the radio RX channel; changing only the RX channel will 
-		* @param channel The channel number to set. Valid values are 1, 2, 3, 4, 5, 7. 
+		* @brief Sets the radio RX channel; changing only the RX channel will
+		* @param channel The channel number to set. Valid values are 1, 2, 3, 4, 5, 7.
 		* @return True if the channel has been sucessfully set, false otherwise
 		* @author Baptiste Pestourie
 		* @date 20190329
-		*/		
-	
-	
+		*/
+
+
 		bool setRxChannel(uint8_t channel);
-	
+
  		/**
 		* @brief Sets the radio TX channel
-		* @param channel The channel number to set. Valid values are 1, 2, 3, 4, 5, 7. 
+		* @param channel The channel number to set. Valid values are 1, 2, 3, 4, 5, 7.
 		* @return True if the channel has been sucessfully set, false otherwise
 		* @author Baptiste Pestourie
 		* @date 20190329
-		*/		
-	
-	
+		*/
+
+
 		bool setTxChannel(uint8_t channel);
 
  		/**
@@ -741,11 +751,11 @@ class DecaDuino {
 		* @author Réjane Dalce
 		* @date 20160310
 		*/
-		
-		
+
+
 		bool setRxPrf(int prf);
-		
-		
+
+
  		/**
 		* @brief Sets the TX Pulse Repetition Frequency
 		* @param The PRF value to set. Valid values are: 1, 2.
@@ -753,7 +763,7 @@ class DecaDuino {
 		* @author Baptiste Pestourie
 		* @date 20180412
 		*/
-		bool setTxPrf(int prf);		
+		bool setTxPrf(int prf);
 
  		/**
 		* @brief Sets the Tx Preamble Code
@@ -794,27 +804,27 @@ class DecaDuino {
 		* @brief displays the full Rx Tx config for quick check/debug
 		* @author Baptiste Pestourie
 		* @date 20190624
-		*/		
+		*/
 		void displayRxTxConfig();
-		
+
 		/**
 		* @brief Get PAC size
 		* @return PAC size (8,16,32 or 64)
 		* @author Baptiste Pestourie
 		* @date 20190624
-		*/		
+		*/
 		int getPACSize();
-		
+
 		/**
 		* @brief Sets PAC size
 		* @param PAC size (8,16,32 or 64)
 		* @return False if a wrong argument is given, true otherwise
 		* @author Baptiste Pestourie
 		* @date 20190430
-		*/		
+		*/
 		bool setPACSize(int pac_size);
 
-		
+
 		/**
 		* @brief Returns an aligned timestamp to use with pdDataRequest() in case of delayed transmissions
 		* @param wantedDelay The required delay to align the delayed transmission
@@ -874,7 +884,7 @@ class DecaDuino {
 		* @author Baptiste Pestourie
 		* @date 20190501
 		*/
-		
+
 		void resend();
 
 		/**
@@ -929,7 +939,7 @@ class DecaDuino {
 		* @brief Sets transceiver mode to receive mode and set the RX buffer for future frame reception. Received bytes will be stored at the end of the buffer of max size.
 		* @param buf The address of the buffer
 		* @param len The address of the message length
-		* @param max The buffer size 
+		* @param max The buffer size
 		* @return No return
 		* @author Adrien van den Bossche
 		* @date 20141115
@@ -952,6 +962,34 @@ class DecaDuino {
 		*/
 		void sleepRequest(void);
 
+		int wakeupConfig();
+		/**
+		* @brief Indicates if ATXSLP is enabled
+		* @return ATXSLP
+		* @author Baptiste Pestourie
+		* @date 20191124
+		*/
+
+		int isAtxslpEnabled();
+		/**
+		* @brief Sets transceiver mode to sleep mode after TX
+		* @return No return
+		* @author Baptiste Pestourie
+		* @date 20191124
+		*/
+
+		void sleepAfterTx(void);
+
+
+
+		/**
+		* @brief Sets transceiver mode to sleep mode with SPI wkeup
+		* @return No return
+		* @author Baptiste Pestourie
+		* @date 20191124
+		*/
+		void sleepUntilSpic(void);
+
 		/**
 		* @brief Returns true if a frame has been received.
 		* @return true if a frame has been received, false otherwise.
@@ -961,7 +999,7 @@ class DecaDuino {
 		uint8_t rxFrameAvailable(void);
 
 		/**
-		* @brief Returns true if a frame has been received, copy received bytes in buf and store message length in len. 
+		* @brief Returns true if a frame has been received, copy received bytes in buf and store message length in len.
 		* @param buf The address of the buffer
 		* @param len The address of the message length
 		* @return true if a frame has been received, false otherwise.
@@ -974,7 +1012,7 @@ class DecaDuino {
 		* @brief Returns true if a frame has been received, copy received bytes in buf and store message length in len. The received bytes shall be copied toward the end of the buffer of size max.
 		* @param buf The address of the buffer
 		* @param len The address of the message length
-		* @param max The buffer size 
+		* @param max The buffer size
 		* @return true if a frame has been received, false otherwise.
 		* @author Adrien van den Bossche
 		* @date 20141115
@@ -1026,7 +1064,7 @@ class DecaDuino {
 		* @return The voltage value in volts
 		* @author Baptiste Pestourie
 		* @date 20180501
-		
+
 		*/
 		float getVoltage(void);
 
@@ -1072,16 +1110,16 @@ class DecaDuino {
 		* @brief Builds an uint64 value from five uint8 values
 		* @param data The address of the uint8_t buffer
 		* @return The decoded uint64_t
-		*/ 
+		*/
 		uint64_t decodeUint40 ( uint8_t *data );
 
 		/**
 		* @brief Formats an uint64 value with only 5 LSbytes as a list of uint8 values
 		* @param from The uint64_t value
 		* @param to The address of the uint8_t buffer
-		*/ 
-		void encodeUint40 ( uint64_t from, uint8_t *to );	
-		
+		*/
+		void encodeUint40 ( uint64_t from, uint8_t *to );
+
 		/**
 		* @brief Builds an uint64 value from eight uint8 values
 		* @param data The address of the uint8_t buffer
@@ -1134,8 +1172,8 @@ class DecaDuino {
 		* @return timestamp for the beginning of the last preamble
 		* @author Baptiste Pestourie
 		* @date 20190430
-		*/		
-				
+		*/
+
 		uint64_t getPreambleTimestamp();
 
 		/**
@@ -1143,17 +1181,17 @@ class DecaDuino {
 		* @return timeout in PAC units
 		* @author Baptiste Pestourie
 		* @date 20190430
-		*/	
-		
-		
+		*/
+
+
 		uint16_t getSfdTimeout();
 		/**
 		* @brief Sets SFD timeout
 		* @param timeout in PAC units
 		* @author Baptiste Pestourie
 		* @date 20190430
-		*/		
-		
+		*/
+
 		void setSfdTimeout(uint16_t to);
 
 
@@ -1162,7 +1200,7 @@ class DecaDuino {
 		* @return SFD timeout counter as uint16_t
 		* @author Baptiste Pestourie
 		* @date 20190430
-		*/			
+		*/
 		uint16_t readSfdTimeoutCounter();
 
 		/**
@@ -1170,25 +1208,25 @@ class DecaDuino {
 		* @param True to enable, false otherwise
 		* @author Baptiste Pestourie
 		* @date 20190430
-		*/	
+		*/
 		void enableCounters(bool enable);
-		
+
 		/**
 		* @brief Returns the uncorrected timestamp for the SFD timeout
 		* @return timestamp for the SFD timeout
 		* @author Baptiste Pestourie
 		* @date 20190430
-		*/		
-				
+		*/
+
 		uint64_t getSfdtoTimestamp();
-		
+
 		/**
 		* @brief Returns preamble flag state
 		* @return True if a preamble is being received, false otherwise
 		* @author Baptiste Pestourie
 		* @date 20190430
-		*/		
-				
+		*/
+
 		bool getPreambleFlag();
 
 		/**
@@ -1197,10 +1235,10 @@ class DecaDuino {
 		* @return true if a preamble has been received, false if it's a timeout
 		* @author Baptiste Pestourie
 		* @date 20190430
-		*/			
-		
+		*/
+
 		bool waitPreamble(int timeout);
-		
+
 		/**
 		* @brief Returns last transmitted frame timestamp based on the DWM1000 System Time Counter at 64GHz
 		* @return Last transmitted frame timestamp
@@ -1319,10 +1357,10 @@ class DecaDuino {
 		*/
 		uint16_t getAntennaDelayReg();
 
-		
 
 
-		
+
+
 		/**
 		* @brief Sets the antenna delay value in the DW1000 register
 		* @param antennaDelay The antenna delay value
@@ -1333,14 +1371,14 @@ class DecaDuino {
 		void setAntennaDelayReg(uint16_t newAntennaDelay);
 
 
-		
+
 		/**
 		* @brief Reads the value in preamble symbol accumalator (unsaturated)
 		* @return preamble accumulation count (unsaturated)
 		* @author Baptiste Pestourie
 		* @date 20190430
 		*/
-		uint16_t getRxPaccNoSat(); 
+		uint16_t getRxPaccNoSat();
 
 
 
@@ -1349,12 +1387,12 @@ class DecaDuino {
 		void spi_send ( uint16_t u16 );
 		void spi_send ( uint8_t* buf, uint16_t len );
 		void spi_receive ( uint8_t* buf, uint16_t len );
-		
-		
+
+
 
 
 		uint16_t antennaDelay;
-	
+
 	protected:
 
 		/**
@@ -1393,7 +1431,7 @@ class DecaDuino {
 		* @brief Current SPI-bus settings
 		*/
 		SPISettings currentSPISettings;
-		
+
 		/**
 		* @brief Current EUID (Extended Unique IDentifier)
 		*/
@@ -1425,25 +1463,25 @@ class DecaDuino {
 
 		/**
 		* @brief Flag indicating that a new preamble is being received
-		*/				
+		*/
 		bool preambleFlag = false;
 
 		/**
 		* @brief Flag for a SFD timeout
-		*/			
+		*/
 		bool sfdtoFlag = false;
-		
+
 		/**
 		* @brief Timestamp for the start of the preamble
 		*/
 		uint64_t preambleTimestamp;
-		
+
 		/**
 		* @brief Timestamp for sfd timeout
 		*/
 		uint64_t sfdtoTimestamp;
-		
-		
+
+
 		/**
 		* @brief Timestamp for interruptions
 		*/

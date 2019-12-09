@@ -20,46 +20,36 @@
  * et le message en clair
  */
 DecaDuino decaduino;// = DecaDuino(DW1000_CS0_PIN, DW1000_IRQ0_PIN);
-AES aes;
+
 uint8_t rxData[128];
 uint16_t rxLen;
-float average;
-int unsigned iAverage;
-char * hex = "0123456789abcdef" ;
+
+
 int state = STATE_PING;
 int next_state;
-byte succ;
-byte key [2*N_BLOCK] = { 0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03,
-							 0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03,
-							 0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03,
-							 0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03 };
 
-int i;
-int rxFrames;
 
-byte nbrand [8];     //nb aléa à crypter et son identifiant
-byte rxIdentifiant[8];  // /!\ identifiant de l'émetteur robot
-byte identifiant[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // identifiant de l'ancre
-byte identifiantAncreRx[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-byte idNextAncreTx[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-byte idNextAncreRx[8] ={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-byte idRobotTx[NB_ROBOTS][8]= { {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x01},
-					 {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x02}};
-byte IdRobotRx[8];
-byte cipher [N_BLOCK] ; //données encryptées
-byte check [N_BLOCK] ;  //contient le msg décrypté
-uint64_t t1, t2, t3, t4;
-int32_t tof;
-float distance;
-uint64_t mask = 0xFFFFFFFFFF;
-String a;
+
+
+
+
+
 uint8_t txData[128];
 int timeout;
-int timeoutWait;
-boolean warning;
+byte success;
+
 char serial_command;
 int target_temp;
 int ctr;
+int frame_ctr= MY_ID?0:128, global_frame_ctr = 0, chunk_idx = 0, block_idx = 0;
+int speed,t_delay = DELAY_SLOW;
+double skew_acc = 0;
+float last_skew;
+//byte signature[N_CHUNKS * 8];
+uint16_t signature[N_CHUNKS * 8];
+float mean_temp = 0;
+int max_chunks = N_CHUNKS;
+
 
 int main(){
 	setup();
@@ -70,66 +60,63 @@ int main(){
 	return(0);
 }
 
-void getID() {
-	char id;
-	#ifdef ANCHOR
-		/* setting up anchor id */
-		identifiant[7] = ANCHOR;
 
-		/* setting up next anchor ID */
-		#ifdef NB_ANCHORS
-		/* checking if this anchors has the highest ID */
-			if (ANCHOR == NB_ANCHORS) {
-				/* the next anchor is the first one */
-				idNextAncreTx[7] = 1;
-			}
-			else {
-				idNextAncreTx[7] = ANCHOR + 1;
-			}
-		#else
-			idNextAncreTx[7] = ANCHOR + 1;
-		#endif
-	#else
-		DPRINTFLN("ANCHOR id has not been defined during compilation. Default ID : 0 \n");
-	#endif
+byte quantize(float skew) {
+	float pow_2 = 16; //skew < 32 ppm so we quantize integer part on 5 bits
+	int bit;
+	byte quantized = 0;
+	Serial.print("$Starting quantization, skew val...");
+	Serial.println(skew);
+	if (skew < 0) {
+		skew = -skew;
+	}
+	while (pow_2 != 1./8.) {
+		bit = (skew > pow_2);
+		// Serial.print("$bit value:");
+		// Serial.println(bit);
+		// Serial.print("$Skew value:");
+		// Serial.println(skew);
+		skew -= pow_2 * bit;
+		quantized = (quantized << 1) + bit;
+		pow_2 = pow_2 / 2;
+	}
+	if (skew > 1./16.) {
+		// rounding to the superior value
+		quantized += 1;
+	}
+	Serial.print("$Quantization: ");
+	Serial.println(quantized);
+	return(quantized);
 }
 
-void print_value (char * str, byte * a, int bits) //sert à afficher les valeurs
-{
-  int i;
-  DPRINTF (str) ;
-  bits >>= 3 ;
-  for (i = 0 ; i < bits ; i++)
-    {
-      byte b = a[i] ;
-      DPRINTF (hex [b >> 4]) ;
-      DPRINTF (hex [b & 15]) ;
-    }
-  DPRINTFLN () ;
+void set_n_chunks(int n) {
+	max_chunks = n;
 }
 
+uint16_t quantize_16(float skew) {
+	float pow_2 = 1024; //skew < 32 ppm so we quantize integer part on 5 bits
+	int bit;
+	uint16_t quantized = 0;
+	Serial.print("$Starting quantization, skew val...");
+	Serial.println(skew);
+	skew += 32.;
+	if (skew < 0) {
+		skew = -skew;
+	}
+	while (pow_2 != 1./64.) {
+		bit = (skew > pow_2);
+		// Serial.print("$bit value:");
+		// Serial.println(bit);
+		// Serial.print("$Skew value:");
+		// Serial.println(skew);
+		skew -= pow_2 * bit;
+		quantized = (quantized << 1) + bit;
+		pow_2 = pow_2 / 2;
+	}
 
-void print_value_raspberry ( byte * a, int bits) //sert à afficher les valeurs
-{
-  int i;
-  bits >>= 3 ;
-  for (i = 0 ; i < bits ; i++)
-    {
-      byte b = a[i] ;
-      RPRINTF (hex [b >> 4]) ;
-      RPRINTF (hex [b & 15]) ;
-    }
-}
-
-void check_same (byte * a, byte * b, int bits) {   //vérifie la correspondance entre deux données
-  int i;
-  bits >>= 3 ;
-  for (i = 0 ; i < bits ; i++)
-    if (a[i] != b[i])
-      {
-        DPRINTFLN ("Failure plain != check") ;
-        return ;
-      }
+	Serial.print("$Quantization: ");
+	Serial.println(quantized);
+	return(quantized);
 }
 
 void boil(int target_temp) {
@@ -154,6 +141,63 @@ void boil(int target_temp) {
 	Serial.println(decaduino.getTemperature());
 }
 
+void reset() {
+	chunk_idx = 0;
+	block_idx = 0;
+	frame_ctr = MY_ID?0:128;
+	global_frame_ctr = 0;
+}
+
+void switch_mode(int sp) {
+	t_delay = sp;
+	reset();
+}
+
+void send_last_frame_data() {
+	float los;
+	decaduino.plmeRxEnableRequest();
+	/* Calculating LoS indicator */
+	los = decaduino.getRSSI() - decaduino.getFpPower();
+	DPRINTF("$LoS: ");
+	DPRINTFLN(los);
+
+	Serial.print(decaduino.getLastRxSkew());
+	Serial.print("|");
+	Serial.print(decaduino.getTemperature());
+	/*
+	Serial.print("|");
+	Serial.print(decaduino.getRSSI());
+	Serial.print("|");
+	Serial.print(decaduino.getFpPower());
+	*/
+	Serial.println("|");
+}
+
+float getSkew() {
+	float skew = decaduino.getLastRxSkew();
+	#ifdef SKEW_CORRECTION
+	/* returns a skew value corrected to match the reference temperature */
+		float temp = decaduino.getTemperature();
+		while ((temp < 15) || (temp > 60)) {
+			// sensor reading failed
+			temp = decaduino.getTemperature();
+		}
+		skew += (REF_TEMPERATURE - temp) * SKEW_FACTOR;
+	#endif
+		return(skew);
+}
+
+void send_signature() {
+	int i;
+	Serial.println("$Signature = ");
+	Serial.print("#");
+	for (i = 0; i < N_CHARACTERS; i++) {
+		Serial.print((int) signature[i]);
+		Serial.print("|");
+	}
+	Serial.println();
+}
+
 void setup() {
   byte error=0;
   bool success;
@@ -164,7 +208,8 @@ void setup() {
 
 
   success = decaduino.init();
-	state = STATE_PONG;
+	state = STATE_PING;
+	//decaduino.wakeupConfig();
 
   if ( !success )  {
     while(1) {
@@ -174,22 +219,30 @@ void setup() {
       delay(50);
     }
   }
-
-
   // Set RX buffer
   decaduino.setRxBuffer(rxData, &rxLen);
-	for (int i = 0; i < 10; i++) {
-		txData[i] = 0;
-	}
-  succ = aes.set_key (key, 32) ;      //initialisation de la clé
+
+
  decaduino.plmeRxEnableRequest();
  DPRINTFLN("decaduino init finished");
- decaduino.setSmartTxPower(0);
- decaduino.setPhrPower(18,15.5);
- decaduino.setSdPower(18,15.5);
  decaduino.plmeRxDisableRequest();
  timeout = millis();
+ txData[0] = MY_ID;
+ rxData[1] = 128;
 
+}
+
+void compute_average() {
+	if ( (frame_ctr + 1) % 32 == 0) {
+		Serial.print("$Average for chunk: ");
+		Serial.println((skew_acc / 32));
+		//quantize(skew_acc / 32);
+
+		//signature[8 * chunk_idx + block_idx] = quantize(skew_acc / 32);
+		signature[8 * chunk_idx + block_idx] = quantize_16(skew_acc / 32);
+		skew_acc = 0;
+		block_idx++;
+	}
 }
 
 void loop() {
@@ -214,8 +267,17 @@ void loop() {
 						boil(target_temp);
             break;
           case 1:
-            Serial.println("$ command #2 received");
+            Serial.println("$ Switching speed");
+						switch_mode(Serial.parseInt()); // 0 or 1
             break;
+					case 2:
+						Serial.println("$ Setting number of chunks");
+						set_n_chunks(Serial.parseInt());
+						break;
+					case 3:
+						Serial.print("$ Temperature:");
+						Serial.println(decaduino.getTemperature());
+						break;
           default:
             Serial.println("$ unknown command received:");
             Serial.println(serial_command);
@@ -233,66 +295,130 @@ void loop() {
       break;
     case STATE_PING:
 			decaduino.plmeRxDisableRequest();
-      if (!decaduino.pdDataRequest(txData, 8)) {
+
+
+
+			DPRINTF("$Ping ");
+			DPRINTFLN(frame_ctr);
+			txData[1] = frame_ctr;
+			DPRINTF("$Temperature: ");
+			DPRINTFLN(decaduino.getTemperature());
+			//decaduino.sleepAfterTx();
+      if (!decaduino.pdDataRequest(txData, 2)) {
 				Serial.println("$Could not send");
 			}
-      Serial.println("$Ping");
 
-			while (!decaduino.hasTxSucceeded());
+			if ( (MY_ID == 1) && (chunk_idx == max_chunks) ){
+				// We're done
+				Serial.println("Done");
+				send_signature();
+				reset();
+				delay(10000);
+			}
 
-      decaduino.plmeRxEnableRequest();
+			//frame_ctr++;
+			//global_frame_ctr++;
+
+
+
+			// if (global_frame_ctr == 10000) {
+			// 	Serial.println("$I'm done");
+			// 	global_frame_ctr = 0;
+			// 	switch_mode(DELAY_SLOW);
+			// }
+
+			//Serial.println("$Going to Pong");
+			delay(t_delay);
+			decaduino.plmeRxEnableRequest();
 			timeout = millis();
 			state = STATE_PONG;
-			delay(DELAY);
+
       break;
 
     case STATE_PONG:
-			decaduino.getTemperature();
+
 			if (Serial.available() > 0) {
 				state = STATE_SERIAL;
 				next_state = STATE_PONG;
 				break;
 			}
-			if  ((millis() - timeout) > 2 * DELAY ) {
-				Serial.println("$Timeout");
+			if  ((millis() - timeout) > 2 * t_delay ) {
+				DPRINTFLN("$Timeout");
 				timeout = millis();
 				state = STATE_PING;
 				break;
 			}
       if (decaduino.rxFrameAvailable() ) {
-				Serial.println("$Pong");
+				DPRINTF("$Pong ");
+				DPRINTFLN(rxData[1]);
 
-				// Serial.print("$RSSI:");
-        // Serial.println(decaduino.getRSSI());
-				//
-        // Serial.print("$FP Ampl1:");
-        // Serial.println(decaduino.getFpAmpl1());
-				//
-        // Serial.print("$FP Ampl2:");
-        // Serial.println(decaduino.getFpAmpl2());
-				//
-        // Serial.print("$FP ampl3:");
-        // Serial.println(decaduino.getFpAmpl3());
-				//
-        // Serial.print("$FP power:");
-        // Serial.println(decaduino.getFpPower());
-				//
-        // Serial.print("$SNR:");
-        // Serial.println(decaduino.getSNR());
-				//
-				// Serial.print("$Skew:");
-        // Serial.println(decaduino.getLastRxSkew());
-				//
-				// Serial.print("$Temperature:");
-        // Serial.println(decaduino.getTemperature());
+
+
+				if (MY_ID == 0) {
+					/* Node 0 is following */
+					if (rxData[1] != frame_ctr) {
+						/* if frame ctr has been incremented, the previous frame has been properly received*/
+						global_frame_ctr++;
+						last_skew = decaduino.getLastRxSkew();
+						skew_acc += last_skew;
+						compute_average();
+						send_last_frame_data();
+						if ((rxData[1]== 0) && (frame_ctr == 255)) {
+							// New chunk
+							chunk_idx++;
+							Serial.print("$Going to next chunk:");
+							Serial.println(chunk_idx);
+							block_idx = 0;
+						}
+					}
+					else {
+						/* correcting last skew value */
+						if (skew_acc > 0) {
+							skew_acc += decaduino.getLastRxSkew() - last_skew;
+							last_skew = decaduino.getLastRxSkew();
+						}
+					}
+
+					frame_ctr = rxData[1];
+					if (chunk_idx == max_chunks) {
+						// We're done
+						Serial.println("Done");
+						send_signature();
+						reset();
+						delay(20000);
+						decaduino.plmeRxEnableRequest();
+
+					}
+
+				}
+
+				if (MY_ID == 1) {
+					/* Node 1 is initiating the protocol */
+					if (frame_ctr == rxData[1] ) {
+						compute_average();
+						send_last_frame_data();
+						if (frame_ctr == 255) {
+							// New chunk
+							chunk_idx++;
+							block_idx = 0;
+							Serial.print("$Going to next chunk:");
+							Serial.println(chunk_idx);
+						}
+						frame_ctr = (frame_ctr + 1) % 256;
+
+
+						global_frame_ctr++;
+						last_skew = decaduino.getLastRxSkew();
+						skew_acc += last_skew;
+					}
+				}
+
+
+
 
 				timeout = millis();
-				decaduino.plmeRxEnableRequest();
 
-				Serial.print(decaduino.getLastRxSkew());
-				Serial.print("|");
-				Serial.print(decaduino.getTemperature());
-				Serial.println("|");
+				delay(t_delay);
 
         state = STATE_PING;
       }

@@ -42,6 +42,9 @@ with open(out_file,'w+') as f:
         skew[port] = 0
         ctr[port] = 0
 
+    for port in ports:
+        msg = "11"
+        port.write(msg.encode())
     while not(exit_flag):
         try:
             for port in ports:
@@ -76,7 +79,7 @@ with open(out_file,'w+') as f:
 
 
 
-                            if (ctr[port] == 100):
+                            if (ctr[port] == 30):
                                 #print("final temp :" + port.name + " " + str(temperature[port]))
                                 temperature[port] = temperature[port] / ctr[port]
 
