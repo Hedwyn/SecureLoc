@@ -47,6 +47,7 @@ double skew_acc = 0;
 float last_skew;
 //byte signature[N_CHUNKS * 8];
 uint16_t signature[N_CHUNKS * 8];
+double signature_float[N_CHUNKS * 8];
 float mean_temp = 0;
 int max_chunks = N_CHUNKS;
 
@@ -65,8 +66,8 @@ byte quantize(float skew) {
 	float pow_2 = 16; //skew < 32 ppm so we quantize integer part on 5 bits
 	int bit;
 	byte quantized = 0;
-	Serial.print("$Starting quantization, skew val...");
-	Serial.println(skew);
+	DPRINTF("$Starting quantization, skew val...");
+	DPRINTFLN(skew);
 	if (skew < 0) {
 		skew = -skew;
 	}
@@ -84,8 +85,8 @@ byte quantize(float skew) {
 		// rounding to the superior value
 		quantized += 1;
 	}
-	Serial.print("$Quantization: ");
-	Serial.println(quantized);
+	DPRINTF("$Quantization: ");
+	DPRINTFLN(quantized);
 	return(quantized);
 }
 
@@ -164,6 +165,8 @@ void send_last_frame_data() {
 	Serial.print(decaduino.getLastRxSkew());
 	Serial.print("|");
 	Serial.print(decaduino.getTemperature());
+	Serial.print("|");
+	Serial.print(los);
 	/*
 	Serial.print("|");
 	Serial.print(decaduino.getRSSI());
@@ -192,7 +195,8 @@ void send_signature() {
 	Serial.println("$Signature = ");
 	Serial.print("#");
 	for (i = 0; i < N_CHARACTERS; i++) {
-		Serial.print((int) signature[i]);
+		//Serial.print((int) signature[i]);
+		Serial.print(signature_float[i]);
 		Serial.print("|");
 	}
 	Serial.println();
@@ -221,6 +225,7 @@ void setup() {
   }
   // Set RX buffer
   decaduino.setRxBuffer(rxData, &rxLen);
+	decaduino.setPreambleLength(64);
 
 
  decaduino.plmeRxEnableRequest();
@@ -234,12 +239,13 @@ void setup() {
 
 void compute_average() {
 	if ( (frame_ctr + 1) % 32 == 0) {
-		Serial.print("$Average for chunk: ");
-		Serial.println((skew_acc / 32));
+		DPRINTF("$Average for chunk: ");
+		DPRINTFLN((skew_acc / 32));
 		//quantize(skew_acc / 32);
 
 		//signature[8 * chunk_idx + block_idx] = quantize(skew_acc / 32);
 		signature[8 * chunk_idx + block_idx] = quantize_16(skew_acc / 32);
+		signature_float[8 * chunk_idx + block_idx] = (skew_acc / 32);
 		skew_acc = 0;
 		block_idx++;
 	}
@@ -295,9 +301,6 @@ void loop() {
       break;
     case STATE_PING:
 			decaduino.plmeRxDisableRequest();
-
-
-
 			DPRINTF("$Ping ");
 			DPRINTFLN(frame_ctr);
 			txData[1] = frame_ctr;
@@ -310,25 +313,15 @@ void loop() {
 
 			if ( (MY_ID == 1) && (chunk_idx == max_chunks) ){
 				// We're done
-				Serial.println("Done");
+				Serial.println("$Done");
 				send_signature();
 				reset();
-				delay(10000);
 			}
 
-			//frame_ctr++;
-			//global_frame_ctr++;
 
-
-
-			// if (global_frame_ctr == 10000) {
-			// 	Serial.println("$I'm done");
-			// 	global_frame_ctr = 0;
-			// 	switch_mode(DELAY_SLOW);
-			// }
-
-			//Serial.println("$Going to Pong");
-			delay(t_delay);
+			if ((!AS_FAST_AS_I_CAN) && (t_delay != 1)) {
+				delay(t_delay);
+			}
 			decaduino.plmeRxEnableRequest();
 			timeout = millis();
 			state = STATE_PONG;
@@ -385,7 +378,7 @@ void loop() {
 						Serial.println("Done");
 						send_signature();
 						reset();
-						delay(20000);
+						delay(30000);
 						decaduino.plmeRxEnableRequest();
 
 					}

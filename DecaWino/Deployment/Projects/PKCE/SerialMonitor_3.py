@@ -58,13 +58,15 @@ with open(out_file,'w+') as f:
                     if (line[0] != '$'):
                         print(line)
                         data = line.split('|')
-                        if (len(data) == 3):
+                        if (len(data) == 4):
                             f_txt[port.name].write(data[1])
                             f_txt[port.name].write(' ')
                             f_txt[port.name].write(data[0])
                             f_txt[port.name].write(' ')
                             f_txt[port.name].write(data[2])
-                            
+                            f_txt[port.name].write(' ')
+                            f_txt[port.name].write(data[3])
+
                         elif (line[0] == '#'):
                             signature = line[1:]
                             with open(signature_file + port.name + '.txt', 'a') as sig:

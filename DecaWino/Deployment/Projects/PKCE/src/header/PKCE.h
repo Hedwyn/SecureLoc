@@ -8,7 +8,7 @@
 
 //#define ANCHOR
 #include <DecaDuino.h>
-#define MY_ID 1
+#define MY_ID 0
 
 //#define _DEBUG_
 #ifdef _DEBUG_
@@ -32,10 +32,11 @@
 #define DELAY 5
 #define DELAY_SLOW 500
 #define DELAY_FAST 5
+#define AS_FAST_AS_I_CAN 1
 
 /* signature-related data */
 #define MES_FOR_AVERAGE 32
-#define N_CHUNKS 100
+#define N_CHUNKS 128
 #define N_CHARACTERS 8 *  N_CHUNKS //each chunk is made of 8 characters
 
 #define SLOW 0
