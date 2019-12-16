@@ -2,7 +2,7 @@ import math
 import os
 import matplotlib.pyplot as plt
 
-reference_signature = 'References/COM17/S1_afaic_128.txt'
+reference_signature = 'References/COM15/signature_COM19.txt'
 #reference_signature = 'References/COM17/S3_afaic_nlos_128.txt'
 current_signature_dir = 'Challenges'
 MAX_STEP = 0.2
@@ -117,6 +117,7 @@ def compare_sig(sig, sig_ref):
 
 
 
+
 if __name__== "__main__":
 
     sig_ref = extract_sig(reference_signature).pop()
@@ -124,9 +125,9 @@ if __name__== "__main__":
     challenge_sig = extract_sig(current_signature)
     display_signature(shrink_signature(sig_ref,8))
     display_signature(shrink_signature(challenge_sig.pop(),8))
-    print(len(sig_ref))
-    for sig in challenge_sig:
-        print("length of signature: " + str(len(sig)))
-
-        compare_sig(shrink_signature(truncate_first_values(sig, 10),32),shrink_signature(sig_ref,32))
-        #compare_sig(truncate_first_values(sig,50),sig_ref)
+    # print(len(sig_ref))
+    # for sig in challenge_sig:
+    #     print("length of signature: " + str(len(sig)))
+    #
+    #     compare_sig(shrink_signature(truncate_first_values(sig, 10),32),shrink_signature(sig_ref,32))
+    #     #compare_sig(truncate_first_values(sig,50),sig_ref)

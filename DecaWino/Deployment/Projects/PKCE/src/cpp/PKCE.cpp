@@ -1,66 +1,36 @@
 #include "PKCE.h"
 
 
-
-/**
- * Les trois fonctions ci dessous permettent d'afficher des messages.
- * En commentant les bonnes lignes on affiche les messages du Debug ou du fonctionnement normal
- */
-
-
-
-
-
-
-/**
- * Dans la boucle "setup" on initialise l'antenne UWB, on génère la clé privé
- * et on initialise le buffer de reception. Si l'initialisation de l'antenne ne
- * marche pas on fait clignoter la lED. Print value nous permet d'afficher la valeur de string en numérique
- * La fonction check_same vérifie la correspondance entre le message décrypter
- * et le message en clair
- */
 DecaDuino decaduino;// = DecaDuino(DW1000_CS0_PIN, DW1000_IRQ0_PIN);
 
-uint8_t rxData[128];
-uint16_t rxLen;
+static uint8_t rxData[128];
+static uint16_t rxLen = 0;
 
 
-int state = STATE_PING;
-int next_state;
+static int state = STATE_PING;
+static int next_state = STATE_PONG;
 
 
+static uint8_t txData[128];
+static int timeout = 0;
+static byte success = 0;
 
-
-
-
-
-uint8_t txData[128];
-int timeout;
-byte success;
-
-char serial_command;
-int target_temp;
-int ctr;
-int frame_ctr= MY_ID?0:128, global_frame_ctr = 0, chunk_idx = 0, block_idx = 0;
-int speed,t_delay = DELAY_SLOW;
-double skew_acc = 0;
-float last_skew;
+static char serial_command = '0';
+static int target_temp;
+static int ctr;
+static int frame_ctr= MY_ID?0:128, global_frame_ctr = 0, chunk_idx = 0, block_idx = 0;
+static int speed,t_delay = DELAY_SLOW;
+static double skew_acc = 0;
+static float last_skew;
 //byte signature[N_CHUNKS * 8];
-uint16_t signature[N_CHUNKS * 8];
-double signature_float[N_CHUNKS * 8];
-float mean_temp = 0;
-int max_chunks = N_CHUNKS;
+static uint16_t signature[N_CHUNKS * 8];
+static double signature_float[N_CHUNKS * 8];
+static float mean_temp = 0;
+static int max_chunks = N_CHUNKS;
 
-
-int main(){
-	setup();
-	while (1) {
-		loop();
-		yield();
-	}
-	return(0);
+void h_word() {
+	Serial.println("HelloWorld");
 }
-
 
 byte quantize(float skew) {
 	float pow_2 = 16; //skew < 32 ppm so we quantize integer part on 5 bits
@@ -202,19 +172,14 @@ void send_signature() {
 	Serial.println();
 }
 
-void setup() {
-  byte error=0;
+void setup_PKCE(int channel, int pcode, int plength, int frame_delay) {
   bool success;
-  delay(4000);
+  delay(1000);
   DPRINTFLN("decaduino init start");
   pinMode(13, OUTPUT);
   SPI.setSCK(14);
 
-
   success = decaduino.init();
-	state = STATE_PING;
-	//decaduino.wakeupConfig();
-
   if ( !success )  {
     while(1) {
       digitalWrite(13, HIGH);
@@ -223,18 +188,26 @@ void setup() {
       delay(50);
     }
   }
-  // Set RX buffer
+  /* Rx-TX parameters */
   decaduino.setRxBuffer(rxData, &rxLen);
-	decaduino.setPreambleLength(64);
+	decaduino.setPreambleLength(plength);
+	decaduino.setRxPcode(pcode);
+	decaduino.setTxPcode(pcode);
 
 
- decaduino.plmeRxEnableRequest();
- DPRINTFLN("decaduino init finished");
- decaduino.plmeRxDisableRequest();
- timeout = millis();
- txData[0] = MY_ID;
- rxData[1] = 128;
+	t_delay = frame_delay;
 
+ 	decaduino.plmeRxEnableRequest();
+	DPRINTFLN("decaduino init finished");
+	decaduino.plmeRxDisableRequest();
+	timeout = millis();
+	txData[0] = MY_ID;
+	rxData[1] = 128;
+	state = STATE_PING;
+}
+
+void setup_PKCE() {
+	setup_PKCE(DEFAULT_CHANNEL, DEFAULT_PCODE, DEFAUTL_PLENGTH, DEFAULT_DELAY);
 }
 
 void compute_average() {
@@ -251,7 +224,8 @@ void compute_average() {
 	}
 }
 
-void loop() {
+int loop_PKCE() {
+	int ret = LOOP_GOES_ON;
   switch (state) {
     case STATE_SERIAL:
        // reading serial command
@@ -284,6 +258,11 @@ void loop() {
 						Serial.print("$ Temperature:");
 						Serial.println(decaduino.getTemperature());
 						break;
+					case 4:
+						Serial.println("$ Switch Plength");
+						decaduino.setPreambleLength(Serial.parseInt());
+						break;
+
           default:
             Serial.println("$ unknown command received:");
             Serial.println(serial_command);
@@ -319,7 +298,7 @@ void loop() {
 			}
 
 
-			if ((!AS_FAST_AS_I_CAN) && (t_delay != 1)) {
+			if ((!AS_FAST_AS_I_CAN) || (t_delay != 1)) {
 				delay(t_delay);
 			}
 			decaduino.plmeRxEnableRequest();
@@ -329,7 +308,6 @@ void loop() {
       break;
 
     case STATE_PONG:
-
 			if (Serial.available() > 0) {
 				state = STATE_SERIAL;
 				next_state = STATE_PONG;
@@ -344,8 +322,6 @@ void loop() {
       if (decaduino.rxFrameAvailable() ) {
 				DPRINTF("$Pong ");
 				DPRINTFLN(rxData[1]);
-
-
 
 				if (MY_ID == 0) {
 					/* Node 0 is following */
@@ -405,14 +381,10 @@ void loop() {
 						skew_acc += last_skew;
 					}
 				}
-
-
-
-
 				timeout = millis();
-
-				delay(t_delay);
-
+				if ((!AS_FAST_AS_I_CAN) || (t_delay != 1)) {
+					delay(t_delay);
+				}
         state = STATE_PING;
       }
 			//delay(10);
@@ -421,5 +393,7 @@ void loop() {
      default:
       state = STATE_PING;
       break;
+
+		return(ret);
   }
 }

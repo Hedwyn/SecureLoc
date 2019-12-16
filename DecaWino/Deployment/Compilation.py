@@ -36,7 +36,7 @@ class CompilationMenu(Frame):
     project architecture generation, flashing interface, platform deployment with a single button"""
 
     def __init__(self):
-        # tkinter initilization
+        # tkinter initialization
         self.root = Tk()
         Frame.__init__(self,self.root)
         self.root.title("SecureLoc Deployment Interface")
@@ -79,20 +79,22 @@ class CompilationMenu(Frame):
         self.console = Listbox(self.root, yscrollcommand= self.projects_scrollbar.set, font = ('Calibri Corps',11), background = '#fafafa', height = 10, width = 100)
         # linking console scrollbar to Listbox
         self.console_scrollbar.config(command=self.projects_listbox.yview)
+        # linking console output to menu
+        Console.console = self
 
         # Serial devices
-        self.serial_devices_scrollbar = ttk.Scrollbar(self.root)
-        self.serial_devices = Listbox(self.root, yscrollcommand= self.projects_scrollbar.set, font = ('Calibri Corps',11), background = '#fafafa')
+        self.hex_files_scrollbar = ttk.Scrollbar(self.root)
+        self.hex_files = Listbox(self.root, yscrollcommand= self.projects_scrollbar.set, font = ('Calibri Corps',11), background = '#fafafa')
         # linking console scrollbar to Listbox
-        self.serial_devices_scrollbar.config(command=self.projects_listbox.yview)
+        self.hex_files_scrollbar.config(command=self.projects_listbox.yview)
 
 
         # buttons
         compile_btn = ttk.Button(self.root, text = "Compile", style = 'W.TButton', command = lambda: self.compile(self.projects_listbox.get(ACTIVE),self.cpu_speed.get()))
         build_btn = ttk.Button(self.root, text = "Build Arduino Libs",style = 'W.TButton',command = lambda: self.build(self.cpu_speed.get()))
         new_project = ttk.Button(self.root, text= "Create New Project", style = 'W.TButton', command = self.create_new_project)
-        serial_scan = ttk.Button(self.root, text= "Scan", style = 'W.TButton', command = self.serial_scan)
-        flash_btn = ttk.Button(self.root, text = "Flash", style = 'W.TButton', command = lambda: self.flash(self.serial_devices.get(ACTIVE)))
+        hex_btn = ttk.Button(self.root, text= "Scan Hex", style = 'W.TButton', command = self.get_available_hex)
+        flash_btn = ttk.Button(self.root, text = "Flash", style = 'W.TButton', command = lambda: self.flash(self.hex_files.get(ACTIVE)))
         deployment_btn = ttk.Button(self.root, text = "Deployment", style = 'W.TButton', command = self.deployment)
         cancel_btn = ttk.Button(self.root, text = "Cancel", style = 'W.TButton', command = self.cancel)
 
@@ -126,13 +128,13 @@ class CompilationMenu(Frame):
         cpu_speed_lbl.grid(row = 1, column = 4)
         cpu_speed_spinbox.grid(row = 2, column = 4)
 
-        serial_scan.grid(row = 1, column = 5, rowspan = 2)
+        hex_btn.grid(row = 1, column = 5, rowspan = 2)
 
         # console
         self.console.grid(row = 3, column = 1, columnspan = 4, pady = 5, padx = 5)
 
         # serial devices listboc
-        self.serial_devices.grid(row = 3, column = 5)
+        self.hex_files.grid(row = 3, column = 5)
         flash_btn.grid(row = 4, column = 5)
         deployment_btn.grid(row = 5, column = 5, pady = 6)
 
@@ -194,8 +196,8 @@ class CompilationMenu(Frame):
         # cleaning previous files
         self.console_handler("cd teensy3 && make softclean PROJECTNAME=" + project_name)
         # compiling the project
-        self.console_handler("cd teensy3 && make PROJECTNAME=" + project_name, "Compiling " + project_name, "Done")
-
+        #self.console_handler("cd teensy3 && make PROJECTNAME=" + project_name, "Compiling " + project_name, "Done")
+        compile_hex_file(project_name)
 
 
         # updating cpu_speed
@@ -234,7 +236,7 @@ class CompilationMenu(Frame):
 
 
         else:
-            print("Could not prcoeed to project creation: project name already exists")
+            print("Could not proceed to project creation: project name already exists")
 
     def serial_scan(self):
         """Scans for open serial ports and appends found serial devices to serial devices scrollbar"""
@@ -245,21 +247,34 @@ class CompilationMenu(Frame):
         for entry in [port.device for port in ports]:
             if entry.startswith('COM'):
                 # appending to serial devives scrollbar
-                self.serial_devices.insert(END,entry)
+                self.hex_files.insert(END,entry)
+
+    def get_available_hex(self):
+        """Displays the available hex files for the selected project in the hex scrollbar"""
+        project_name = self.projects_listbox.get(ACTIVE)
+        hex_list = os.listdir(PROJECTS_DIR + '/' + project_name + '/' + BINDIR)
+
+        # emptying Scrollbar
+        self.hex_files.delete(0,END)
+
+        # displaying hex list
+        for entry in hex_list:
+            if entry.endswith('.hex'):
+                self.hex_files.insert(END,entry)
 
     def flash(self,serial_port = ''):
         """flashes the target serial port with the active project hex file"""
         try:
             # flashing
             self.console_display("flashing, press the teensy button")
-            self.console_handler('teensy_loader_cli.exe -mmcu=mk20dx256 -s -v ' + PROJECTS_DIR + '/' + self.projects_listbox.get(ACTIVE) + '/' + BINDIR +'/' + self.projects_listbox.get(ACTIVE) + '.hex')
+            self.console_handler('teensy_loader_cli.exe -mmcu=mk20dx256 -s -v ' + PROJECTS_DIR + '/' + self.projects_listbox.get(ACTIVE) + '/' + BINDIR +'/' + self.hex_files.get(ACTIVE))
         except:
             self.console_display("Target serial device is disconnected")
 
     def deployment(self):
         """Deploys the chosen project on the platform. The ID's and keys are automaticcaly generated in the compiled files.
         Teensyduino's are remotely flashed by RPI. The config (IDs, IPs) can be changed in config.txt"""
-        Console.console = self
+
         deploy_hex_files('config2.txt',self.projects_listbox.get(ACTIVE))
         global_flash('config2.txt')
 

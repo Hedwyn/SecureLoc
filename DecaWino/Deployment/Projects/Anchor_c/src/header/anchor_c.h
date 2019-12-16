@@ -3,6 +3,7 @@
 #include "WProgram.h"
 #include <AES.h>
 #include <SPI.h>
+#include "PKCE.h"
 
 #include <DecaDuino.h>
 #define EXTENDED 1
@@ -63,7 +64,7 @@
 #define TWR_ENGINE_STATE_SEND_DATA_PI 7
 #define TWR_ENGINE_STATE_IDLE 8
 
-extern const char* states[50];
+
 
 
 #define TWR_ENGINE_STATE_SEND_ACK 19
@@ -79,10 +80,10 @@ extern const char* states[50];
 #define TWR_MSG_TYPE_START 1
 #define TWR_MSG_TYPE_ACK 2
 #define TWR_MSG_TYPE_DATA_REPLY 3
-#define NB_ROBOTS 1
+#define NB_ROBOTS 2
 
 void setup();
 void print_byte_array(byte b[8]);
 int byte_array_cmp(byte b1[8], byte b2[8]);
-void loop();
+void anchor_loop();
 int main();

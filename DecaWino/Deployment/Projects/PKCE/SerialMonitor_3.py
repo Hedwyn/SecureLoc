@@ -1,8 +1,8 @@
 from serial import *
 import json
 
-PORT1 = 'COM17'
-PORT2 = 'COM19'
+PORT1 = 'COM15'
+PORT2 = 'COM21'
 PORT3 = 'COM21'
 
 out_file = 'skew.json'
@@ -12,7 +12,7 @@ sample = {}
 
 
 try:
-    port1 = Serial(PORT1)
+    #port1 = Serial(PORT1)
     port2 = Serial(PORT2)
     #port3 = Serial(PORT3)
 
@@ -22,7 +22,8 @@ except:
 exit_flag = False
 
 #ports = [port1, port2, port3]
-ports = [port1, port2]
+#ports = [port1, port2]
+ports = [port2]
 f_txt = {}
 for port in ports:
     f_txt[port.name] = open(out_txt + port.name + '.txt', 'w+')

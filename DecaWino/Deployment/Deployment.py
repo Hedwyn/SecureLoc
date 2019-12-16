@@ -6,7 +6,7 @@ import fabric
 import paramiko
 import spur
 import time
-
+from Make import *
 
 SHELL_ON = True
 DEFAULT_NB_ANCHORS = 15
@@ -19,6 +19,9 @@ DEFAULT_CONF = 'config.txt'
 
 DEFAULT_PROJECT_NAME = 'Anchor'
 hex_name = 'anchor'
+
+DEFAULT_NB_ANCHORS = 1
+DEFAULT_ID = '1'
 
 
 PROJECTS_DIR = 'Projects'
@@ -127,7 +130,19 @@ def clean(project_name):
 	"""removes all previous compiled files from directory"""
 	console.shell_exec("cd teensy3 && make softclean PROJECTNAME=" + project_name)
 
+def compile_hex_file(project_name = DEFAULT_PROJECT_NAME, nb_anchors = DEFAULT_NB_ANCHORS, id = DEFAULT_ID, id_idx = DEFAULT_ID):
+	# .hex files generation
+	make_calls, obj_list = get_dependency_rules(project_name)
 
+	# compiling dependencies from other projects
+
+	for call in make_calls:
+		console.shell_exec(call)
+
+	obj_list_str = ""
+	for obj in obj_list:
+		obj_list_str += obj + " "
+	console.shell_exec("cd teensy3 && make PROJECTNAME=" + project_name + " BINNAME=" + hex_name + id  + " NB_ANCHORS=" + str(nb_anchors) + " ANCHORID=" + str(id_idx) + " OTHER_PROJECTS_OBJS_FILES=" + obj_list_str)
 
 def compilation(nb_anchors, project_name = DEFAULT_PROJECT_NAME):
 	"""compiles main.cpp and generates one specific anchor{ID}.hex with a unique ID for each anchor"""
@@ -135,12 +150,7 @@ def compilation(nb_anchors, project_name = DEFAULT_PROJECT_NAME):
 	id_idx = 1
 
 	for id in anchors_id:
-		# .elf files generation
-		# dependencies will be compiled only the first time
-
-
-		# .hex files generation
-		console.shell_exec("cd teensy3 && make PROJECTNAME=" + project_name + " BINNAME=" + hex_name + id  + " NB_ANCHORS=" + str(nb_anchors) + " ANCHORID=" + str(id_idx))
+		compile_hex_file(project_name, nb_anchors, id, id_idx)
 
 		id_idx += 1
 		# deletes main.o such as reassembling main.o at the next iteration
@@ -267,5 +277,6 @@ def global_flash(config = DEFAULT_CONF):
 
 
 if __name__ == "__main__":
-	deploy_hex_files('config2.txt', 'Anchor_c')
-	global_flash('config2.txt')
+	#deploy_hex_files('config2.txt', 'Anchor_c')
+	#global_flash('config2.txt')
+	compilation(1, 'Anchor_c')

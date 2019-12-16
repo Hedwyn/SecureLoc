@@ -1,20 +1,21 @@
 #include "anchor_c.h"
 
+
 /* libraries */
 
-DecaDuino decaduino;
-AES aes;
+static DecaDuino decaduino;
+static AES aes;
 
 /* RX-TX buffers */
-uint8_t rxData[128];
-uint8_t txData[128];
-uint16_t rxLen;
+static uint8_t rxData[128];
+static uint8_t txData[128];
+static uint16_t rxLen;
 
 /* state machine iterators */
-int state = TWR_ENGINE_STATE_IDLE;
-int previous_state = TWR_ENGINE_STATE_IDLE;
-int next_state;
-const char * states[50]=
+static int state = TWR_ENGINE_STATE_IDLE;
+static int previous_state = TWR_ENGINE_STATE_IDLE;
+static int next_state;
+static const char * states[50]=
 {
 "Init",
 "Serial",
@@ -28,7 +29,7 @@ const char * states[50]=
 };
 
 /* RX IDs - when receiving frames from tags or anchors */
-byte targetID[][8]= { {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x01},// bots
+static byte targetID[][8]= { {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x01},// bots
                      {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x02},
                      {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01}, //anchors
                      {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02},
@@ -39,40 +40,40 @@ byte targetID[][8]= { {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x01},// bots
                      {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07},
                      {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08},
                      {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x09}};
-byte rxID[8];
-byte nextTarget[8];
-int next_target_idx = 0; //  index on tag to localize in the next round
+static byte rxID[8];
+static byte nextTarget[8];
+static int next_target_idx = 0; //  index on tag to localize in the next round
 
 /* Anchor ID's */
-byte myID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, ANCHOR}; // identifiant de l'ancre
-byte anchorID[8]; //anchorID field for received frames
-byte myNextAnchorID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // filled by getId()
-byte nextAnchorID[8] ={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // buffer for the next anchor field in RX frames
+static byte myID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, ANCHOR}; // identifiant de l'ancre
+static byte anchorID[8]; //anchorID field for received frames
+static byte myNextAnchorID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // filled by getId()
+static byte nextAnchorID[8] ={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // buffer for the next anchor field in RX frames
 
 /* Two-Way Ranging protocol   */
-unsigned long timeout;
-bool has_timedout;
-uint64_t t1, t2, t3, t4;
-int32_t tof,tof_skew;
-float distance, distance_skew;
+static unsigned long timeout;
+static bool has_timedout;
+static uint64_t t1, t2, t3, t4;
+static int32_t tof,tof_skew;
+static float distance, distance_skew;
 
 
 /* Serial communications */
-char serial_command, target_id;
-bool is_target_anchor;
+static char serial_command, target_id;
+static bool is_target_anchor;
 
 /* Scheduling */
-int aloha_delay;
-bool my_turn;
-uint64_t slot_start;
-uint64_t last_start_frame;
-int delayed;
+static int aloha_delay;
+static bool my_turn;
+static uint64_t slot_start;
+static uint64_t last_start_frame;
+static int delayed;
 
 
 int main(){
 	setup();
 	while (1) {
-		loop();
+		anchor_loop();
 		yield();
 	}
 	return(0);
@@ -99,6 +100,10 @@ void getID() {
 	#else
 		DPRINTFLN("ANCHOR id has not been defined during compilation. Default ID : 0 \n");
 	#endif
+}
+
+void getID(byte id) {
+  myID[7] = id;
 }
 
 void print_byte_array(byte b[8]) {
@@ -143,14 +148,14 @@ void setup() {
   /* Setting RX-TX parameters */
   decaduino.setRxBuffer(rxData, &rxLen);
 
- decaduino.plmeRxEnableRequest();
- timeout = millis() + START_TIMEOUT + (ANCHOR - 1) * SLOT_LENGTH * 1E-3;
- DPRINTFLN("Starting");
+  decaduino.plmeRxEnableRequest();
+  timeout = millis() + START_TIMEOUT + (ANCHOR - 1) * SLOT_LENGTH * 1E-3;
+  DPRINTFLN("Starting");
 }
 
 
-void loop() {
-
+void anchor_loop() {
+  h_word();
   if (state != previous_state) {
     Serial.print("$State: ");
     Serial.println(states[state]);

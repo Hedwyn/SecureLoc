@@ -35,10 +35,13 @@ CPU_SPEED = 72000000 #default
 #MCU=MK66FX1M0
 PROJECTNAME= Anchor
 BINNAME= $(PROJECTNAME)
-PROJECTPATH= ../Projects/$(PROJECTNAME)
+PROJECTSDIR= ../Projects
+PROJECTPATH= $(PROJECTSDIR)/$(PROJECTNAME)
 # make it lower case
 LOWER_MCU := $(subst A,a,$(subst B,b,$(subst C,c,$(subst D,d,$(subst E,e,$(subst F,f,$(subst G,g,$(subst H,h,$(subst I,i,$(subst J,j,$(subst K,k,$(subst L,l,$(subst M,m,$(subst N,n,$(subst O,o,$(subst P,p,$(subst Q,q,$(subst R,r,$(subst S,s,$(subst T,t,$(subst U,u,$(subst V,v,$(subst W,w,$(subst X,x,$(subst Y,y,$(subst Z,z,$(MCU)))))))))))))))))))))))))))
 MCU_LD = $(LOWER_MCU).ld
+
+PROJECTS_SUBDIRS = $(sort $(dir $(wildcard $(PROJECTSDIR)/*/)))
 
 
 TARGET = main
@@ -105,9 +108,11 @@ endif
 #************************************************************************
 # Settings below this point usually do not need to be edited
 #************************************************************************
+OBJ_DEPENDENCIES = $(addsuffix $(SRCDIR)/$(HEADERDIR), $(addprefix -I, $(PROJECTS_SUBDIRS)))
+#OBJ_DEPENDENCIES = -I../PROJECTS/PKCE/src/header
 INCLUDE = -I$(LIBS_H_PATH) -I$(PROJECTS_H_PATH)
 # CPPFLAGS = compiler options for C and C++
-CPPFLAGS = -Wall -g -Os -mcpu=$(CPUARCH) -mthumb -MMD $(OPTIONS) -I. -I $(LIBRARYPATH) $(INCLUDE) -I "C:\Users\pestourb\Documents\Arduino\libraries\DecaDuino-master" -I "C:\Program Files (x86)\Arduino\hardware\teensy\avr\libraries\SPI" -I "C:\WinAVR-20100110\avr32\include"
+CPPFLAGS = -Wall -g -Os -mcpu=$(CPUARCH) -mthumb -MMD -MP $(OPTIONS) -I. -I $(LIBRARYPATH) $(INCLUDE)  -I "C:\Program Files (x86)\Arduino\hardware\teensy\avr\libraries\SPI" -I "C:\WinAVR-20100110\avr32\include"
 
 # compiler options for C++ only
 CXXFLAGS = -std=gnu++14 -felide-constructors -fno-exceptions -fno-rtti
@@ -150,12 +155,13 @@ PROJECT_C_FILES :=  $(wildcard $(PROJECTPATH)/$(SRCDIR)/$(CPPDIR)/*.c)
 PROJECT_CPP_FILES :=  $(wildcard $(PROJECTPATH)/$(SRCDIR)/$(CPPDIR)/*.cpp)
 PROJECT_OBJS_FILES = $(notdir $(PROJECT_CPP_FILES:.cpp=.o))
 PROJECT_OBJS = $(foreach obj,$(PROJECT_OBJS_FILES),$(PROJECTPATH)/$(OBJDIR)/$(obj) )
+OTHER_PROJECTS_OBJS_FILES :=
+
+
 
 # global list of object files
 #OBJS = $(foreach obj,$(LIBS_OBJS),$(OBJDIR)/$(obj)) $(foreach obj,$(PROJECT_OBJS),$(PROJECTPATH)/$(OBJDIR)/$(obj))
 OBJS = $(LIBS_OBJS) $(PROJECT_OBJS)
-
-
 
 
 
@@ -172,6 +178,7 @@ ifneq (,$(wildcard $(TOOLSPATH)))
 	-$(TOOLSPATH)/teensy_reboot
 endif
 
+
 ${OBJDIR}/%.o:	$(SRCDIR)/$(CPPDIR)/%.cpp
 	@echo $@
 	@echo compiling arduino libs objects file
@@ -182,29 +189,32 @@ ${OBJDIR}/%.o:	$(SRCDIR)/$(CPPDIR)/%.c
 	@echo $@
 	@echo compiling arduino libs objects file
 	@echo $<
-	$(CC) $(LDFLAGS) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	$(CC) $(LDFLAGS) $(CPPFLAGS) $(CFLAGS)  -c $< -o $@
 
 ${PROJECTPATH}/${OBJDIR}/%.o:	$(PROJECTPATH)/$(SRCDIR)/$(CPPDIR)/%.cpp
 	@echo $@
 	@echo compiling projects objects file
 	@echo $<
-	$(CXX) $(LDFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(LDFLAGS) $(CPPFLAGS) $(CXXFLAGS) $(OBJ_DEPENDENCIES) -c $< -o $@
+
 
 ${PROJECTPATH}/${OBJDIR}/%.o:	$(PROJECTPATH)/$(SRCDIR)/$(CPPDIR)/%.c
 	@echo $@
 	@echo compiling projects objects file
 	@echo $<
-	$(CC) $(LDFLAGS) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	$(CC) $(LDFLAGS) $(CPPFLAGS) $(CFLAGS) $(OBJ_DEPENDENCIES)  -c $< -o $@
+
 
 ${PROJECTPATH}/${BINDIR}/$(PROJECTNAME).elf: $(OBJS) $(MCU_LD)
 	@echo making elf file
-	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(OTHER_PROJECTS_OBJS_FILES) $(LIBS)
 
 build: $(LIBS_OBJS)
 	@echo Arduino libraries built
 
 # compiler generated dependency info
--include $(OBJS:.o=.d)
+# -include $(OBJS:.o=.d)
+# -include $(PROJECT_OBJS:.o=.d)
 
 clean:
 	@echo cleaning previous built
@@ -215,8 +225,7 @@ softclean:
 	rm -f $(PROJECTPATH)/$(OBJDIR)/$(PROJECTNAME).o
 	rm -f $(PROJECTPATH)/$(OBJDIR)/$(PROJECTNAME).d
 	rm -f $(PROJECTPATH)/$(BINDIR)/$(PROJECTNAME).elf
-	
+
 
 test:
-	@echo $(LIBS_C_FILES)
-	@echo $(LIBS_CPP_FILES)
+	@echo  $(OTHER_PROJECTS_OBJS_FILES)
