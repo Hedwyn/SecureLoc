@@ -197,7 +197,7 @@ class CompilationMenu(Frame):
         self.console_handler("cd teensy3 && make softclean PROJECTNAME=" + project_name)
         # compiling the project
         #self.console_handler("cd teensy3 && make PROJECTNAME=" + project_name, "Compiling " + project_name, "Done")
-        compile_hex_file(project_name)
+        compile_hex_file(project_name, binname = project_name)
 
 
         # updating cpu_speed

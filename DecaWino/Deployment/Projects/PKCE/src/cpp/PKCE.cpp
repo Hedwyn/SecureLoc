@@ -28,9 +28,6 @@ static double signature_float[N_CHUNKS * 8];
 static float mean_temp = 0;
 static int max_chunks = N_CHUNKS;
 
-void h_word() {
-	Serial.println("HelloWorld");
-}
 
 byte quantize(float skew) {
 	float pow_2 = 16; //skew < 32 ppm so we quantize integer part on 5 bits

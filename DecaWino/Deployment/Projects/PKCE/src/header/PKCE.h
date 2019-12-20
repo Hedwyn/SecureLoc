@@ -64,7 +64,7 @@
 byte quantize(float skew);
 void set_n_chunks(int n);
 uint16_t quantize_16(float skew);
-void h_word();
+
 void setup_PKCE(int channel, int pcode, int plength, int delay);
 void setup_PKCE();
 void print_value (char * str, byte * a, int bits);

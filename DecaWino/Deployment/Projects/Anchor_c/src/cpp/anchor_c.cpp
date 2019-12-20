@@ -4,7 +4,7 @@
 /* libraries */
 
 static DecaDuino decaduino;
-static AES aes;
+
 
 /* RX-TX buffers */
 static uint8_t rxData[128];
@@ -12,20 +12,20 @@ static uint8_t txData[128];
 static uint16_t rxLen;
 
 /* state machine iterators */
-static int state = TWR_ENGINE_STATE_IDLE;
+static int state = TWR_ENGINE_STATE_INIT;
 static int previous_state = TWR_ENGINE_STATE_IDLE;
 static int next_state;
 static const char * states[50]=
 {
 "Init",
+"Idle",
 "Serial",
-"Wait New Cycle",
+"Prepare Ranging",
 "Send Start",
 "Wait ACK",
 "WAIT DATA",
 "Extract Timestamps",
 "Send to Pi",
-"Idle"
 };
 
 /* RX IDs - when receiving frames from tags or anchors */
@@ -45,9 +45,9 @@ static byte nextTarget[8];
 static int next_target_idx = 0; //  index on tag to localize in the next round
 
 /* Anchor ID's */
-static byte myID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, ANCHOR}; // identifiant de l'ancre
+static byte MYID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, ANCHOR}; // identifiant de l'ancre
 static byte anchorID[8]; //anchorID field for received frames
-static byte myNextAnchorID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // filled by getId()
+static byte MY_NEXT_ANCHOR_ID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // filled by getId()
 static byte nextAnchorID[8] ={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // buffer for the next anchor field in RX frames
 
 /* Two-Way Ranging protocol   */
@@ -69,33 +69,39 @@ static uint64_t slot_start;
 static uint64_t last_start_frame;
 static int delayed;
 
+/* Cooperative methods */
+struct control_frame{
+  byte anchor_id;
+  byte tag_id;
+};
+static control_frame next_ghost_anchor = {.anchor_id = 0, .tag_id = 0};
 
-int main(){
-	setup();
-	while (1) {
-		anchor_loop();
-		yield();
-	}
-	return(0);
+
+#ifdef MASTER
+void getNextGhostAnchor() {
+  Serial.println("I'm Master, sending control frame");
+  next_ghost_anchor.anchor_id = NB_ANCHORS;
+  next_ghost_anchor.tag_id = (next_target_idx + 1) % NB_ROBOTS;
 }
+#endif
 
 void getID() {
 	#ifdef ANCHOR
 		/* setting up anchor id */
-		myID[7] = ANCHOR;
+		MYID[7] = ANCHOR;
 
 		/* setting up next anchor ID */
 		#ifdef NB_ANCHORS
 		/* checking if this anchors has the highest ID */
 			if (ANCHOR == NB_ANCHORS) {
 				/* the next anchor is the first one */
-				myNextAnchorID[7] = 1;
+				MY_NEXT_ANCHOR_ID[7] = 1;
 			}
 			else {
-				myNextAnchorID[7] = ANCHOR + 1;
+				MY_NEXT_ANCHOR_ID[7] = ANCHOR + 1;
 			}
 		#else
-			myNextAnchorID[7] = ANCHOR + 1;
+			MY_NEXT_ANCHOR_ID[7] = ANCHOR + 1;
 		#endif
 	#else
 		DPRINTFLN("ANCHOR id has not been defined during compilation. Default ID : 0 \n");
@@ -103,7 +109,7 @@ void getID() {
 }
 
 void getID(byte id) {
-  myID[7] = id;
+  MYID[7] = id;
 }
 
 void print_byte_array(byte b[8]) {
@@ -129,7 +135,7 @@ int byte_array_cmp(byte b1[8], byte b2[8]) {
 	return(ret);
 }
 
-void setup() {
+void anchor_setup() {
   delay(1000);
   pinMode(13, OUTPUT);
   SPI.setSCK(14);
@@ -146,16 +152,30 @@ void setup() {
   getID();
 
   /* Setting RX-TX parameters */
-  decaduino.setRxBuffer(rxData, &rxLen);
+  anchor_RxTxConfig();
 
   decaduino.plmeRxEnableRequest();
   timeout = millis() + START_TIMEOUT + (ANCHOR - 1) * SLOT_LENGTH * 1E-3;
   DPRINTFLN("Starting");
+  #ifdef MASTER
+    state = TWR_ENGINE_STATE_SEND_START;
+  #else
+    state = TWR_ENGINE_STATE_INIT;
+  #endif
+  state = TWR_ENGINE_STATE_INIT;
+}
+
+void anchor_RxTxConfig() {
+	decaduino.setRxBuffer(rxData, &rxLen);
 }
 
 
-void anchor_loop() {
-  h_word();
+int anchor_loop() {
+  return(anchor_loop(MYID, MY_NEXT_ANCHOR_ID, next_target_idx ));
+}
+
+int anchor_loop(byte *myID, byte *myNextAnchorID, int tagID) {
+  int ret = TWR_ON_GOING;
   if (state != previous_state) {
     Serial.print("$State: ");
     Serial.println(states[state]);
@@ -163,14 +183,31 @@ void anchor_loop() {
   previous_state = state;
 
   switch (state) {
+    case TWR_ENGINE_STATE_INIT:
+      #ifdef MASTER
+      if (myID[7] == MASTER_ID) {
+        timeout = millis() + START_TIMEOUT + SLOT_LENGTH * 1E-3;
+        Serial.println("$ Master Timeout Set");
+      }
+      else {
+        timeout = millis() + 2 * START_TIMEOUT + ANCHOR * SLOT_LENGTH * 1E-3;
+      }
+      #else
+        timeout = millis() + 2 * START_TIMEOUT + ANCHOR * SLOT_LENGTH * 1E-3;
+      #endif
+
+      decaduino.plmeRxEnableRequest();
+      state = TWR_ENGINE_STATE_IDLE;
+      break;
+
 		case TWR_ENGINE_STATE_IDLE :
       if (ALOHA) {
-        state = TWR_ENGINE_STATE_INIT;
+        state = TWR_ENGINE_PREPARE_RANGING;
 				break;
       }
 			if (millis() > timeout) {
 				/* the DATA frame of the previous frame has never been received. Forcing a new cycle */
-				state = TWR_ENGINE_STATE_INIT;
+				state = TWR_ENGINE_PREPARE_RANGING;
         delayed = 0;
         DPRINTFLN("$Timeout- Starting new cycle");
         decaduino.plmeRxDisableRequest();
@@ -179,7 +216,7 @@ void anchor_loop() {
 
       if ( decaduino.rxFrameAvailable() ) {
 				my_turn = false;
-
+        DPRINTFLN("$ Frame received");
 				/* checking START frames for anchor ranging request */
 				if ( rxData[0] == TWR_MSG_TYPE_START ) {
 					/* extracting target ID */
@@ -188,12 +225,11 @@ void anchor_loop() {
 					}
 
 					if (byte_array_cmp(nextTarget, myID)) {
-						Serial.println("$anchor ranging request received !");
+						Serial.println("$anchor ranging request received ! [TBD]");
 						//anchorID[i] = rxData[i+9];
             for (int i = 0; i < 8; i++) {
               anchorID[i] = rxData[i+1];
             }
-						state = TWR_ENGINE_STATE_MEMORISE_T2;
 						break;
 					}
 
@@ -203,7 +239,7 @@ void anchor_loop() {
 					}
 					DPRINTF("$ID received:");
 					DPRINTFLN((int) nextAnchorID[7] );
-					DPRINTF("$ID of the anchor before me: ");
+					DPRINTF("$My ID ");
 					DPRINTFLN((int) myID[7]);
 				}
 				if (byte_array_cmp(nextAnchorID, myID))
@@ -217,7 +253,7 @@ void anchor_loop() {
           Serial.print("$ID of the next anchor: ");
           print_byte_array(myNextAnchorID);
           Serial.println();
-					state = TWR_ENGINE_STATE_INIT;
+					state = TWR_ENGINE_PREPARE_RANGING;
           slot_start =  last_start_frame + (SLOT_LENGTH / (DW1000_TIMEBASE * IN_US) );
           delayed = 1;
         }
@@ -227,10 +263,6 @@ void anchor_loop() {
         }
       }
 
-      break;
-
-    case TWR_ENGINE_STATE_INIT:
-      state = TWR_ENGINE_STATE_WAIT_NEW_CYCLE;
       break;
 
     case TWR_ENGINE_STATE_SERIAL:
@@ -267,6 +299,10 @@ void anchor_loop() {
           case 1:
             Serial.println("$ command #2 received");
             break;
+          case 2:
+            Serial.println("$ Starting PKCE");
+
+            break;
           default:
             Serial.println("$ unknown command received:");
             Serial.println(serial_command);
@@ -283,10 +319,10 @@ void anchor_loop() {
        }
       break;
 
-    case TWR_ENGINE_STATE_WAIT_NEW_CYCLE:
-		if (ALOHA) {
-			delay(aloha_delay);
-		}
+    case TWR_ENGINE_PREPARE_RANGING:
+  		if (ALOHA) {
+  			delay(aloha_delay);
+  		}
       if (Serial.available() > 0) {
         state = TWR_ENGINE_STATE_SERIAL;
         next_state = TWR_ENGINE_STATE_SEND_START;
@@ -303,16 +339,26 @@ void anchor_loop() {
 
     case TWR_ENGINE_STATE_SEND_START:
 			/* Frame format : tagID | anchorID | nextAnchorID  */
+      #ifdef MASTER
+        if (myID[7] == MASTER_ID) {
+          getNextGhostAnchor();
+          DPRINTFLN("$ [Master Anchor] Getting next ghost anchor ID");
+          DPRINTF("");
+        }
+      #endif
 			txData[0] = TWR_MSG_TYPE_START;
       for(int i=0; i<8; i++){
-        txData[1+i]=targetID[next_target_idx][i];
+        txData[1+i]=targetID[tagID][i];
         txData[9+i]=myID[i];
         txData[17+i]=myNextAnchorID[i];
       }
-      txData[25]=0;
+
+      // control frame
+      txData[25]= next_ghost_anchor.anchor_id;
+      txData[26] = next_ghost_anchor.tag_id;
 
 			/* Sending frame */
-      if(!decaduino.pdDataRequest(txData, 26, delayed, slot_start) ){
+      if(!decaduino.pdDataRequest(txData, 27, delayed, slot_start) ){
         DPRINTFLN("$Could not send the frame");
       }
 
@@ -324,16 +370,8 @@ void anchor_loop() {
 			/* waiting completion */
 			timeout = millis() + TX_TIMEOUT;
 			has_timedout = false;
+      Serial.println("$ Waiting Frame");
       while (!decaduino.hasTxSucceeded());
-			// while ( (!decaduino.hasTxSucceeded() ) || !has_timedout ) {
-			// 	if (millis() > timeout) {
-			// 		has_timedout = true;
-			// 		delay(1);
-			// 	}
-			// }
-			// if (has_timedout) {
-			// 	DPRINTFLN("$Timeout - TX never completed");
-			// }
 			t1 = decaduino.getLastTxTimestamp();
 			/* enabling reception for the incoming ACK */
 			decaduino.plmeRxEnableRequest();
@@ -343,8 +381,9 @@ void anchor_loop() {
 
     case TWR_ENGINE_STATE_WAIT_ACK:
       if ( millis() > timeout ) {
-        state = TWR_ENGINE_STATE_IDLE;    //pb ici
+        state = TWR_ENGINE_STATE_INIT;
         DPRINTFLN("$timeout on waiting ACK");
+        ret = TWR_COMPLETE;
 				break;
       }
 
@@ -378,7 +417,8 @@ void anchor_loop() {
     case TWR_ENGINE_STATE_WAIT_DATA_REPLY:
       if ( millis() > timeout ) {
 				DPRINTFLN("$timeout on waiting DATA");
-        state = TWR_ENGINE_STATE_IDLE;
+        ret = TWR_COMPLETE;
+        state = TWR_ENGINE_STATE_INIT;
 				break;
       }
       if ( decaduino.rxFrameAvailable() ) {
@@ -460,80 +500,15 @@ void anchor_loop() {
       Serial.print(decaduino.getRSSI() );
       Serial.println("#\n");
 
-			timeout = millis() + START_TIMEOUT + (ANCHOR - 1) * SLOT_LENGTH * 1E-3;
-      decaduino.plmeRxEnableRequest();
-      state = TWR_ENGINE_STATE_IDLE;
-      break;
-
-
-
-
-
-    case TWR_ENGINE_STATE_MEMORISE_T2:
-      t2 = decaduino.getLastRxTimestamp();           //On enregistre l'heure de réception
-      state = TWR_ENGINE_STATE_SEND_ACK;
-      break;
-
-/**
- * State handling replies for anchor ranging
- */
-
-
-    case TWR_ENGINE_STATE_SEND_ACK:
-      decaduino.plmeRxDisableRequest();
-      txData[0] = TWR_MSG_TYPE_ACK;           //On acquite le message (champs 0 du mesage)
-      for( int i =0; i<8 ; i++){
-        txData[1+i] = anchorID[i];
-        txData[9+i] = myID[i];
-      }
-      decaduino.pdDataRequest(txData, 18);
-      state = TWR_ENGINE_STATE_WAIT_SENT;
-      break;
-
-/**
- * Etat : TWR_ENGINE_STATE_WAIT_SENT
- * On vérifie que l'Ack est bien envoyé
- */
-
-    case TWR_ENGINE_STATE_WAIT_SENT:
-
-      if ( decaduino.hasTxSucceeded() )
-        state = TWR_ENGINE_STATE_MEMORISE_T3;  //si l'état précédent est réussi on continue
-      break;
-
-
-/**
- * Etat : TWR_ENGINE_STATE_MEMORISE_T3
- * Sauvegarde de l'heure d'envoie de la réponse
- */
-    case TWR_ENGINE_STATE_MEMORISE_T3:
-      t3 = decaduino.getLastTxTimestamp();       // on sauvegarde l'heure d'envoie de la réponse
-      state = TWR_ENGINE_STATE_SEND_DATA_REPLY;
-      break;
-/**
- * Etat : TWR_ENGINE_STATE_ENCRYPTION
- * Dans cet étant on génère un nombre aléatoire pour l'authentification.
- * On encrypte ce dernier avec l'idée à l'aide d'une clé privée
- */
-
-
-
-    case TWR_ENGINE_STATE_SEND_DATA_REPLY:
-      Serial.println("$anchor data reply sent !");
-      txData[0] = TWR_MSG_TYPE_DATA_REPLY;
-      for( int i=0; i<8;i++){
-
-        txData[42+i] = anchorID[i];
-      }
-      decaduino.encodeUint64(t2, &txData[1]);
-      decaduino.encodeUint64(t3, &txData[9]);
-      decaduino.pdDataRequest(txData, 50);  //message de 49 octets
-      state = TWR_ENGINE_STATE_IDLE;
+      state = TWR_ENGINE_STATE_INIT;
+      ret = TWR_COMPLETE;
       break;
 
     default:
       state = TWR_ENGINE_STATE_INIT;
       break;
-  }
 
+
+  }
+  return(ret);
 }

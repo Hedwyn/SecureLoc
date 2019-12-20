@@ -1,7 +1,3 @@
-#include <AES_config.h>
-#include <printf.h>
-#include "WProgram.h"
-#include <AES.h>
 #include <SPI.h>
 #include "PKCE.h"
 
@@ -15,10 +11,16 @@
 #endif
 
 #ifndef ANCHOR
-  #define ANCHOR 1
+  #define ANCHOR 0
 #endif
 
-#define SLOT_LENGTH 50000 //microseconds
+#define MASTER_ID 1
+
+#if (ANCHOR == MASTER_ID)
+  #define MASTER
+#endif
+
+#define SLOT_LENGTH 1000000 //microseconds
 #define SLOT_LENGTH_MS (SLOT_LENGTH / 1000)
 #define IN_US 1E6 //microseconds
 
@@ -53,27 +55,20 @@
 
 
 
-
 #define TWR_ENGINE_STATE_INIT 0
-#define TWR_ENGINE_STATE_SERIAL 1
-#define TWR_ENGINE_STATE_WAIT_NEW_CYCLE 2
-#define TWR_ENGINE_STATE_SEND_START 3
-#define TWR_ENGINE_STATE_WAIT_ACK 4
-#define TWR_ENGINE_STATE_WAIT_DATA_REPLY 5
-#define TWR_ENGINE_STATE_EXTRACT_T2_T3 6
-#define TWR_ENGINE_STATE_SEND_DATA_PI 7
-#define TWR_ENGINE_STATE_IDLE 8
+#define TWR_ENGINE_STATE_IDLE 1
+#define TWR_ENGINE_STATE_SERIAL 2
+#define TWR_ENGINE_PREPARE_RANGING 3
+#define TWR_ENGINE_STATE_SEND_START 4
+#define TWR_ENGINE_STATE_WAIT_ACK 5
+#define TWR_ENGINE_STATE_WAIT_DATA_REPLY 6
+#define TWR_ENGINE_STATE_EXTRACT_T2_T3 7
+#define TWR_ENGINE_STATE_SEND_DATA_PI 8
 
 
-
-
-#define TWR_ENGINE_STATE_SEND_ACK 19
-#define TWR_ENGINE_STATE_WAIT_SENT 20
-#define TWR_ENGINE_STATE_MEMORISE_T3 21
-#define TWR_ENGINE_STATE_WAIT_BEFORE_SEND_DATA_REPLY 22
-#define TWR_ENGINE_STATE_SEND_DATA_REPLY 23
-#define TWR_ENGINE_STATE_ENCRYPTION 24
-#define TWR_ENGINE_STATE_MEMORISE_T2 25
+/* TWR State */
+#define TWR_ON_GOING 0
+#define TWR_COMPLETE 1
 
 /* frame types */
 #define TWR_MSG_TYPE_UNKNOWN 0
@@ -82,8 +77,13 @@
 #define TWR_MSG_TYPE_DATA_REPLY 3
 #define NB_ROBOTS 2
 
-void setup();
+/* Cooperative */
+#define COOPERATIVE
+
+
+void anchor_setup();
+void anchor_RxTxConfig();
 void print_byte_array(byte b[8]);
 int byte_array_cmp(byte b1[8], byte b2[8]);
-void anchor_loop();
-int main();
+int anchor_loop();
+int anchor_loop(byte *myID, byte *myNextAnchorID, int tagID);

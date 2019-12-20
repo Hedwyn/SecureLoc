@@ -130,7 +130,7 @@ def clean(project_name):
 	"""removes all previous compiled files from directory"""
 	console.shell_exec("cd teensy3 && make softclean PROJECTNAME=" + project_name)
 
-def compile_hex_file(project_name = DEFAULT_PROJECT_NAME, nb_anchors = DEFAULT_NB_ANCHORS, id = DEFAULT_ID, id_idx = DEFAULT_ID):
+def compile_hex_file(project_name = DEFAULT_PROJECT_NAME, nb_anchors = DEFAULT_NB_ANCHORS, id = DEFAULT_ID, id_idx = DEFAULT_ID, binname= hex_name):
 	# .hex files generation
 	make_calls, obj_list = get_dependency_rules(project_name)
 
@@ -142,7 +142,7 @@ def compile_hex_file(project_name = DEFAULT_PROJECT_NAME, nb_anchors = DEFAULT_N
 	obj_list_str = ""
 	for obj in obj_list:
 		obj_list_str += obj + " "
-	console.shell_exec("cd teensy3 && make PROJECTNAME=" + project_name + " BINNAME=" + hex_name + id  + " NB_ANCHORS=" + str(nb_anchors) + " ANCHORID=" + str(id_idx) + " OTHER_PROJECTS_OBJS_FILES=" + obj_list_str)
+	console.shell_exec("cd teensy3 && make PROJECTNAME=" + project_name + " BINNAME=" + binname + id  + " NB_ANCHORS=" + str(nb_anchors) + " ANCHORID=" + str(id_idx) + " OTHER_PROJECTS_OBJS_FILES=" + obj_list_str)
 
 def compilation(nb_anchors, project_name = DEFAULT_PROJECT_NAME):
 	"""compiles main.cpp and generates one specific anchor{ID}.hex with a unique ID for each anchor"""
@@ -279,4 +279,4 @@ def global_flash(config = DEFAULT_CONF):
 if __name__ == "__main__":
 	#deploy_hex_files('config2.txt', 'Anchor_c')
 	#global_flash('config2.txt')
-	compilation(1, 'Anchor_c')
+	compilation(2, 'Anchor_c')

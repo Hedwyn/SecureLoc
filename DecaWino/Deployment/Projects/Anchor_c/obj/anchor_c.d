@@ -1,7 +1,6 @@
 ../Projects/Anchor_c/obj/anchor_c.o: \
  ../Projects/Anchor_c/src/cpp/anchor_c.cpp \
- ../Projects/Anchor_c/src/header/anchor_c.h \
- C:\Users\pestourb\Documents\Arduino\libraries\AES-master/AES_config.h \
+ ../Projects/Anchor_c/src/header/anchor_c.h src/header/SPI.h \
  src/header/Arduino.h src/header/WProgram.h \
  C:\WinAVR-20100110\avr32\include/stdlib.h \
  C:\WinAVR-20100110\avr32\include/_ansi.h \
@@ -38,17 +37,13 @@
  src/header/usb_mtp.h src/header/usb_audio.h src/header/usb_touch.h \
  src/header/usb_undef.h src/header/WCharacter.h \
  src/header/elapsedMillis.h src/header/Arduino.h \
- src/header/IntervalTimer.h src/header/pgmspace.h \
- C:\Users\pestourb\Documents\Arduino\libraries\AES-master/printf.h \
- src/header/WProgram.h \
- C:\Users\pestourb\Documents\Arduino\libraries\AES-master/AES.h \
- C:\Users\pestourb\Documents\Arduino\libraries\AES-master/AES_config.h \
- src/header/SPI.h src/header/DMAChannel.h src/header/EventResponder.h \
- ../Projects/PKCE/src/header/PKCE.h src/header/DecaDuino.h
+ src/header/IntervalTimer.h src/header/DMAChannel.h \
+ src/header/EventResponder.h ../Projects/PKCE/src/header/PKCE.h \
+ src/header/DecaDuino.h
 
 ../Projects/Anchor_c/src/header/anchor_c.h:
 
-C:\Users\pestourb\Documents\Arduino\libraries\AES-master/AES_config.h:
+src/header/SPI.h:
 
 src/header/Arduino.h:
 
@@ -169,18 +164,6 @@ src/header/elapsedMillis.h:
 src/header/Arduino.h:
 
 src/header/IntervalTimer.h:
-
-src/header/pgmspace.h:
-
-C:\Users\pestourb\Documents\Arduino\libraries\AES-master/printf.h:
-
-src/header/WProgram.h:
-
-C:\Users\pestourb\Documents\Arduino\libraries\AES-master/AES.h:
-
-C:\Users\pestourb\Documents\Arduino\libraries\AES-master/AES_config.h:
-
-src/header/SPI.h:
 
 src/header/DMAChannel.h:
 
