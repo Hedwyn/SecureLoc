@@ -18,7 +18,7 @@ CONFIG_PATH = 'Config'
 DEFAULT_CONF = 'config.txt'
 
 DEFAULT_PROJECT_NAME = 'Anchor'
-hex_name = 'anchor'
+hex_name = 'node'
 
 DEFAULT_NB_ANCHORS = 1
 DEFAULT_ID = '1'
@@ -27,6 +27,7 @@ DEFAULT_ID = '1'
 PROJECTS_DIR = 'Projects'
 BIN_DIR = 'bin'
 ID_LENGTH = 1
+anchors_table = {}
 
 class Console():
 	_console = None
@@ -64,7 +65,8 @@ def read_config(configname = DEFAULT_CONF):
 	usernames = {}
 	passwords = {}
 	anchors_names = []
-	anchors_table = {}
+	global anchors_table
+	anchors_table.clear()
 
 	filename = CONFIG_PATH + "/" + configname
 
@@ -97,7 +99,7 @@ def read_config(configname = DEFAULT_CONF):
 					anchors_table[hostname].append(name)
 
 				i += 1
-	return([hosts_list,usernames,passwords,anchors_names,anchors_table])
+	return([hosts_list,usernames,passwords,anchors_names])
 
 
 
@@ -133,7 +135,8 @@ def clean(project_name):
 def compile_hex_file(project_name = DEFAULT_PROJECT_NAME, nb_anchors = DEFAULT_NB_ANCHORS, id = DEFAULT_ID, id_idx = DEFAULT_ID, binname= hex_name):
 	# .hex files generation
 	make_calls, obj_list = get_dependency_rules(project_name)
-
+	print("make_calls: " + str(make_calls))
+	print("obj_list: " + str(obj_list))
 	# compiling dependencies from other projects
 
 	for call in make_calls:
@@ -142,7 +145,10 @@ def compile_hex_file(project_name = DEFAULT_PROJECT_NAME, nb_anchors = DEFAULT_N
 	obj_list_str = ""
 	for obj in obj_list:
 		obj_list_str += obj + " "
-	console.shell_exec("cd teensy3 && make PROJECTNAME=" + project_name + " BINNAME=" + binname + id  + " NB_ANCHORS=" + str(nb_anchors) + " ANCHORID=" + str(id_idx) + " OTHER_PROJECTS_OBJS_FILES=" + obj_list_str)
+	print(obj_list)
+	print(project_name)
+	print("cd teensy3 && make PROJECTNAME=" + project_name + " BINNAME=" + binname + id  + " NB_ANCHORS=" + str(nb_anchors) + " NODE_ID=" + str(id_idx) + " OTHER_PROJECTS_OBJS_FILES=" + "{" + obj_list_str + "}")
+	console.shell_exec("cd teensy3 && make PROJECTNAME=" + project_name + " BINNAME=" + binname + id  + " NB_ANCHORS=" + str(nb_anchors) + " NODE_ID=" + str(id_idx) + " OTHER_PROJECTS_OBJS_FILES=" + '"' + obj_list_str + '"')
 
 def compilation(nb_anchors, project_name = DEFAULT_PROJECT_NAME):
 	"""compiles main.cpp and generates one specific anchor{ID}.hex with a unique ID for each anchor"""
@@ -170,7 +176,7 @@ def deploy_hex_files(config = DEFAULT_CONF, project_name = DEFAULT_PROJECT_NAME)
 	"""triggers the compilation and deploys the hex files on the raspberry hosts"""
 
 	# getting config
-	[hosts_list,usernames,passwords,anchors_names,anchors_table] = read_config(config)
+	[hosts_list,usernames,passwords,anchors_names] = read_config(config)
 	nb_anchors = len(anchors_names)
 
 	# cleaning previous local hex files
@@ -210,9 +216,14 @@ def local_flash(hostname,username,password,anchors_list):
 		# flashing the anchors in anchor_list
 		for anchor in anchors_list:
 			console.print("flashing anchor " + anchor + "..." )
-			(stdin, stdout, stderr) = ssh.exec_command('nohup /home/pi/Desktop/teensy_loader_cli -mmcu=mk20dx256 -s -v ' + '/home/pi/Desktop/anchor' + anchor + '.hex')
+			if (len(anchors_table[hostname]) > 1):
+				console.print("More than, one anchor; pressing the reset button is required")
+				soft_reset = ' -w'
+			else:
+				soft_reset = ' -s'
+			(stdin, stdout, stderr) = ssh.exec_command('nohup /home/pi/Desktop/teensy_loader_cli -mmcu=mk20dx256' + soft_reset + ' -v ' + '/home/pi/Desktop/' + hex_name + anchor + '.hex')
 			stdout.channel.recv_exit_status()
-			console.print('nohup ~/Desktop/teensy_loader_cli -mmcu=mk20dx256 -s -v ' + '~/Desktop/anchor' + anchor + '.hex')
+			console.print('nohup /home/pi/Desktop/teensy_loader_cli -mmcu=mk20dx256' + soft_reset + ' -v ' + '/home/pi/Desktop/' + hex_name + anchor + '.hex')
 
 			for line in stdout.readlines():
 				console.print(line)
@@ -242,7 +253,7 @@ def local_clean(hostname,username,password):
 	ssh.close()
 
 def global_clean(config = DEFAULT_CONF):
-	[hosts_list,usernames,passwords,anchors_names,anchors_table] = read_config(config)
+	[hosts_list,usernames,passwords,anchors_names] = read_config(config)
 	for host in hosts_list:
 		local_clean(host,usernames[host],passwords[host])
 
@@ -252,7 +263,7 @@ def global_clean(config = DEFAULT_CONF):
 
 def global_flash(config = DEFAULT_CONF):
 	"""triggers every local flash given in the config file"""
-	[hosts_list,usernames,passwords,anchors_names,anchors_table] = read_config(config)
+	[hosts_list,usernames,passwords,anchors_names] = read_config(config)
 
 	for host in hosts_list:
 		# getting the anchors associated to the host
@@ -279,4 +290,10 @@ def global_flash(config = DEFAULT_CONF):
 if __name__ == "__main__":
 	#deploy_hex_files('config2.txt', 'Anchor_c')
 	#global_flash('config2.txt')
-	compilation(2, 'Anchor_c')
+	#compilation(2, 'Anchor_c')
+	#local_flash()
+	#[hosts_list,usernames,passwords,anchors_names] = read_config('config2.txt')
+	# for host in hosts_list:
+	# 	print(host)
+	# 	print(anchors_table[host])
+	global_flash('config2.txt',)

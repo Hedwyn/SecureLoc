@@ -114,6 +114,12 @@ class RenderedNode(ABC):
             self.model.detach_node()
             self.shown = False
 
+    def change_color(self,color):
+        """chanegs the color of the node rendition in the 3D engine"""
+        self.model.set_color(utils.colors[self.color])
+        # changing text color
+        self.label.set_text_color(utils.colors[self.color])
+
     def get_distances_as_str(self):
         """converts the distances measured by the node into a string.
         The string is formatted as 'distance1 / distance2/... distance n'

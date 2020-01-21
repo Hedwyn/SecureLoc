@@ -13,7 +13,7 @@ import serial.tools.list_ports
 
 SERIAL_ROOT = 'COM'
 # CPU clock speed
-CPU_SPEED = ["24 Mhz","48 Mhz","72 Mhz","96 Mhz","120 Mhz"]
+CPU_SPEED = ["96 Mhz","120 Mhz","24 Mhz","48 Mhz","72 Mhz"]
 SHELL_ON = True
 PROJECTS_DIR = "Projects"
 SRCDIR = 'src'
@@ -61,6 +61,7 @@ class CompilationMenu(Frame):
         projects_lbl = ttk.Label(self.root, text = "Projects", style = 'Standard.TLabel')
         new_project_lbl = ttk.Label(self.root, text = "New Project Name", style = 'Standard.TLabel')
         cpu_speed_lbl = ttk.Label(self.root, text = "CPU Frequency", style = 'Standard.TLabel')
+        n_compile_lbl = ttk.Label(self.root, text = "#hex to generate:", style = 'Standard.TLabel')
         #console =  tk.Label(self.root, text = "Displaying random stuff", height = 10, width = 80)
 
         # Projects scrolling Menu
@@ -91,6 +92,8 @@ class CompilationMenu(Frame):
 
         # buttons
         compile_btn = ttk.Button(self.root, text = "Compile", style = 'W.TButton', command = lambda: self.compile(self.projects_listbox.get(ACTIVE),self.cpu_speed.get()))
+        n_compile_btn = ttk.Button(self.root, text = "n-Compile", style = 'W.TButton', command = lambda: self.n_compile(self.projects_listbox.get(ACTIVE),self.cpu_speed.get(), self.n_compile_entry.get()))
+        clean_btn = ttk.Button(self.root, text = "Clean Project", style = 'W.TButton', command = lambda: self.clean(self.projects_listbox.get(ACTIVE)))
         build_btn = ttk.Button(self.root, text = "Build Arduino Libs",style = 'W.TButton',command = lambda: self.build(self.cpu_speed.get()))
         new_project = ttk.Button(self.root, text= "Create New Project", style = 'W.TButton', command = self.create_new_project)
         hex_btn = ttk.Button(self.root, text= "Scan Hex", style = 'W.TButton', command = self.get_available_hex)
@@ -103,6 +106,7 @@ class CompilationMenu(Frame):
 
         # entries
         self.project_entry = Entry(self.root)
+        self.n_compile_entry = Entry(self.root)
 
         # others
         self.current_cpu_speed = self.cpu_speed.get()
@@ -119,6 +123,7 @@ class CompilationMenu(Frame):
         new_project_lbl.grid(row = 4, column = 0)
         self.project_entry.grid(row = 5, column = 0, pady = 3)
         new_project.grid(row = 6, column = 0)
+        clean_btn.grid(row = 7, column = 0, pady = 6)
 
         # menu commands
         build_btn.grid(row = 1, column = 1, rowspan = 2)
@@ -133,10 +138,14 @@ class CompilationMenu(Frame):
         # console
         self.console.grid(row = 3, column = 1, columnspan = 4, pady = 5, padx = 5)
 
-        # serial devices listboc
+        # Right column -> Hex-related commands
         self.hex_files.grid(row = 3, column = 5)
         flash_btn.grid(row = 4, column = 5)
-        deployment_btn.grid(row = 5, column = 5, pady = 6)
+        n_compile_btn.grid(row = 5, column = 5, pady = 6)
+        n_compile_lbl.grid(row = 4, column = 4)
+        self.n_compile_entry.grid(row = 5, column = 4)
+        deployment_btn.grid(row = 6, column = 5, pady = 6)
+
 
 
 
@@ -187,6 +196,13 @@ class CompilationMenu(Frame):
             self.console_display(end_msg)
 
 
+    def clean(self, project_name):
+        """Cleans the hex directory of the selected project"""
+        self.console_handler("cd teensy3 && make clean PROJECTNAME=" + project_name)
+
+        # refreshing hex listbox
+        self.get_available_hex()
+
     def compile(self,project_name,cpu_speed):
         """Compiles the target project selcted in the projects scrollbar"""
         # checking if the CPU speed has changed
@@ -202,6 +218,26 @@ class CompilationMenu(Frame):
 
         # updating cpu_speed
         self.current_cpu_speed = cpu_speed
+
+        # refreshing hex listbox
+        self.get_available_hex()
+
+    def n_compile(self, project_name, cpu_speed, n):
+        """Compiles n times the projects with successive ID's in {1,..., n}"""
+        if (cpu_speed != self.current_cpu_speed):
+            self.build(cpu_speed)
+
+        # cleaning previous files
+        self.console_handler("cd teensy3 && make softclean PROJECTNAME=" + project_name)
+        # compiling the project
+        self.console_display("Number of projects: " + n)
+        compilation(int(n), project_name)
+
+        # updating cpu_speed
+        self.current_cpu_speed = cpu_speed
+
+        # refreshing hex listbox
+        self.get_available_hex()
 
 
     def build(self,cpu_speed):

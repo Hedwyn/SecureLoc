@@ -32,6 +32,10 @@
 #define T23 100000000
 #define FRAME_LEN 64
 
+#ifndef NODE_ID
+  #define NODE_ID 1
+#endif
+
 #define TWR_ENGINE_STATE_INIT 0
 #define TWR_ENGINE_GHOST_ANCHOR 1
 #define TWR_ENGINE_STATE_RX_ON 2

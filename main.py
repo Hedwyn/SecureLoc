@@ -6,4 +6,3 @@ if __name__ == "__main__":
     from application import Application
     game_app = Application()
     game_app.run()
-

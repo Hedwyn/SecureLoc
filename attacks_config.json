@@ -1,0 +1,2 @@
+{"name": "Random ACK Attack", "success_rate": 0.85, "dos_rate": 0.1, "distance_distrib": 5}
+{"name": "Fine Spoofed ACK", "success_rate": 0.9, "dos_rate": 0, "distance_distrib": 1}

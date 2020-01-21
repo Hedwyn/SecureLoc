@@ -8,6 +8,7 @@ from datetime import datetime
 from parameters import *
 from Menu import Menu
 from world import World
+from Simulation import Simulator
 from anchor import Anchor
 from movingentity import MovingEntity
 from Filter import Filter
@@ -26,15 +27,11 @@ import numpy as np
 import sympy as sp
 
 
-
-
-
-
 class Application(Renderer):
     """Main application class"""
     def __init__(self):
 
-        self.robots = {}
+        self.tags = {}
 
         self.logs_pipe = [] # list for the children connexions of the logs pipes
         self.anchors = []
@@ -47,8 +44,23 @@ class Application(Renderer):
         self.threads_pipe = {} # pipes dictionary
         self.init_render()
         self.filters = {}
-        #self.menu = Menu()
+
+
+
+        ## Simulation layer config
+        self.simulator = Simulator()
+        self.simulator.configure_attacks()
+        self.keep_dataset = True
+
+        ## menu configuration
         self.menu = Menu()
+        p,q = Pipe()
+        self.menu.application_pipe = p
+        self.menu_pipe = q
+        self.menu.attack_list = [attack_name for attack_name in self.simulator.attacks]
+
+
+        ## logs config
         self.dataset = {}
         #self.dataset = dataset()
         self.log_flag = True
@@ -64,23 +76,14 @@ class Application(Renderer):
         self.playback_rangings =  None
         self.playback_counter = 0
 
-
-
-
         # mqtt
-
         self.mqttc = None
-
         # logs for positions
         self.logs_mqtt = None
         self.logs_pos = None
 
         # logs for rangings
         self.logs_rangings = None
-
-
-
-
         if (PLAYBACK):
             try:
                 self.log2play = jsonLogs()
@@ -103,8 +106,6 @@ class Application(Renderer):
                         f.write("\n")
 
                 # anchors_playback.tab will be read by create_world
-
-
                 taskMgr.doMethodLater(0,self.update_sock_task,'update sock')
 
 
@@ -120,7 +121,6 @@ class Application(Renderer):
                         if e.errno != errno.EEXIST:
                             raise
 
-
             except IOError:
                 print("failed to read playback log file")
 
@@ -128,18 +128,23 @@ class Application(Renderer):
         # now creating the world in the 3D engine
         d_print("creating world...")
         self.create_world()
+
         d_print(" world created ...")
         self.create_moving_entities()
         d_print(" robots created ...")
 
-
-        if not(PLAYBACK):
-            self.init_mqtt()
-            taskMgr.doMethodLater(0,self.update_positions_task,'update sock')
+        ## adding tags and anchors to the menu
+        self.menu.anchors_list = [anchor.name for anchor in self.world.anchors]
+        self.menu.tags_list = [tagID[13:16] for tagID in self.tags]
+        self.menu.generate_attacks_panel()
+        ## ready to start main loop
         # initializing logs
         self.init_logs()
 
-
+        if not(PLAYBACK) or (EMULATE_MQTT):
+            self.init_mqtt()
+            if not (EMULATE_MQTT):
+                taskMgr.doMethodLater(0,self.update_positions_task,'update sock')
 
         # in playback mode, prepares the iteration through the ranging lists
         if (PLAYBACK):
@@ -147,20 +152,136 @@ class Application(Renderer):
             for anchor in self.world.anchors:
                 print(anchor.name)
                 self.ranging_counter[anchor.name] = 0
+
+
         # in measurement mode, reads the reference points file
         if (MEASURING):
             # reads the list of reference points in rp.tab
             self.get_rp()
-
             # gives the starting signal
             Melody(launch_score).start()
             time.sleep(START_DELAY)
 
+        ## User inputs task
+        taskMgr.doMethodLater(0,self.UI_management_task,'User Inputs Management')
+
+    def UI_management_task(self, task):
+        """Handles user inputs; refresh rate can be set in parameters"""
+        task.delay = UI_REFRESH_TIME
+        self.checkInputs()
+
+        ## handling menu pipe
+        if self.menu_pipe.poll():
+            inputs = self.menu_pipe.recv()
+            #print("positions received" + str(inputs))
+
+            ## inputs handler
+            if "anchor_position" in inputs:
+                self.add_anchor(inputs["anchor_position"])
+
+            elif "tag_position" in inputs:
+                self.add_tag(inputs["tag_position"])
+                print("adding tag")
+            elif "Attack" and "Target" and "Offset" in inputs:
+                attack_type = inputs["Attack"]
+                target = inputs["Target"]
+                print("Appending attack " + attack_type + " to target " + target)
+                self.simulator.attacks[attack_type].targets.append(target)
+                # changing anchor color to red
+                matching_anchors = [anchor for anchor in self.world.anchors if anchor.name == target]
+
+                if matching_anchors:
+                    anchor = matching_anchors.pop()
+                    anchor.color = 'red'
+                    print(anchor.color)
+                    anchor.change_color('red')
+                # setting up the offset of the attack
+                try:
+                    self.simulator.attacks[attack_type].offset = float(inputs["Offset"])
+                except:
+                    print("Provided offset value is not a float")
+            elif "Freeze"  in inputs:
+                if inputs["Freeze"]:
+                    buffer = {}
+                    print("Waiting input..;")
+                    while not("Freeze" in buffer and not(buffer["Freeze"])):
+                        buffer = self.menu_pipe.recv()
+                        print(buffer)
 
 
 
 
+        return(task.again)
 
+    def add_anchor(self, anchor_pos):
+        """adds an anchor to the current world. Should be used to create a fictive anchor"""
+        # ID generation
+        try:
+            new_anchor_name = str(int(self.world.anchors[-1].name) + 1) # incrementing the IDof the last anchor by 1
+        except:
+            print("Failed to generate ID")
+            return
+
+        try:
+            (x,y,z) = anchor_pos
+        except:
+            print("pos is not a proper tuple")
+            return
+
+        # generating a new Anchor
+        new_anchor = Anchor(x, y, z, new_anchor_name, 'blue')
+
+        # appending anchors to the global anchors
+        self.world.anchors.append(new_anchor)
+        # appending anchor to fictive anchors list of simulator
+        self.simulator.fictive_anchors.append(new_anchor)
+
+        # displaying the new anchor
+        self.world.anchors[-1].show()
+
+        # suscribing to the MQTT stream of new anchor
+        for label_b in bots_labels:
+            for topic in MQTT_TOPICS:
+                self.mqttc.subscribe(ROOT + '0' + new_anchor.name + "/"  + label_b + topic)
+                # print("suscribing to")
+                # print(ROOT + '0' + new_anchor.name + "/"  + label_b + topic)
+
+    def add_tag(self, tag_pos):
+        """adds an tag to the current world. Should be used to create a fictive tag"""
+        # ID generation
+        try:
+            previous_tag_name = [tag_name for tag_name in self.tags][-1]
+            new_tag_name = previous_tag_name[:-1] + str(int(previous_tag_name[-1]) +1)
+            print("Tag ID: " + new_tag_name)
+        except:
+            print("Failed to generate ID")
+            return
+
+        try:
+            (x,y,z) = tag_pos
+        except:
+            print("pos is not a proper tuple")
+            return
+
+        # generating a new tag
+        new_tag = MovingEntity(new_tag_name, 'magenta')
+
+        # appending tags to the global anchors
+        self.tags[new_tag_name] = new_tag
+
+        # appending tag to fictive anchors list of simulator
+        self.simulator.fictive_tags.append(new_tag)
+
+        # displaying the new tag
+        new_tag.move(tag_pos)
+        new_tag.show()
+
+        # suscribing to the MQTT stream of new anchor
+        # for label_a in anchors_labels:
+        #     for topic in MQTT_TOPICS:
+        #         self.mqttc.subscribe(ROOT + '0' + label_a + "/"  + label_b + topic)
+        #         print("suscribing to")
+        #         print(ROOT + '0' + new_anchor.name + "/"  + label_b + topic)
 
 
     def create_world(self):
@@ -170,23 +291,22 @@ class Application(Renderer):
             tabfile = 'anchors_playback.tab'
         else:
             tabfile = 'anchors.tab'
+
+        ## anchor creation
         with open(tabfile) as anchors_file:
             for line in anchors_file:
+                if line and line[0] == '#':
+                    continue
                 data = line.strip().split()
                 if len(data) != 5:
                     d_print('did not understood line "{}"'.format(line.strip()))
                     continue
                 (x,y,z) = (float(data[0]),float(data[1]),float(data[2]))
                 name = data[3]
-
                 color = data[4]
-
-                self.anchors.append( Anchor(x,y,z,name,color) )
+                self.anchors.append(Anchor(x,y,z,name,color) )
        # creating the graphic world in the 3D engine. First 2 args define the size
         self.world = World(20, 20, self.anchors)
-
-
-
 
     def create_moving_entities(self):
         """Create moving entities"""
@@ -194,7 +314,7 @@ class Application(Renderer):
         #bots_id = self.world.gen_bots_id(NB_BOTS)
         for i in range(NB_BOTS):
             colors = ['orange','blue']
-            self.robots[ bots_id[i] ]  = MovingEntity( bots_id[i], colors[i] )
+            self.tags[ bots_id[i] ]  = MovingEntity( bots_id[i], colors[i] )
         self.processed_robot = bots_id[0]
 
 
@@ -203,24 +323,18 @@ class Application(Renderer):
         self.mqttc = mqtt.Client()
         self.mqttc.on_message = self.on_message
 
+        # setting mqttc for the simulator
+        self.simulator.mqttc = self.mqttc
+
         # connecting to local host
         self.mqttc.connect("127.0.0.1", 1883, 60)
 
 
         for label_a in anchors_labels:
             for label_b in bots_labels:
+                for topic in MQTT_TOPICS:
+                    self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + topic)
 
-                self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/distance")
-                self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/ts1")
-                self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/ts2")
-                self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/ts3")
-                self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/ts4")
-                self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/rssi")
-                self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/fp_power")
-                self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/fp_ampl2")
-                self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/std_noise")
-                self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + "/temperature")
-                print(ROOT + label_a + "/"  + label_b + "/temperature")
         self.mqttc.loop_start()
         print("MQTT loop succesfully started !")
 
@@ -232,8 +346,8 @@ class Application(Renderer):
 
         labels = msg.topic.split("/")
         anchor_id = labels[2]
-        bot_id = name_to_id(labels[3])
-        anchor_name = id_to_name(anchor_id)
+        bot_id = tag_name_to_id(labels[3])
+        anchor_name = anchor_id_to_name(anchor_id)
         data_type = labels[4]
 
         # one dataset for each anchor/bot combination
@@ -249,14 +363,23 @@ class Application(Renderer):
 
         if (data_type == "distance"):
             # publishing the dataset
-            if self.log_flag:
+            distance = float(msg.payload)
+            self.keep_dataset = True
+            self.dataset[anchor_id][bot_id].distance = distance
+            for attack in self.simulator.attacks:
+                if (anchor_id_to_name(anchor_id) in self.simulator.attacks[attack].targets) or (bot_id in self.simulator.attacks[attack].targets):
+                    print("Anchor " + anchor_id + " targeted by the attack" + attack)
+                    self.keep_dataset = self.simulator.attacks[attack].apply(self.dataset[anchor_id][bot_id])
+                    print("distance after attack: " + str(self.dataset[anchor_id][bot_id].distance))
+            self.world.update_anchor(anchor_name, self.dataset[anchor_id][bot_id].distance,bot_id,'SW')
+            if self.log_flag and self.keep_dataset:
                 self.log_dataset(self.dataset[anchor_id][bot_id])
+
             # resetting the dataset
             self.dataset[anchor_id][bot_id].__init__()
 
 
-            distance = float(msg.payload)
-            d_print('distance received:' + str(distance))
+
             if MEASURING and (self.rp < len(self.ref_points)):
                 # adding the current reference point into the dataset
                 self.dataset[anchor_id][bot_id].rp = self.ref_points[self.rp]
@@ -265,9 +388,11 @@ class Application(Renderer):
             self.dataset[anchor_id][bot_id].botID = bot_id
 
             self.processed_robot = bot_id
-            self.world.update_anchor(anchor_name, distance,bot_id,'SW')
+
+
             #task = taskMgr.doMethodLater(0,self.update_positions_task,'Log Reading')
-            taskMgr.doMethodLater(0,self.update_sock_task,'update sock')
+            if not(PLAYBACK):
+                taskMgr.doMethodLater(0,self.update_sock_task,'update sock')
 
         if (data_type == "rssi"):
             rssi = float(msg.payload)
@@ -307,19 +432,11 @@ class Application(Renderer):
             d_print('temperature received:' + str(temperature))
 
             self.dataset[anchor_id][bot_id].temperature = temperature
-
-
-
         d_print("MQTT frame processed !")
 
-
-
-
-
-
-
-
-
+        last_physical_anchor_name = self.world.anchors[-(len(self.simulator.fictive_anchors) + 1)].name
+        if (anchor_id == '0' + last_physical_anchor_name) and (bot_id in self.tags):
+            self.simulation_layer(self.tags[bot_id])
 
 
     def init_logs(self):
@@ -392,34 +509,24 @@ class Application(Renderer):
             self.threads_pipe['pos'].send(pos.export())
 
 
-
-
-
-
-
-
     def checkInputs(self):
         """ manages user keyboard interaction """
-        inputs = []
-
         if (keyboard.is_pressed('q') ):
-            inputs.append('q')
-        elif (keyboard.is_pressed('w') ):
-            inputs.append('sw')
+            self.done = True
+            self.exit_flag = True
         elif keyboard.is_pressed('UP'):
-            inputs.append('UP')
+            base.cam.set_pos(base.cam.getX() - 0.1, base.cam.getY() - 0.1, base.cam.getZ())
         elif keyboard.is_pressed('DOWN'):
-            inputs.append('DOWN')
+            base.cam.set_pos(base.cam.getX() + 0.1, base.cam.getY() + 0.1, base.cam.getZ())
         elif keyboard.is_pressed('LEFT'):
-            inputs.append('LEFT')
+            base.cam.setPos(base.cam.getX() + 0.1, base.cam.getY() - 0.1, base.cam.getZ())
         elif keyboard.is_pressed('RIGHT'):
-            inputs.append('RIGHT')
+            base.cam.setPos(base.cam.getX() - 0.1 , base.cam.getY() + 0.1, base.cam.getZ())
         elif keyboard.is_pressed('d'):
-            inputs.append('d')
+            base.cam.setPos(base.cam.getX(), base.cam.getY() + 0.1, base.cam.getZ()+ 0.1)
         elif keyboard.is_pressed('c'):
-            inputs.append('c')
+            base.cam.setPos(base.cam.getX() , base.cam.getY() + 0.1, base.cam.getZ() - 0.1)
 
-        return(inputs)
 
     def update_positions_task(self,task):
         """Updates moving entities positions"""
@@ -428,8 +535,8 @@ class Application(Renderer):
         filter_type = 'SW'
 
         robotname = self.processed_robot
-        if robotname in self.robots:
-            robot = self.robots[robotname]
+        if robotname in self.tags:
+            robot = self.tags[robotname]
         else:
             # quits the task if invalid robot id is received
             d_print("invalid robot id has been received: " + str(robotname))
@@ -439,7 +546,7 @@ class Application(Renderer):
             return(0)
 
         # computes multilateration to localize the robot
-        self.world.get_target(self.robots[robotname])
+        self.world.get_target(self.tags[robotname])
 
         if (PLAYBACK):
             # reading  data for playback
@@ -452,14 +559,21 @@ class Application(Renderer):
                     self.done = True
                     return(task.done)
                 data = self.playback_rangings[self.playback_counter]
-                self.world.update_anchor(id_to_name(data['anchorID']),
-                                         data['distance'],
-                                         data['botID'],
-                                         'SAT')
+                if not(EMULATE_MQTT):
+                    self.world.update_anchor(anchor_id_to_name(data['anchorID']),
+                                             data['distance'],
+                                             data['botID'],
+                                             'SAT')
+                else: # emulating MQTT frames
+                    self.simulator.send_log_as_MQTT_frame(data)
+                    # last_physical_anchor_name = self.world.anchors[-(len(self.simulator.fictive_anchors) + 1)].name
+                    # if (anchor_id_to_name(data['anchorID']) == last_physical_anchor_name) and (data['botID'] in self.tags):
+                    #     self.simulation_layer(self.tags[data['botID']])
+
+
+
+
                 self.processed_robot = data['botID']
-
-
-
                 self.playback_counter += 1
 
 
@@ -479,10 +593,6 @@ class Application(Renderer):
         pos = robot.get_position()
         (x,y,z) = pos
         self.log_pos(position(robotname,x,y,z,mse,anchors_mse))
-
-
-
-
         # computes the robot speed based on position variation
         robot.compute_speed()
 
@@ -498,9 +608,18 @@ class Application(Renderer):
         if self.exit_flag or PLAYBACK:
             return(task.done)
         else:
-            task.delayTime = 0.33
+            task.delayTime = REFRESH_PERIOD
             return(task.again)
 
+    def simulation_layer(self, tag):
+        """handles all the tasks related to the simulator"""
+        # checking if the dataset if from the last (i.e. highest ID) physical anchor
+        try:
+            # simulating fictive anchors
+            if tag:
+                self.simulator.emulate_all_fictive_anchors(tag)
+        except:
+            print("Failed to simulate fictive anchors")
 
     def get_rp(self,tabfile = "rp.tab"):
         """For measurements mode only. Gets the reference points in the configuration file"""
@@ -509,158 +628,98 @@ class Application(Renderer):
             coord = line.split()
             self.ref_points.append(coord)
 
-
-
-
-
     def update_sock_task(self,task):
         """Asks server newest positions of entities"""
         """In playback mode the socket is bypassed and ranging resultd are obtained directly from the log file"""
         global ACCELERATION
-
-
-
         filter_type = 'SW' # uses the raw ranging values by default
 
-
-
-        ##  managing user inputs
-
-        pressed_keys = self.checkInputs()
         if self.done:
-            # adding quit input if measuring protocol is over
-            pressed_keys.append('q')
-        for key in pressed_keys:
+            # quitting if measuring protocol is over
+            self.exit_flag = True
 
-            if (key == 'q'):
-                # quit command
-                self.exit_flag = True
-
-
-
-                # sending termination signal to logging thread
-                print("closing logs & pipes...")
-                for key in self.threads_pipe:
-                    self.threads_pipe[key].send('stop')
-                    self.threads_pipe[key].close()
+        if self.exit_flag:
+            # quit command
+            # sending termination signal to logging thread
+            print("closing logs & pipes...")
+            for key in self.threads_pipe:
+                self.threads_pipe[key].send('stop')
+                self.threads_pipe[key].close()
 
 
-                print('done !')
-                self.threads_pipe = {}
-                if not(PLAYBACK):
-                    self.mqttc.loop_stop()
+            print('done !')
+            self.threads_pipe = {}
+            if not(PLAYBACK) and not(EMULATE_MQTT):
+                self.mqttc.loop_stop()
 
-                self.menu.callback()
-                print("returning...")
-                return(task.done)
+            self.menu.callback()
+            print("returning...")
+            return(task.done)
 
-
-            if (key == 'sw'):
-                # enables sliding windows
-                filter_type = 'SW'
-            if key == 'UP':
-                base.cam.set_pos(base.cam.getX() - 0.1, base.cam.getY() - 0.1, base.cam.getZ())
-            if key == 'DOWN':
-                base.cam.set_pos(base.cam.getX() + 0.1, base.cam.getY() + 0.1, base.cam.getZ())
-            if key == 'LEFT':
-                base.cam.setPos(base.cam.getX() + 0.1, base.cam.getY() - 0.1, base.cam.getZ())
-            if key == 'RIGHT':
-                base.cam.setPos(base.cam.getX() - 0.1 , base.cam.getY() + 0.1, base.cam.getZ())
-            if key == 'd':
-                base.cam.setPos(base.cam.getX(), base.cam.getY() + 0.1, base.cam.getZ()+ 0.1)
-            if key == 'c':
-                base.cam.setPos(base.cam.getX() , base.cam.getY() + 0.1, base.cam.getZ() - 0.1)
 
         if not(MEASURING):
             if (PLAYBACK):
                 taskMgr.doMethodLater(0,self.update_positions_task,'update positions')
                 task.delayTime = REFRESH_TIME / self.menu.getAccel()
+
                 return(task.again)
+
             else:
-                #taskMgr.doMethodLater(0,self.update_positions_task,'update positions')
                 return(task.done)
+        else: # measurements mode
+            self.manage_measurements()
+
+        return(task.done)
+
+    def manage_measurements(self):
+        """handles the pace of measurements. Measurements modes consist of series of measures separated by short rests.
+        The duration can be set by the user"""
+        if (self.mes_counter == 0):
+            Melody(start_score).start()
 
 
+            if (self.rp > len(self.ref_points) - 1):
+                #self.logs.close()
+                self.done = True
+                print("done !")
+                return
+            (rp_x, rp_y, rp_z) = self.ref_points[self.rp]
+            v_print("New reference point: " + str( (rp_x,rp_y,rp_z) ) )
+
+            # displaying ref point pos
+            if (self.rp == len(self.ref_points) ):
+                return
+
+            rp = self.ref_points[self.rp]
+            (rp_x,rp_y,rp_z) = rp
+            pos_x = float(rp_x) * SQUARE_SIZE
+            pos_y = float(rp_y) * SQUARE_SIZE
+            pos_z = float(rp_z) * SQUARE_SIZE
+            pos = (pos_x,pos_y,pos_z)
+
+            taskMgr.doMethodLater(0,self.update_positions_task,'update positions')
+            self.mes_counter += 1
+
+
+        elif (self.mes_counter < NB_MES):
+            # measurement phase - recoding position into json log
+            self.mes_counter += 1
+            taskMgr.doMethodLater(0,self.update_positions_task,'update positions')
+        elif (self.mes_counter == NB_MES):
+            Melody(end_score).start()
+            # disabling logging
+            self.log_flag = False
+            self.mes_counter += 1
+
+        elif (self.mes_counter < NB_MES + NB_REST):
+            # rest phase for robot displacement
+            print("rest..")
+            self.mes_counter += 1
 
         else:
-
-            if (self.mes_counter == 0):
-                Melody(start_score).start()
-
-
-                if (self.rp > len(self.ref_points) - 1):
-                    #self.logs.close()
-                    self.done = True
-                    print("done !")
-                    return(task.done)
-                (rp_x, rp_y, rp_z) = self.ref_points[self.rp]
-                v_print("New reference point: " + str( (rp_x,rp_y,rp_z) ) )
-
-                # displaying ref point pos
-                if (self.rp == len(self.ref_points) ):
-                    return(task.done)
-
-                rp = self.ref_points[self.rp]
-                (rp_x,rp_y,rp_z) = rp
-                pos_x = float(rp_x) * SQUARE_SIZE
-                pos_y = float(rp_y) * SQUARE_SIZE
-                pos_z = float(rp_z) * SQUARE_SIZE
-                pos = (pos_x,pos_y,pos_z)
-
-
-
-
-                #self.logs.write(str(rp_x) + " " + str(rp_y) + " " + str(rp_z) + "\n\n")
-                #self.logs_rangings.write(str(rp_x) + " " + str(rp_y) + " " + str(rp_z) + "\n\n")
-                taskMgr.doMethodLater(0,self.update_positions_task,'update positions')
-                self.mes_counter += 1
-
-
-            elif (self.mes_counter < NB_MES):
-                # measurement phase - recoding position into json log
-
-
-
-                self.mes_counter += 1
-                taskMgr.doMethodLater(0,self.update_positions_task,'update positions')
-            elif (self.mes_counter == NB_MES):
-
-                Melody(end_score).start()
-
-                # disabling logging
-                self.log_flag = False
-
-                self.mes_counter += 1
-
-
-
-            elif (self.mes_counter < NB_MES + NB_REST):
-
-                # rest phase for robot displacement
-                print("rest..")
-
-                self.mes_counter += 1
-
-            else:
-                # mes_counter == NB_MES + NB_REST
-                # resetting
-
-                self.mes_counter = 0
-                self.rp += 1
-                # enabling logging
-                self.log_flag = True
-
-
-
-
-
-
-
-            #self.update_positions_task(task)
-
-
-        # FPS will be dependant of 1/delayTime. Choose a value close to the delay between rangings
-
-
-
-        return (task.done)
+            # mes_counter == NB_MES + NB_REST
+            # resetting
+            self.mes_counter = 0
+            self.rp += 1
+            # enabling logging
+            self.log_flag = True

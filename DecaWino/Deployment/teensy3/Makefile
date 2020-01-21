@@ -47,7 +47,7 @@ PROJECTS_SUBDIRS = $(sort $(dir $(wildcard $(PROJECTSDIR)/*/)))
 TARGET = main
 
 # anchor ID should be given in args of make command. Default value 1
-ANCHORID = 1
+NODE_ID = 1
 NB_ANCHORS = 4
 
 # Those that specify a NO_ARDUINO environment variable will
@@ -61,7 +61,7 @@ ARDUINOPATH ?= ../../../../..
 endif
 
 # configurable options
-OPTIONS = -DF_CPU=$(CPU_SPEED) -DUSB_SERIAL -DLAYOUT_US_ENGLISH -DUSING_MAKEFILE -DANCHOR=$(ANCHORID) -DNB_ANCHORS=$(NB_ANCHORS)
+OPTIONS = -DF_CPU=$(CPU_SPEED) -DUSB_SERIAL -DLAYOUT_US_ENGLISH -DUSING_MAKEFILE -DNODE_ID=$(NODE_ID) -DNB_ANCHORS=$(NB_ANCHORS)
 
 # options needed by many Arduino libraries to configure for Teensy 3.x
 OPTIONS += -D__$(MCU)__ -DARDUINO=10805 -DTEENSYDUINO=141
@@ -216,15 +216,24 @@ build: $(LIBS_OBJS)
 # -include $(OBJS:.o=.d)
 # -include $(PROJECT_OBJS:.o=.d)
 
-clean:
+libclean:
 	@echo cleaning previous built
 	rm -f  *.o *.d *.hex *.elf $(OBJDIR)/*.o  $(OBJDIR)/*.d
 	rm -f $(PROJECTPATH)/$(OBJDIR)/*.o $(PROJECTPATH)/$(OBJDIR)/*.d $(PROJECTPATH)/$(BINDIR)/*.elf $(PROJECTPATH)/$(BINDIR)/*.hex
 
+clean:
+	rm -f $(PROJECTPATH)/$(OBJDIR)/*.o
+	rm -f $(PROJECTPATH)/$(OBJDIR)/*.d
+	rm -f $(PROJECTPATH)/$(BINDIR)/*.elf
+	rm -f $(PROJECTPATH)/$(BINDIR)/*.hex
+
+
+# does not remove hex files
 softclean:
-	rm -f $(PROJECTPATH)/$(OBJDIR)/$(PROJECTNAME).o
-	rm -f $(PROJECTPATH)/$(OBJDIR)/$(PROJECTNAME).d
-	rm -f $(PROJECTPATH)/$(BINDIR)/$(PROJECTNAME).elf
+	rm -f $(PROJECTPATH)/$(OBJDIR)/*.o
+	rm -f $(PROJECTPATH)/$(OBJDIR)/*.d
+	rm -f $(PROJECTPATH)/$(BINDIR)/*.elf
+
 
 
 test:

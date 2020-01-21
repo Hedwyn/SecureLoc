@@ -44,8 +44,9 @@ static byte rxID[8];
 static byte nextTarget[8];
 static int next_target_idx = 0; //  index on tag to localize in the next round
 
+
 /* Anchor ID's */
-static byte MYID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, ANCHOR}; // identifiant de l'ancre
+static byte MYID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, NODE_ID}; // identifiant de l'ancre
 static byte anchorID[8]; //anchorID field for received frames
 static byte MY_NEXT_ANCHOR_ID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // filled by getId()
 static byte nextAnchorID[8] ={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // buffer for the next anchor field in RX frames
@@ -73,8 +74,9 @@ static int delayed;
 struct control_frame{
   byte anchor_id;
   byte tag_id;
+  byte sleep_slots; // in slot number
 };
-static control_frame next_ghost_anchor = {.anchor_id = 0, .tag_id = 0};
+static control_frame next_ghost_anchor = {.anchor_id = 0, .tag_id = 0, .sleep_slots = 0};
 
 
 #ifdef MASTER
@@ -82,26 +84,27 @@ void getNextGhostAnchor() {
   Serial.println("I'm Master, sending control frame");
   next_ghost_anchor.anchor_id = NB_ANCHORS;
   next_ghost_anchor.tag_id = (next_target_idx + 1) % NB_ROBOTS;
+  next_ghost_anchor.sleep_slots = NB_ANCHORS + next_ghost_anchor.anchor_id - 2;
 }
 #endif
 
 void getID() {
-	#ifdef ANCHOR
+	#ifdef NODE_ID
 		/* setting up anchor id */
-		MYID[7] = ANCHOR;
+		MYID[7] = NODE_ID;
 
 		/* setting up next anchor ID */
 		#ifdef NB_ANCHORS
 		/* checking if this anchors has the highest ID */
-			if (ANCHOR == NB_ANCHORS) {
+			if (NODE_ID == NB_ANCHORS) {
 				/* the next anchor is the first one */
 				MY_NEXT_ANCHOR_ID[7] = 1;
 			}
 			else {
-				MY_NEXT_ANCHOR_ID[7] = ANCHOR + 1;
+				MY_NEXT_ANCHOR_ID[7] = NODE_ID + 1;
 			}
 		#else
-			MY_NEXT_ANCHOR_ID[7] = ANCHOR + 1;
+			MY_NEXT_ANCHOR_ID[7] = NODE_ID + 1;
 		#endif
 	#else
 		DPRINTFLN("ANCHOR id has not been defined during compilation. Default ID : 0 \n");
@@ -122,6 +125,16 @@ void print_byte_array(byte b[8]) {
 		}
 		Serial.print(b[i],HEX);
 	}
+}
+
+int get_next_target_idx(byte tag_ID[8]) {
+  int idx = 0;
+  while (targetID[idx][7] != tag_ID[7]) {
+    idx++;
+  }
+  Serial.print("$ Tag IDx:");
+  Serial.println(idx);
+  return(idx);
 }
 
 int byte_array_cmp(byte b1[8], byte b2[8]) {
@@ -155,7 +168,7 @@ void anchor_setup() {
   anchor_RxTxConfig();
 
   decaduino.plmeRxEnableRequest();
-  timeout = millis() + START_TIMEOUT + (ANCHOR - 1) * SLOT_LENGTH * 1E-3;
+  timeout = millis() + START_TIMEOUT + (NODE_ID - 1) * SLOT_LENGTH * 1E-3;
   DPRINTFLN("Starting");
   #ifdef MASTER
     state = TWR_ENGINE_STATE_SEND_START;
@@ -171,10 +184,10 @@ void anchor_RxTxConfig() {
 
 
 int anchor_loop() {
-  return(anchor_loop(MYID, MY_NEXT_ANCHOR_ID, next_target_idx ));
+  return(anchor_loop(MYID, MY_NEXT_ANCHOR_ID));
 }
 
-int anchor_loop(byte *myID, byte *myNextAnchorID, int tagID) {
+int anchor_loop(byte *myID, byte *myNextAnchorID) {
   int ret = TWR_ON_GOING;
   if (state != previous_state) {
     Serial.print("$State: ");
@@ -190,10 +203,10 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int tagID) {
         Serial.println("$ Master Timeout Set");
       }
       else {
-        timeout = millis() + 2 * START_TIMEOUT + ANCHOR * SLOT_LENGTH * 1E-3;
+        timeout = millis() + 2 * START_TIMEOUT + NODE_ID * SLOT_LENGTH * 1E-3;
       }
       #else
-        timeout = millis() + 2 * START_TIMEOUT + ANCHOR * SLOT_LENGTH * 1E-3;
+        timeout = millis() + 2 * START_TIMEOUT + NODE_ID * SLOT_LENGTH * 1E-3;
       #endif
 
       decaduino.plmeRxEnableRequest();
@@ -219,24 +232,17 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int tagID) {
         DPRINTFLN("$ Frame received");
 				/* checking START frames for anchor ranging request */
 				if ( rxData[0] == TWR_MSG_TYPE_START ) {
+          DPRINTFLN("$ Start received");
 					/* extracting target ID */
 					for (int i = 0; i < 8; i++) {
 						nextTarget[i] = rxData[i + 1];
-					}
+            nextAnchorID[i] = rxData[i+17];
 
-					if (byte_array_cmp(nextTarget, myID)) {
-						Serial.println("$anchor ranging request received ! [TBD]");
-						//anchorID[i] = rxData[i+9];
-            for (int i = 0; i < 8; i++) {
-              anchorID[i] = rxData[i+1];
-            }
-						break;
 					}
+          Serial.print("Next Target= ");
+          print_byte_array(nextTarget);
+          Serial.println();
 
-					/* checking if we are the next one */
-					for (int i=0; i<8; i++){
-						nextAnchorID[i] = rxData[i+17];
-					}
 					DPRINTF("$ID received:");
 					DPRINTFLN((int) nextAnchorID[7] );
 					DPRINTF("$My ID ");
@@ -252,7 +258,9 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int tagID) {
 					Serial.println("$It's my turn");
           Serial.print("$ID of the next anchor: ");
           print_byte_array(myNextAnchorID);
-          Serial.println();
+          #ifndef MASTER
+            next_target_idx = get_next_target_idx(nextTarget);
+          #endif
 					state = TWR_ENGINE_PREPARE_RANGING;
           slot_start =  last_start_frame + (SLOT_LENGTH / (DW1000_TIMEBASE * IN_US) );
           delayed = 1;
@@ -331,10 +339,9 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int tagID) {
       	state = TWR_ENGINE_STATE_SEND_START;
       }
       // getting the index of the next robot to localize
-
-      if (!is_target_anchor) { // not switching target id if the target is an anchor
+      #ifdef MASTER
         next_target_idx = (next_target_idx + 1) % NB_ROBOTS;
-      }
+      #endif
       break;
 
     case TWR_ENGINE_STATE_SEND_START:
@@ -348,7 +355,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int tagID) {
       #endif
 			txData[0] = TWR_MSG_TYPE_START;
       for(int i=0; i<8; i++){
-        txData[1+i]=targetID[tagID][i];
+        txData[1+i]=targetID[next_target_idx][i];
         txData[9+i]=myID[i];
         txData[17+i]=myNextAnchorID[i];
       }
@@ -356,9 +363,10 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int tagID) {
       // control frame
       txData[25]= next_ghost_anchor.anchor_id;
       txData[26] = next_ghost_anchor.tag_id;
+      txData[27] = next_ghost_anchor.sleep_slots;
 
 			/* Sending frame */
-      if(!decaduino.pdDataRequest(txData, 27, delayed, slot_start) ){
+      if(!decaduino.pdDataRequest(txData, 28, delayed, slot_start) ){
         DPRINTFLN("$Could not send the frame");
       }
 
@@ -455,13 +463,13 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int tagID) {
       tof_skew = ((t4 - t1) - (1+1.0E-6*decaduino.getLastRxSkew())*(t3 - t2))/2;
 
 			/* computing distance */
-      distance = tof * COEFF;
-      distance_skew = tof_skew * COEFF;
+      distance = tof * SPEED_COEFF;
+      distance_skew = tof_skew * SPEED_COEFF;
 
 			if (ALOHA) {
 				/* checking for collisions */
 				if ( (distance_skew < 0) || (distance_skew > DMAX) ) {
-					aloha_delay = SLOT_LENGTH + ANCHOR * ALOHA_COLLISION_DELAY;
+					aloha_delay = SLOT_LENGTH + NODE_ID * ALOHA_COLLISION_DELAY;
 				}
 				else {
 					aloha_delay = SLOT_LENGTH;

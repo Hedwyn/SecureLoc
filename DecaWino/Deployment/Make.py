@@ -37,7 +37,7 @@ def get_all_project_headers(project_name):
             header_files[header] = project_path
     return(header_files)
 
-def get_includes_from_projects(project_name):
+def get_includes_from_projects(project_name, ignored = []):
     my_headers = find_headers(project_name)
     project_headers = get_all_project_headers(project_name)
     header_from_other_projects = {}
@@ -46,10 +46,15 @@ def get_includes_from_projects(project_name):
         if header in project_headers:
             header_from_other_projects[header] = project_headers[header].split("\\")[-1] # project name
 
+    for ignored_file in ignored:
+        header_from_other_projects.pop(ignored_file, None)
+
     return(header_from_other_projects)
 
 def get_dependency_rules(project_name):
-    includes = get_includes_from_projects(project_name)
+    includes = get_includes_from_projects_rec(project_name, [])
+    print("getting dependencies..")
+    print(includes)
     # returning call to makes as a list of str
     make_calls = []
     obj_files = []
@@ -61,12 +66,33 @@ def get_dependency_rules(project_name):
 
     return(make_calls,obj_files)
 
+def get_includes_from_projects_rec(project_name, ignored = []):
+    ignored.append(project_name + '.h')
+    includes = get_includes_from_projects(project_name, ignored)
+    print("recursive seearch results: ")
+    print(includes)
+    projects = includes.copy()
+    #print("includes list for project: " + project_name + str(projects))
+
+    if any(includes):
+        #print("Recursive call")
+        for project in projects:
+            # removing .h
+            #print("project_name:" + project_name)
+            includes.update(get_includes_from_projects_rec(project[:-2], ignored))
+
+    return(includes)
+
+
+    return(make_calls,obj_files)
+
 
 
 
 
 
 if __name__ == "__main__":
-    print(find_headers('Anchor_c'))
-    print(get_all_project_headers('Anchor_c'))
-    print(get_dependency_rules('Anchor_c'))
+    #print(find_headers('Anchor_c'))
+    #print(get_all_project_headers('Anchor_c'))
+    print(get_includes_from_projects('Tag'))
+    print(get_dependency_rules('Tag'))

@@ -1,5 +1,5 @@
 from anchor import Anchor
-from application import *
+#from application import *
 from Filter import Filter
 from parameters import *
 import math
@@ -53,7 +53,8 @@ class World(RenderedWorld):
     def update_anchor(self, name: str, distance: float,robot_id,options = None):
         """Updates distance between anchor and robot.
            Note that anchors names should be unique for this to work"""
-
+        if (distance < 0) or (distance > DMAX):
+            return
         for anchor in self.anchors:
             if anchor.name == name:
 
@@ -65,7 +66,7 @@ class World(RenderedWorld):
                 if (options == "SW"):
                     # sliding window enabled
 
-                    sliding_windows = Filter("SW",[anchor.rangings[robot_id],15,8,0])
+                    sliding_windows = Filter("SW",[anchor.rangings[robot_id],SW_SIZE,SW_ELIMINATIONS,0])
                     filtered_distance = sliding_windows.apply()[0] # output(s) of filters are returned as a list
 
 
@@ -116,7 +117,8 @@ class World(RenderedWorld):
             error = (self.ranging(x,y,z,i) - distance)
             #print("error is:" + str(error) )
             mean_error += pow(error,2)
-        mean_error = mean_error / len(rangings)
+        if rangings:
+            mean_error = mean_error / len(rangings)
 
 
         return(mean_error)
@@ -221,11 +223,20 @@ class World(RenderedWorld):
 
         # trilateration-based solutions
 
-        if len(self.anchors) < 2:
-            raise TooFewAnchors("There are not enough anchors")
+        if len(self.anchors) ==  0:
+            raise TooFewAnchors("No anchor detected")
+        elif len(self.anchors) == 1:
+            # Calulating position on y axis
+            anchor_pos = (self.anchors[0].x,self.anchors[0].y,self.anchors[0].z)
+            x = self.anchors[0].x
+            y = self.anchors[0].y
+            z = self.anchors[0].z
+            centroid = (x, y + self.anchors[0].get_distance(target) , z )
+            mse_sum = 0
         elif len(self.anchors) == 2:
-            print("Only two anchors for position computation. Assuming that the tag is on the positive part of the y axis")
-            wc_solution = self.trilateration(target,self.anchors[0], self.anchors[1])[0]
+            d_print("Only two anchors for position computation. Assuming that the tag is on the positive part of the y axis")
+            centroid = self.trilateration(target,self.anchors[0], self.anchors[1])[0]
+            mse_sum = 0
         else:
             solutions = []
             solutions_mse = []
@@ -275,7 +286,7 @@ class World(RenderedWorld):
 
         return(pos,mse,anchors_mse)
 
-    def trilateration(self,target,anchor1,anchor2, mode = '2D'):
+    def trilateration(self,target,anchor1,anchor2, anchor3 = None, mode = '2D'):
         """computes the trilateration of target based on the rangings from anchor 1 and 2.
         Two solutions are obtained based on Pythagora's theorem, both are returned"""
         pos1 = (anchor1.x, anchor1.y, anchor1.z)
@@ -283,6 +294,10 @@ class World(RenderedWorld):
 
         # getting the distance between both anchors
         base = self.get_distance(pos1, pos2)
+
+        # checking that anchors do not share the same coordinates
+        if base == 0:
+            return
 
         # applying Pythagora on the triangle (anchor1, anchor 2, target)
         # considering the cartesian system of {anchor 1 (0,0);anchor 2 (0, base) }
@@ -355,7 +370,51 @@ class World(RenderedWorld):
                 return(s2,mse2)
             else:
                 return(s1,mse1)
+
         elif mode == '3D':
+            # z is assumed to be 0
+            # calculating vect_base_x and vect_base_y coordinates in the global cartesian system
+            vect_base_x  = [(anchor2.x - anchor1.x) / base,(anchor2.y - anchor1.y) / base ]
+            vect_base_y = [-vect_base_x[1], vect_base_x[0]]
+            vect_o = [anchor1.x, anchor1.y]
+
+            # computing first solution
+            vect_a = [dx, dy]
+            ##print("vect_a" + str(vect_a))
+            s1 = [vect_base_x[0] * vect_a[0] + vect_base_y[0] * vect_a[1]   , vect_base_x[1] * vect_a[0] + vect_base_y[1] * vect_a[1] ]
+            ##print("s1" + str(s1))
+            s1[0]+= vect_o[0]
+            s1[1]+= vect_o[1]
+
+            # appending z coordinate
+            s1.append(0)
+
+            # computing second solution
+            vect_a = [dx, -dy]
+            vect_a = [dx, dy]
+            s2 = [vect_base_x[0] * vect_a[0] + vect_base_y[0] * vect_a[1]   , vect_base_x[1] * vect_a[0] + vect_base_y[1] * vect_a[1] ]
+            s2[0]+= vect_o[0]
+            s2[1]+= vect_o[1]
+            # appending z coordinate
+            s2.append(0)
+
+            # determining which one of the two solution is the right one based on MSE of the other rangings
+            rangings = []
+            for anchor in (self.anchors):
+                if anchor.name == anchor1.name or anchor.name == anchor2.name:
+                    continue
+                rangings.append(anchor.get_distance(target))
+            # converting solutions from list to tuple
+            s1 = tuple(s1)
+            s2 = tuple(s2)
+
+            #comapring the mean sqaured error for both solution and picking the best one
+            mse1 = self.mse(rangings, s1)
+            mse2 = self.mse(rangings, s2)
+            if mse1 > mse2:
+                return(s2,mse2)
+            else:
+                return(s1,mse1)
             raise NotImplementedError
         else:
             raise ValueError("The specifed mode does not exist")

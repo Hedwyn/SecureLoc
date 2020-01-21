@@ -3,24 +3,33 @@ HEADLESS = False
 DEBUG = 0
 VERBOSE = 0
 ENABLE_LOGS = 1
-PLAYBACK = False
+PLAYBACK = True
+EMULATE_MQTT = False
 MEASURING = False
-HOST = '169.254.1.1'   # IP address of the MQTT broker
 
+## MQTT parameters
+HOST = '169.254.1.1'   # IP address of the MQTT brokerq
 PORT = 80              # Arbitrary non-privileged port
+MQTT_TOPICS = ["/distance","/ts1","/ts2","/ts3","/ts4","/rssi","/fp_power","/fp_ampl2","/std_noise","/temperature"]
+
 
 ## Standard mode
 T = 0.1 # sample time (s), should match the sample time of the hardware
 NB_RANGINGS = 25 # size of the list that keeps track of the last rangings
+REFRESH_PERIOD = 0.10
+DMAX = 15 # maximum distance on the platform
 
 ## Measurements mode parameters
 SQUARE_SIZE = 0.304
 MSE_THRESHOLD = 0.6
 TILES = False  # Gives the coordinates with a grid model with a resolution of SQUARE_SIZE
 NB_BYTES = 4
-NB_MES = 500
-NB_REST = 50
+NB_MES = 50
+NB_REST = 10
 START_DELAY = 1
+
+## User inputs
+UI_REFRESH_TIME = 0.1
 
 ## audio signals for the measurement mode
 end_score = [('E4',0.33),
@@ -42,7 +51,7 @@ launch_score = [('E6',0.5),
 
 ## Playback parameters
 ACCELERATION = 1.0  #used by Tkinter menu. Allows accelerating the playback
-REFRESH_TIME = 0.2  #default position refresh time. Decreased by ACCELERATION.
+REFRESH_TIME = 0.36  #default position refresh time. Decreased by ACCELERATION.
 
 ## anchors and robots
 def is_bot_id(ID):
@@ -53,18 +62,25 @@ NB_BOTS = 1
 anchors_labels = ['01',
                   '02',
                   '03',
-                  '04']
+                  '04',
+                  '05',
+                  '06',
+                  '07',
+                  '08'
+                  '09']
+
 bots_labels = ['01','02']
 bots_id = ["0000000000000b01",
            "0000000000000b02"]
 
-colorList = ['orange', 'red'] # used for the robots representation
+colorList = ['orange', 'orange'] # used for the robots representation
 
 
 ## directories and files
 LOGSFILE = 'measurements/logs'
 LOGSRANGINGS = 'rangings/logs'
 LOGSFILE_PLAYBACK = 'measurements/raw/logs'
+
 LOGSRANGINGS_PLAYBACK = 'rangings/playback/logs'
 
 MQTT_REPO = 'mqtt'
@@ -90,6 +106,9 @@ NB_STEPS = 10 #Steps number for position iterative resolution
 SPEED_BUFFER_LEN = 5 #size of the list storing the last speed measurements
 POSITIONS_BUFFER_LEN = 5 #size of the list storing the last positions measurements
 ACC_BUFFER_LEN = 5
+# SW filter
+SW_SIZE = 4
+SW_ELIMINATIONS = 1
 
 DEFAULT_ACC_THOLD = 10 #THold for SAT filter
 STEP = 1 # Steps for SAT filter
@@ -122,7 +141,7 @@ def v_print(msg):
         print(msg)
 
 
-def id_to_name(id):
+def anchor_id_to_name(id):
     dic = {"01":"1","02":"2","03":"3","04":"4","05":"5","06":"6","07":"7","08":"8",
                "09":"9"}
     if id in dic:
@@ -133,7 +152,7 @@ def id_to_name(id):
 
 
 
-def name_to_id(name):
+def tag_name_to_id(name):
     dic = {"01":"0000000000000b01",
            "02":"0000000000000b02"
            }

@@ -10,17 +10,17 @@
   #define NB_ANCHORS 4
 #endif
 
-#ifndef ANCHOR
-  #define ANCHOR 0
+#ifndef NODE_ID
+  #define NODE_ID 0
 #endif
 
 #define MASTER_ID 1
 
-#if (ANCHOR == MASTER_ID)
+#if (NODE_ID == MASTER_ID)
   #define MASTER
 #endif
 
-#define SLOT_LENGTH 1000000 //microseconds
+#define SLOT_LENGTH 500000 //microseconds
 #define SLOT_LENGTH_MS (SLOT_LENGTH / 1000)
 #define IN_US 1E6 //microseconds
 
@@ -43,7 +43,8 @@
 
 #define AIR_SPEED_OF_LIGHT 299700000.0
 #define DW1000_TIMEBASE 15.65E-12
-#define COEFF AIR_SPEED_OF_LIGHT*DW1000_TIMEBASE
+#define CALIBRATION 0.9
+#define SPEED_COEFF AIR_SPEED_OF_LIGHT*DW1000_TIMEBASE*CALIBRATION
 
 /* watchdogs */
 
@@ -78,12 +79,13 @@
 #define NB_ROBOTS 2
 
 /* Cooperative */
-#define COOPERATIVE
+#define COOPERATIVE 1
 
 
 void anchor_setup();
 void anchor_RxTxConfig();
 void print_byte_array(byte b[8]);
 int byte_array_cmp(byte b1[8], byte b2[8]);
+int get_tag_idx(byte tag_ID[8]);
 int anchor_loop();
-int anchor_loop(byte *myID, byte *myNextAnchorID, int tagID);
+int anchor_loop(byte *myID, byte *myNextAnchorID);
