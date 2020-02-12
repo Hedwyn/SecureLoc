@@ -3,7 +3,7 @@ HEADLESS = False
 DEBUG = 0
 VERBOSE = 0
 ENABLE_LOGS = 1
-PLAYBACK = True
+PLAYBACK = False
 EMULATE_MQTT = False
 MEASURING = False
 
@@ -97,8 +97,8 @@ ROOT = 'SecureLoc/anchors_data/'
 
 # If both GN and ITERATIVE are disabled the position is calulated only with weighted centroid
 RANDOM_SEARCH = False # notifies that GN and iterative algorithm should use the default pos as starting point
-GN = True # notifies that Gauss-Newton algorithm should be used for position computation
-ITERATIVE = False # used only when GN is disabled. Notifies that iterative localization should be used for position computation
+GN = False # notifies that Gauss-Newton algorithm should be used for position computation
+ITERATIVE = True # used only when GN is disabled. Notifies that iterative localization should be used for position computation
 DEFAULT_POS = (0.9,2.4,0) # default position; center of the platform
 NB_STEPS = 10 #Steps number for position iterative resolution
 
@@ -107,8 +107,8 @@ SPEED_BUFFER_LEN = 5 #size of the list storing the last speed measurements
 POSITIONS_BUFFER_LEN = 5 #size of the list storing the last positions measurements
 ACC_BUFFER_LEN = 5
 # SW filter
-SW_SIZE = 4
-SW_ELIMINATIONS = 1
+SW_SIZE = 20
+SW_ELIMINATIONS = 12
 
 DEFAULT_ACC_THOLD = 10 #THold for SAT filter
 STEP = 1 # Steps for SAT filter

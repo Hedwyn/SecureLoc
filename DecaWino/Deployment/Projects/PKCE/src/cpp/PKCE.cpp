@@ -18,7 +18,7 @@ static byte success = 0;
 static char serial_command = '0';
 static int target_temp;
 static int ctr;
-static int frame_ctr= MY_ID?0:128, global_frame_ctr = 0, chunk_idx = 0, block_idx = 0;
+static int frame_ctr= VERIFIER?0:128, global_frame_ctr = 0, chunk_idx = 0, block_idx = 0;
 static int speed,t_delay = DELAY_SLOW;
 static double skew_acc = 0;
 static float last_skew;
@@ -27,7 +27,7 @@ static uint16_t signature[N_CHUNKS * 8];
 static double signature_float[N_CHUNKS * 8];
 static float mean_temp = 0;
 static int max_chunks = N_CHUNKS;
-
+static int restart = 0;
 
 byte quantize(float skew) {
 	float pow_2 = 16; //skew < 32 ppm so we quantize integer part on 5 bits
@@ -112,8 +112,10 @@ void boil(int target_temp) {
 void reset() {
 	chunk_idx = 0;
 	block_idx = 0;
-	frame_ctr = MY_ID?0:128;
+	frame_ctr = VERIFIER?0:128;
 	global_frame_ctr = 0;
+	skew_acc = 0;
+	mean_temp = 0;
 }
 
 void switch_mode(int sp) {
@@ -187,7 +189,12 @@ void setup_PKCE(int channel, int pcode, int plength, int frame_delay) {
   }
   /* Rx-TX parameters */
   decaduino.setRxBuffer(rxData, &rxLen);
-	decaduino.setPreambleLength(plength);
+	if (VERIFIER) {
+		decaduino.setPreambleLength(4096);
+	}
+	else {
+		decaduino.setPreambleLength(plength);
+	}
 	decaduino.setRxPcode(pcode);
 	decaduino.setTxPcode(pcode);
 
@@ -198,7 +205,7 @@ void setup_PKCE(int channel, int pcode, int plength, int frame_delay) {
 	DPRINTFLN("decaduino init finished");
 	decaduino.plmeRxDisableRequest();
 	timeout = millis();
-	txData[0] = MY_ID;
+	txData[0] = VERIFIER;
 	rxData[1] = 128;
 	state = STATE_PING;
 }
@@ -259,6 +266,10 @@ int loop_PKCE() {
 						Serial.println("$ Switch Plength");
 						decaduino.setPreambleLength(Serial.parseInt());
 						break;
+					case 5:
+						Serial.println("Restarting !");
+						restart = 1;
+						break;
 
           default:
             Serial.println("$ unknown command received:");
@@ -287,7 +298,7 @@ int loop_PKCE() {
 				Serial.println("$Could not send");
 			}
 
-			if ( (MY_ID == 1) && (chunk_idx == max_chunks) ){
+			if ( (VERIFIER == 1) && (chunk_idx == max_chunks) ){
 				// We're done
 				Serial.println("$Done");
 				send_signature();
@@ -310,8 +321,9 @@ int loop_PKCE() {
 				next_state = STATE_PONG;
 				break;
 			}
-			if  ((millis() - timeout) > 2 * t_delay ) {
-				DPRINTFLN("$Timeout");
+			if  ((millis() - timeout) > 100 * t_delay ) {
+				//DPRINTFLN("$Timeout");
+				Serial.println("$Timeout");
 				timeout = millis();
 				state = STATE_PING;
 				break;
@@ -320,7 +332,7 @@ int loop_PKCE() {
 				DPRINTF("$Pong ");
 				DPRINTFLN(rxData[1]);
 
-				if (MY_ID == 0) {
+				if (VERIFIER == 0) {
 					/* Node 0 is following */
 					if (rxData[1] != frame_ctr) {
 						/* if frame ctr has been incremented, the previous frame has been properly received*/
@@ -351,14 +363,16 @@ int loop_PKCE() {
 						Serial.println("Done");
 						send_signature();
 						reset();
-						delay(30000);
+						restart = 0;
+						state = STATE_IDLE;
+						delay(3000);
 						decaduino.plmeRxEnableRequest();
-
+						break;
 					}
 
 				}
 
-				if (MY_ID == 1) {
+				if (VERIFIER == 1) {
 					/* Node 1 is initiating the protocol */
 					if (frame_ctr == rxData[1] ) {
 						compute_average();
@@ -385,6 +399,18 @@ int loop_PKCE() {
         state = STATE_PING;
       }
 			//delay(10);
+			break;
+
+		case STATE_IDLE:
+			Serial.println("Idle");
+			delay(10);
+			while (!restart) {
+				if (Serial.available() > 0) {
+					state = STATE_SERIAL;
+					next_state = STATE_IDLE;
+					break;
+				}
+			}
 			break;
 
      default:

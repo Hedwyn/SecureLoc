@@ -1,5 +1,6 @@
 169.254.108.111 pi raspberry A
 169.254.35.79 pi raspberry B
+#169.254.35.79 pi raspberry F
 169.254.73.145 pi raspberry C
 169.254.142.238 pi raspberry D
 #169.254.142.238 pi raspberry E

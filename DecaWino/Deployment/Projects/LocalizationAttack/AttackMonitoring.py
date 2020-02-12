@@ -9,14 +9,15 @@ import threading
 
 
 
-SERIALPATH = 'COM17'
+SERIALPATH = 'COM19'
 line = ''
 ANCHORS_TABFILE = 'C:/Users/pestourb/Documents/GitHub/SecureLoc/anchors.tab'
 DWM1000_TIMEBASE = 15.65E-12
 SPEED_OF_LIGHT = 2.5E8
 exit_flag = False
 STEP = 0.25 #m
-START_POS = (1.5,1.5,0.)
+#START_POS = (1.5,1.5,0.)
+START_POS = (1.0,0,0.)
 buffer = []
 
 

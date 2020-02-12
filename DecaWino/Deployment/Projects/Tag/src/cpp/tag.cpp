@@ -19,12 +19,12 @@ byte sleep_slots;
 
 
 /* timestamps */
-uint64_t t2, t3,sleep_timer;      //temps de réception et temps de ré-émission
+uint64_t t2, t3,ts_ghost_anchor;      //temps de réception et temps de ré-émission
 
 /* cooperative methods */
-static byte next_target_id[8] = {0};
-static byte ghost_anchor_id[8] = {0};
-static byte next_anchor_id[8] = {0};
+static byte next_target_id[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00};
+static byte ghost_anchor_id[8] ={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00};
+static byte next_anchor_id[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00};
 
 static const char * states[50]=
 {
@@ -112,13 +112,6 @@ void loop() {
     case TWR_ENGINE_STATE_INIT:
       //decaduino.plmeRxDisableRequest();
       state = TWR_ENGINE_STATE_RX_ON;
-			if (COOPERATIVE) {
-				if (NODE_ID == 1) {
-					if (ghost_anchor_id[7] != 0) {// && (next_target_id[7] != 0)) {
-						state = TWR_ENGINE_GHOST_ANCHOR;
-					}
-				}
-			}
 
       break;
 
@@ -127,12 +120,6 @@ void loop() {
 			Serial.println("Switching to ghost anchor mode");
 			Serial.print("Ghost Anchor ID: ");
 			Serial.println(ghost_anchor_id[7]);
-
-			/* sleeping until next robot */
-			sleep_timer = decaduino.getSystemTimeCounter();
-			while (decaduino.getSystemTimeCounter() - sleep_timer < sleep_slots * SLOT_LENGTH) {
-				delayMicroseconds(100);
-			}
 			Serial.print("Number of sleep slots:");
 			Serial.println((int) sleep_slots);
 			anchor_setup();
@@ -140,12 +127,18 @@ void loop() {
 			tag_setup();
 			Serial.println("Ghost Anchor Job Complete");
 			ghost_anchor_id[7] = 0;
-			next_target_id[7] = 0;
 			break;
 
     case TWR_ENGINE_STATE_RX_ON:
       decaduino.plmeRxEnableRequest();
       state = TWR_ENGINE_STATE_WAIT_START;
+			if (COOPERATIVE && (ghost_anchor_id[7] != 0)  && (decaduino.getSystemTimeCounter() > ts_ghost_anchor + sleep_slots * SLOT_LENGTH) ) {
+				//if (ghost_anchor_id[7] != 0) {// && (next_target_id[7] != 0)) {
+					state = TWR_ENGINE_GHOST_ANCHOR;
+				}
+			else {
+				delayMicroseconds(100);
+			}
       break;
 
     case TWR_ENGINE_STATE_WAIT_START:
@@ -162,7 +155,13 @@ void loop() {
           if ( byte_array_cmp(targetID, myID) ) {
             t2 = decaduino.getLastRxTimestamp();
             state = TWR_ENGINE_STATE_SEND_ACK;
-
+						if (anchorID[7] == MASTER_ID) {
+							DPRINTFLN("Received ghost anchor request from Master");
+							ghost_anchor_id[7] = rxData[25];
+							next_anchor_id[7] = rxData[26];
+							sleep_slots = rxData[27];
+							ts_ghost_anchor = t2;
+						}
           }
           else{
               DPRINTFLN("Not for me" );
@@ -170,10 +169,7 @@ void loop() {
           }
 
 					/* Control parameters for cooperative methods */
-					ghost_anchor_id[7] = rxData[25];
-					next_anchor_id[7] = 1;
-					next_target_id[7] = rxData[26];
-					sleep_slots = rxData[27];
+
 
 
         }
@@ -183,8 +179,6 @@ void loop() {
         }
       }
       break;
-
-
 
     case TWR_ENGINE_STATE_SEND_ACK:
       txData[0] = TWR_MSG_TYPE_ACK;           //On acquite le message (champs 0 du mesage)
@@ -205,6 +199,8 @@ void loop() {
       decaduino.encodeUint64(t2, &txData[17]);
       decaduino.encodeUint64(t3, &txData[25]);
       decaduino.pdDataRequest(txData, 33);
+			Serial.print("$Temperature: ");
+			Serial.println(decaduino.getTemperature());
       while (!decaduino.hasTxSucceeded());
       state = TWR_ENGINE_STATE_INIT;
       break;

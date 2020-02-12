@@ -1,6 +1,4 @@
 #include "anchor_c.h"
-
-
 /* libraries */
 
 static DecaDuino decaduino;
@@ -73,18 +71,20 @@ static int delayed;
 /* Cooperative methods */
 struct control_frame{
   byte anchor_id;
-  byte tag_id;
+  int target_idx;
+  byte next_anchor_id;
   byte sleep_slots; // in slot number
 };
-static control_frame next_ghost_anchor = {.anchor_id = 0, .tag_id = 0, .sleep_slots = 0};
+static control_frame next_ghost_anchor = {.anchor_id = 0, .target_idx = 0, .next_anchor_id = 0, .sleep_slots = 0};
 
 
 #ifdef MASTER
 void getNextGhostAnchor() {
   Serial.println("I'm Master, sending control frame");
-  next_ghost_anchor.anchor_id = NB_ANCHORS;
-  next_ghost_anchor.tag_id = (next_target_idx + 1) % NB_ROBOTS;
-  next_ghost_anchor.sleep_slots = NB_ANCHORS + next_ghost_anchor.anchor_id - 2;
+  next_ghost_anchor.anchor_id = NB_TOTAL_ANCHORS;
+  next_ghost_anchor.target_idx = next_target_idx;
+  next_ghost_anchor.next_anchor_id = 1;
+  next_ghost_anchor.sleep_slots = NB_TOTAL_ANCHORS;//+ next_ghost_anchor.anchor_id - 2;
 }
 #endif
 
@@ -94,9 +94,9 @@ void getID() {
 		MYID[7] = NODE_ID;
 
 		/* setting up next anchor ID */
-		#ifdef NB_ANCHORS
+		#ifdef NB_TOTAL_ANCHORS
 		/* checking if this anchors has the highest ID */
-			if (NODE_ID == NB_ANCHORS) {
+			if (NODE_ID == NB_TOTAL_ANCHORS) {
 				/* the next anchor is the first one */
 				MY_NEXT_ANCHOR_ID[7] = 1;
 			}
@@ -218,7 +218,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
         state = TWR_ENGINE_PREPARE_RANGING;
 				break;
       }
-			if (millis() > timeout) {
+			if ((millis() > timeout) or (NB_ANCHORS == 1)){
 				/* the DATA frame of the previous frame has never been received. Forcing a new cycle */
 				state = TWR_ENGINE_PREPARE_RANGING;
         delayed = 0;
@@ -250,11 +250,11 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 				}
 				if (byte_array_cmp(nextAnchorID, myID))
 				{
-					my_turn = true;
           last_start_frame = decaduino.getLastRxTimestamp();
-				}
-				/* checking DATA frames for end of cycle */
-				if (my_turn && ( rxData[0] == TWR_MSG_TYPE_DATA_REPLY )) {
+					//my_turn = true;
+				// }
+				// /* checking DATA frames for end of cycle */
+				// if (my_turn && ( rxData[0] == TWR_MSG_TYPE_DATA_REPLY )) {
 					Serial.println("$It's my turn");
           Serial.print("$ID of the next anchor: ");
           print_byte_array(myNextAnchorID);
@@ -362,7 +362,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 
       // control frame
       txData[25]= next_ghost_anchor.anchor_id;
-      txData[26] = next_ghost_anchor.tag_id;
+      txData[26] = next_ghost_anchor.next_anchor_id;
       txData[27] = next_ghost_anchor.sleep_slots;
 
 			/* Sending frame */
@@ -506,6 +506,23 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
       /* RSSI */
 			Serial.print("|");
       Serial.print(decaduino.getRSSI() );
+
+      /* First path power */
+      Serial.print("|");
+      Serial.print(decaduino.getFpPower());
+
+      /* FpAmpl2 */
+      Serial.print("|");
+      Serial.print((int) decaduino.getFpAmpl2());
+
+      /* Std noise */
+      Serial.print("|");
+      Serial.print(decaduino.getSNR());
+
+      /* Temperature */
+      Serial.print("|");
+      Serial.print(decaduino.getTemperature());
+
       Serial.println("#\n");
 
       state = TWR_ENGINE_STATE_INIT;

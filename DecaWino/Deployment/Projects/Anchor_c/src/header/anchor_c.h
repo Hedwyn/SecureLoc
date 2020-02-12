@@ -7,7 +7,8 @@
 #define ALOHA_COLLISION_DELAY 20
 #define DMAX 10
 #ifndef NB_ANCHORS
-  #define NB_ANCHORS 4
+  #define NB_ANCHORS 1
+
 #endif
 
 #ifndef NODE_ID
@@ -20,7 +21,7 @@
   #define MASTER
 #endif
 
-#define SLOT_LENGTH 500000 //microseconds
+#define SLOT_LENGTH 100000 //microseconds
 #define SLOT_LENGTH_MS (SLOT_LENGTH / 1000)
 #define IN_US 1E6 //microseconds
 
@@ -76,10 +77,17 @@
 #define TWR_MSG_TYPE_START 1
 #define TWR_MSG_TYPE_ACK 2
 #define TWR_MSG_TYPE_DATA_REPLY 3
-#define NB_ROBOTS 2
+#define NB_ROBOTS 1
 
 /* Cooperative */
-#define COOPERATIVE 1
+#define COOPERATIVE 0
+#if (COOPERATIVE)
+  #define NB_GHOST_ANCHORS 1
+#else
+  #define NB_GHOST_ANCHORS 0
+#endif
+
+#define NB_TOTAL_ANCHORS (NB_ANCHORS + NB_GHOST_ANCHORS)
 
 
 void anchor_setup();

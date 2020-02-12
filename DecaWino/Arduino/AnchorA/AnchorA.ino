@@ -1,5 +1,5 @@
 #include <AES_config.h>
-#include <printf.h>
+//#include <printf.h>
 
 
 
@@ -16,7 +16,7 @@ AES aes ;
  * En commentant les bonnes lignes on affiche les messages du Debug ou du fonctionnement normal
  */
 
-#define ANCHOR 2
+#define ANCHOR 1
 #define NB_ANCHORS 2
 #define SLOT 300
 #define WAITTIME 600 // set frequency here 
