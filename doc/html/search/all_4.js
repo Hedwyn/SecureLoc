@@ -1,20 +1,8 @@
 var searchData=
 [
-  ['d_5fprint',['d_print',['../namespaceparameters.html#a7b69c4090ad4c4bb2a8bdc6bb75b704a',1,'parameters']]],
-  ['data',['data',['../namespacejson_logs.html#a00e63e49e8d3ceb37579f106a0c53641',1,'jsonLogs']]],
-  ['dataset',['dataset',['../classjson_structures_1_1dataset.html',1,'jsonStructures.dataset'],['../classapplication_1_1_application.html#acce9e5753161b23d3c97cc7a9da9b891',1,'application.Application.dataset()']]],
-  ['dataset1',['dataset1',['../namespacejson_logs.html#ad4802e52abbbaefc0de10f63bb9622e0',1,'jsonLogs']]],
-  ['dataset2',['dataset2',['../namespacejson_logs.html#ad8c2bc69d0e389341a6178c0a6ec0852',1,'jsonLogs']]],
-  ['date',['date',['../classjson_logs_1_1json_logs.html#ae74f3ac5784832384799f2e196240930',1,'jsonLogs::jsonLogs']]],
-  ['debug',['DEBUG',['../namespaceparameters.html#a5072948d4ab917329556811dc3e16dad',1,'parameters']]],
-  ['default_5facc_5fthold',['DEFAULT_ACC_THOLD',['../namespaceparameters.html#afccaa39e83d6fa25858c6f6833311bd9',1,'parameters']]],
-  ['display',['display',['../classread_mes_1_1_measurements.html#aa95f8754f4f67f8c85897ff9344c0536',1,'readMes.Measurements.display()'],['../namespaceread_rangings.html#a8ffcf76665ce8cfb9cd4bb6b13df3745',1,'readRangings.display()'],['../namespaceread_r_s_s_i__save.html#aa013a906bb47d5a537bd0bdd8fd5db4c',1,'readRSSI_save.display()'],['../namespaceread_mes.html#ad54297853f31fdc1e5f605ae0289bfe3',1,'readMes.DISPLAY()'],['../namespaceread_rangings.html#a298416f2f636819a2cde6ad286e75b8a',1,'readRangings.DISPLAY()']]],
-  ['display_5flogs',['display_logs',['../classlogs_1_1_logs.html#ade05b8cf6e6b4ec7b2e3cbd42f485454',1,'logs.Logs.display_logs()'],['../classlogs__save_1_1_logs.html#aad973183d519f9240b453b305514216d',1,'logs_save.Logs.display_logs()']]],
-  ['display_5fpos',['display_pos',['../classmovingentity_1_1_moving_entity.html#ad814aca469e3808524ff331dda2afed2',1,'movingentity::MovingEntity']]],
-  ['distance',['distance',['../classanchor_1_1_anchor.html#a225363ba0a2d15baa16436660e83ea4d',1,'anchor.Anchor.distance()'],['../classjson_structures_1_1dataset.html#aa394025e4a0dfdc6bf85095603fe1e34',1,'jsonStructures.dataset.distance()'],['../classranging_1_1_ranging.html#a71d363d29447f420f770eb4f035203fb',1,'ranging.Ranging.distance()']]],
-  ['distance_5ffrom_5frp',['distance_from_rp',['../classread_mes_1_1_measurements.html#a0826857e6e0351e71c6490bc3ccd0884',1,'readMes::Measurements']]],
-  ['done',['done',['../classapplication_1_1_application.html#acfcdd10c20cae8a06203c4e9c06f4e7f',1,'application::Application']]],
-  ['draw',['draw',['../classparameters_1_1_menu.html#ae92b245517117a4a9a0fe73ac9c13727',1,'parameters::Menu']]],
-  ['dump_5ftabfile',['dump_tabfile',['../classjson_structures_1_1metadata.html#af84d32fecd053804123374e08396690b',1,'jsonStructures::metadata']]],
-  ['duration',['duration',['../classsound_1_1_sound.html#a112bc7848fe4c8c75a1acd5c967345cf',1,'sound::Sound']]]
+  ['export',['export',['../classjson_structures_1_1dataset.html#a68cc2498d25cf6670863c141957ac262',1,'jsonStructures.dataset.export()'],['../classjson_structures_1_1position.html#a68cc2498d25cf6670863c141957ac262',1,'jsonStructures.position.export()'],['../classjson_structures_1_1metadata.html#a68cc2498d25cf6670863c141957ac262',1,'jsonStructures.metadata.export()']]],
+  ['export_5fresults',['export_results',['../classread_r_s_s_i_1_1_r_s_s_i.html#a7f770c7daa5311635963ea5110c357fb',1,'readRSSI::RSSI']]],
+  ['extract_5frx_5fphy_5fdata',['extract_rx_phy_data',['../classread_r_s_s_i_1_1_r_s_s_i.html#a789b90763802b8501acc3429b812eb22',1,'readRSSI::RSSI']]],
+  ['extract_5fserie',['extract_serie',['../classread_mes_1_1_measurements.html#ac792c51cc2fd3ee12f7fe6d4595c853b',1,'readMes::Measurements']]],
+  ['extract_5fserie_5frangings',['extract_serie_rangings',['../classread_mes_1_1_measurements.html#a904ca68697f93b5f5aa1794e596e41f2',1,'readMes::Measurements']]]
 ];

@@ -1,0 +1,48 @@
+\hypertarget{structcontrol__frame}{}\section{control\+\_\+frame Struct Reference}
+\label{structcontrol__frame}\index{control\+\_\+frame@{control\+\_\+frame}}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+byte \mbox{\hyperlink{structcontrol__frame_aa94c10c0f07e2f27fe44bca45e59735f}{anchor\+\_\+id}}
+\item 
+int \mbox{\hyperlink{structcontrol__frame_a7c74492e7941ff4d6d2697ab892f4fe7}{target\+\_\+idx}}
+\item 
+byte \mbox{\hyperlink{structcontrol__frame_ab7a1283fa788f533f37c47b452cd3589}{next\+\_\+anchor\+\_\+id}}
+\item 
+byte \mbox{\hyperlink{structcontrol__frame_a669b7e13ef545f7ac9e46bc794b87c63}{sleep\+\_\+slots}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Ghost Anchor Request structure sent to designated tags in cooperative protocols. The tag receiving this will have to localize another tag at a given time The designated tag usesa specific anchor ID for that purpose 
+
+\subsection{Field Documentation}
+\mbox{\Hypertarget{structcontrol__frame_aa94c10c0f07e2f27fe44bca45e59735f}\label{structcontrol__frame_aa94c10c0f07e2f27fe44bca45e59735f}} 
+\index{control\+\_\+frame@{control\+\_\+frame}!anchor\+\_\+id@{anchor\+\_\+id}}
+\index{anchor\+\_\+id@{anchor\+\_\+id}!control\+\_\+frame@{control\+\_\+frame}}
+\subsubsection{\texorpdfstring{anchor\+\_\+id}{anchor\_id}}
+{\footnotesize\ttfamily byte anchor\+\_\+id}
+
+ID that the designated tag is going to use to its anchor turn \mbox{\Hypertarget{structcontrol__frame_ab7a1283fa788f533f37c47b452cd3589}\label{structcontrol__frame_ab7a1283fa788f533f37c47b452cd3589}} 
+\index{control\+\_\+frame@{control\+\_\+frame}!next\+\_\+anchor\+\_\+id@{next\+\_\+anchor\+\_\+id}}
+\index{next\+\_\+anchor\+\_\+id@{next\+\_\+anchor\+\_\+id}!control\+\_\+frame@{control\+\_\+frame}}
+\subsubsection{\texorpdfstring{next\+\_\+anchor\+\_\+id}{next\_anchor\_id}}
+{\footnotesize\ttfamily byte next\+\_\+anchor\+\_\+id}
+
+ID of the next anchor to call during the designated tag verification process \mbox{\Hypertarget{structcontrol__frame_a669b7e13ef545f7ac9e46bc794b87c63}\label{structcontrol__frame_a669b7e13ef545f7ac9e46bc794b87c63}} 
+\index{control\+\_\+frame@{control\+\_\+frame}!sleep\+\_\+slots@{sleep\+\_\+slots}}
+\index{sleep\+\_\+slots@{sleep\+\_\+slots}!control\+\_\+frame@{control\+\_\+frame}}
+\subsubsection{\texorpdfstring{sleep\+\_\+slots}{sleep\_slots}}
+{\footnotesize\ttfamily byte sleep\+\_\+slots}
+
+Number of slots that the designated tag should sleep before starting the verification process \mbox{\Hypertarget{structcontrol__frame_a7c74492e7941ff4d6d2697ab892f4fe7}\label{structcontrol__frame_a7c74492e7941ff4d6d2697ab892f4fe7}} 
+\index{control\+\_\+frame@{control\+\_\+frame}!target\+\_\+idx@{target\+\_\+idx}}
+\index{target\+\_\+idx@{target\+\_\+idx}!control\+\_\+frame@{control\+\_\+frame}}
+\subsubsection{\texorpdfstring{target\+\_\+idx}{target\_idx}}
+{\footnotesize\ttfamily int target\+\_\+idx}
+
+ID of the target that the designated tag should localize 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Anchor\+\_\+c/src/cpp/\mbox{\hyperlink{anchor__c_8cpp}{anchor\+\_\+c.\+cpp}}\end{DoxyCompactItemize}

@@ -38,8 +38,7 @@
  src/header/usb_undef.h src/header/WCharacter.h \
  src/header/elapsedMillis.h src/header/Arduino.h \
  src/header/IntervalTimer.h src/header/DMAChannel.h \
- src/header/EventResponder.h ../Projects/PKCE/src/header/PKCE.h \
- src/header/DecaDuino.h
+ src/header/EventResponder.h src/header/DecaDuino.h
 
 ../Projects/Anchor_c/src/header/anchor_c.h:
 
@@ -168,7 +167,5 @@ src/header/IntervalTimer.h:
 src/header/DMAChannel.h:
 
 src/header/EventResponder.h:
-
-../Projects/PKCE/src/header/PKCE.h:
 
 src/header/DecaDuino.h:

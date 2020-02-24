@@ -1,0 +1,157 @@
+\hypertarget{classread_mes_1_1_measurements}{}\section{Measurements Class Reference}
+\label{classread_mes_1_1_measurements}\index{Measurements@{Measurements}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classread_mes_1_1_measurements_ad5de178e9da2711c5bc270200dc25568}\label{classread_mes_1_1_measurements_ad5de178e9da2711c5bc270200dc25568}} 
+def {\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self, filename)
+\item 
+def \mbox{\hyperlink{classread_mes_1_1_measurements_a4bf6b24f95dbd9e6388503f474e0be05}{get\+\_\+metadata}} (self)
+\item 
+def \mbox{\hyperlink{classread_mes_1_1_measurements_af97d9bc67dffe24a1547fabebc31e9ad}{read\+\_\+mes}} (self, mode=\textquotesingle{}P\+OS\textquotesingle{})
+\item 
+def \mbox{\hyperlink{classread_mes_1_1_measurements_a9cab236ac56c4f2245c8f87035f736ef}{get\+\_\+anchors}} (self)
+\begin{DoxyCompactList}\small\item\em if (len(serie) == len( output\mbox{[}0\mbox{]} ) )\+: output.\+append(serie) else\+: ref\+\_\+points.\+pop(len(ref\+\_\+points) -\/ 1) \#print(serie) \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classread_mes_1_1_measurements_a3720c2eca68a86eb32876fad24d37b65}{ranging\+\_\+from\+\_\+rp}} (self, rp, anchor\+\_\+name)
+\item 
+def \mbox{\hyperlink{classread_mes_1_1_measurements_a993884eadd2abd392aa1b4d0aca03d57}{ranging\+\_\+from\+\_\+pos}} (self, pos, anchor\+\_\+name)
+\item 
+def \mbox{\hyperlink{classread_mes_1_1_measurements_ae9f85ff6eeb7be193c52d772e6aeacfb}{distance\+\_\+from\+\_\+rp}} (self, rp, pos)
+\item 
+def \mbox{\hyperlink{classread_mes_1_1_measurements_aec61a49900a125b0b6f614e94fba7003}{get\+\_\+coord}} (self, x, y, z)
+\item 
+def \mbox{\hyperlink{classread_mes_1_1_measurements_af98b3c60b52d623f9c69951ff26a2557}{filter\+\_\+rp}} (self, rp\+\_\+list, rangings, threshold=T\+H\+R\+E\+S\+H\+O\+LD)
+\item 
+def \mbox{\hyperlink{classread_mes_1_1_measurements_ac792c51cc2fd3ee12f7fe6d4595c853b}{extract\+\_\+serie}} (self, serie, rp)
+\item 
+def \mbox{\hyperlink{classread_mes_1_1_measurements_a904ca68697f93b5f5aa1794e596e41f2}{extract\+\_\+serie\+\_\+rangings}} (self, serie, rp)
+\item 
+def \mbox{\hyperlink{classread_mes_1_1_measurements_a4dfb72a3a59bb3616ecc87e769948963}{get\+\_\+ranging\+\_\+error}} (self, anchor\+\_\+name, pos, rp, ranging=None)
+\item 
+def \mbox{\hyperlink{classread_mes_1_1_measurements_a8793e38aa01d0a08a2c3de87bcaef6ba}{display}} (self, anchor\+\_\+name=A\+N\+C\+H\+O\+R\+\_\+\+N\+A\+ME, mode=\textquotesingle{}2\+D\textquotesingle{})
+\item 
+def \mbox{\hyperlink{classread_mes_1_1_measurements_a2c700151a5d9c0926dfb4c40064df17a}{get\+\_\+results}} (self, start\+\_\+idx, stop\+\_\+idx)
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classread_mes_1_1_measurements_a2ff994e16bf9521154de4cf659a3b689}\label{classread_mes_1_1_measurements_a2ff994e16bf9521154de4cf659a3b689}} 
+{\bfseries filename}
+\item 
+\mbox{\Hypertarget{classread_mes_1_1_measurements_ab09a63eb35b270b5cdbead1983ebdccb}\label{classread_mes_1_1_measurements_ab09a63eb35b270b5cdbead1983ebdccb}} 
+{\bfseries log}
+\item 
+\mbox{\Hypertarget{classread_mes_1_1_measurements_a5b68d6d2c91370ca44cee7699a3cb1fd}\label{classread_mes_1_1_measurements_a5b68d6d2c91370ca44cee7699a3cb1fd}} 
+{\bfseries anchors\+\_\+pos}
+\item 
+\mbox{\Hypertarget{classread_mes_1_1_measurements_a64b8b36116751d566275b722e40bb3a7}\label{classread_mes_1_1_measurements_a64b8b36116751d566275b722e40bb3a7}} 
+{\bfseries comments}
+\item 
+\mbox{\Hypertarget{classread_mes_1_1_measurements_ac74f5fdcc1c338a24cba634a4f16a1b6}\label{classread_mes_1_1_measurements_ac74f5fdcc1c338a24cba634a4f16a1b6}} 
+{\bfseries anchors\+\_\+dic}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classread_mes_1_1_measurements_a8793e38aa01d0a08a2c3de87bcaef6ba}\label{classread_mes_1_1_measurements_a8793e38aa01d0a08a2c3de87bcaef6ba}} 
+\index{read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}!display@{display}}
+\index{display@{display}!read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}}
+\subsubsection{\texorpdfstring{display()}{display()}}
+{\footnotesize\ttfamily def display (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{anchor\+\_\+name = {\ttfamily ANCHOR\+\_\+NAME},  }\item[{}]{mode = {\ttfamily \textquotesingle{}2D\textquotesingle{}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}displays the results using matplotlib\end{DoxyVerb}
+ \mbox{\Hypertarget{classread_mes_1_1_measurements_ae9f85ff6eeb7be193c52d772e6aeacfb}\label{classread_mes_1_1_measurements_ae9f85ff6eeb7be193c52d772e6aeacfb}} 
+\index{read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}!distance\+\_\+from\+\_\+rp@{distance\+\_\+from\+\_\+rp}}
+\index{distance\+\_\+from\+\_\+rp@{distance\+\_\+from\+\_\+rp}!read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}}
+\subsubsection{\texorpdfstring{distance\+\_\+from\+\_\+rp()}{distance\_from\_rp()}}
+{\footnotesize\ttfamily def distance\+\_\+from\+\_\+rp (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{rp,  }\item[{}]{pos }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}returns the distance between the given position & the given rp\end{DoxyVerb}
+ \mbox{\Hypertarget{classread_mes_1_1_measurements_ac792c51cc2fd3ee12f7fe6d4595c853b}\label{classread_mes_1_1_measurements_ac792c51cc2fd3ee12f7fe6d4595c853b}} 
+\index{read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}!extract\+\_\+serie@{extract\+\_\+serie}}
+\index{extract\+\_\+serie@{extract\+\_\+serie}!read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}}
+\subsubsection{\texorpdfstring{extract\+\_\+serie()}{extract\_serie()}}
+{\footnotesize\ttfamily def extract\+\_\+serie (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{serie,  }\item[{}]{rp }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}extracts the series of ranging from the log file\end{DoxyVerb}
+ \mbox{\Hypertarget{classread_mes_1_1_measurements_a904ca68697f93b5f5aa1794e596e41f2}\label{classread_mes_1_1_measurements_a904ca68697f93b5f5aa1794e596e41f2}} 
+\index{read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}!extract\+\_\+serie\+\_\+rangings@{extract\+\_\+serie\+\_\+rangings}}
+\index{extract\+\_\+serie\+\_\+rangings@{extract\+\_\+serie\+\_\+rangings}!read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}}
+\subsubsection{\texorpdfstring{extract\+\_\+serie\+\_\+rangings()}{extract\_serie\_rangings()}}
+{\footnotesize\ttfamily def extract\+\_\+serie\+\_\+rangings (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{serie,  }\item[{}]{rp }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}returns the mean ranging values from a serie of rangings\end{DoxyVerb}
+ \mbox{\Hypertarget{classread_mes_1_1_measurements_af98b3c60b52d623f9c69951ff26a2557}\label{classread_mes_1_1_measurements_af98b3c60b52d623f9c69951ff26a2557}} 
+\index{read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}!filter\+\_\+rp@{filter\+\_\+rp}}
+\index{filter\+\_\+rp@{filter\+\_\+rp}!read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}}
+\subsubsection{\texorpdfstring{filter\+\_\+rp()}{filter\_rp()}}
+{\footnotesize\ttfamily def filter\+\_\+rp (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{rp\+\_\+list,  }\item[{}]{rangings,  }\item[{}]{threshold = {\ttfamily THRESHOLD} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}returns a list of rp excluding the ones too far away\end{DoxyVerb}
+ \mbox{\Hypertarget{classread_mes_1_1_measurements_a9cab236ac56c4f2245c8f87035f736ef}\label{classread_mes_1_1_measurements_a9cab236ac56c4f2245c8f87035f736ef}} 
+\index{read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}!get\+\_\+anchors@{get\+\_\+anchors}}
+\index{get\+\_\+anchors@{get\+\_\+anchors}!read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}}
+\subsubsection{\texorpdfstring{get\+\_\+anchors()}{get\_anchors()}}
+{\footnotesize\ttfamily def get\+\_\+anchors (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+if (len(serie) == len( output\mbox{[}0\mbox{]} ) )\+: output.\+append(serie) else\+: ref\+\_\+points.\+pop(len(ref\+\_\+points) -\/ 1) \#print(serie) 
+
+\begin{DoxyVerb}gets the anchors names & positions from metadata\end{DoxyVerb}
+ \mbox{\Hypertarget{classread_mes_1_1_measurements_aec61a49900a125b0b6f614e94fba7003}\label{classread_mes_1_1_measurements_aec61a49900a125b0b6f614e94fba7003}} 
+\index{read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}!get\+\_\+coord@{get\+\_\+coord}}
+\index{get\+\_\+coord@{get\+\_\+coord}!read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}}
+\subsubsection{\texorpdfstring{get\+\_\+coord()}{get\_coord()}}
+{\footnotesize\ttfamily def get\+\_\+coord (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{x,  }\item[{}]{y,  }\item[{}]{z }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}returns the coordinates associated to the given pos on a tiled surface\end{DoxyVerb}
+ \mbox{\Hypertarget{classread_mes_1_1_measurements_a4bf6b24f95dbd9e6388503f474e0be05}\label{classread_mes_1_1_measurements_a4bf6b24f95dbd9e6388503f474e0be05}} 
+\index{read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}!get\+\_\+metadata@{get\+\_\+metadata}}
+\index{get\+\_\+metadata@{get\+\_\+metadata}!read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}}
+\subsubsection{\texorpdfstring{get\+\_\+metadata()}{get\_metadata()}}
+{\footnotesize\ttfamily def get\+\_\+metadata (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}reads and returns as a dic the metadata in the measurements file\end{DoxyVerb}
+ \mbox{\Hypertarget{classread_mes_1_1_measurements_a4dfb72a3a59bb3616ecc87e769948963}\label{classread_mes_1_1_measurements_a4dfb72a3a59bb3616ecc87e769948963}} 
+\index{read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}!get\+\_\+ranging\+\_\+error@{get\+\_\+ranging\+\_\+error}}
+\index{get\+\_\+ranging\+\_\+error@{get\+\_\+ranging\+\_\+error}!read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}}
+\subsubsection{\texorpdfstring{get\+\_\+ranging\+\_\+error()}{get\_ranging\_error()}}
+{\footnotesize\ttfamily def get\+\_\+ranging\+\_\+error (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{anchor\+\_\+name,  }\item[{}]{pos,  }\item[{}]{rp,  }\item[{}]{ranging = {\ttfamily None} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}computes the ranging error for the given rp\end{DoxyVerb}
+ \mbox{\Hypertarget{classread_mes_1_1_measurements_a2c700151a5d9c0926dfb4c40064df17a}\label{classread_mes_1_1_measurements_a2c700151a5d9c0926dfb4c40064df17a}} 
+\index{read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}!get\+\_\+results@{get\+\_\+results}}
+\index{get\+\_\+results@{get\+\_\+results}!read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}}
+\subsubsection{\texorpdfstring{get\+\_\+results()}{get\_results()}}
+{\footnotesize\ttfamily def get\+\_\+results (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{start\+\_\+idx,  }\item[{}]{stop\+\_\+idx }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}writes the results for the logs between start_id and stop_idx
+in a tab file\end{DoxyVerb}
+ \mbox{\Hypertarget{classread_mes_1_1_measurements_a993884eadd2abd392aa1b4d0aca03d57}\label{classread_mes_1_1_measurements_a993884eadd2abd392aa1b4d0aca03d57}} 
+\index{read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}!ranging\+\_\+from\+\_\+pos@{ranging\+\_\+from\+\_\+pos}}
+\index{ranging\+\_\+from\+\_\+pos@{ranging\+\_\+from\+\_\+pos}!read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}}
+\subsubsection{\texorpdfstring{ranging\+\_\+from\+\_\+pos()}{ranging\_from\_pos()}}
+{\footnotesize\ttfamily def ranging\+\_\+from\+\_\+pos (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{pos,  }\item[{}]{anchor\+\_\+name }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}returns the distance between the given position and the given anchor\end{DoxyVerb}
+ \mbox{\Hypertarget{classread_mes_1_1_measurements_a3720c2eca68a86eb32876fad24d37b65}\label{classread_mes_1_1_measurements_a3720c2eca68a86eb32876fad24d37b65}} 
+\index{read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}!ranging\+\_\+from\+\_\+rp@{ranging\+\_\+from\+\_\+rp}}
+\index{ranging\+\_\+from\+\_\+rp@{ranging\+\_\+from\+\_\+rp}!read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}}
+\subsubsection{\texorpdfstring{ranging\+\_\+from\+\_\+rp()}{ranging\_from\_rp()}}
+{\footnotesize\ttfamily def ranging\+\_\+from\+\_\+rp (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{rp,  }\item[{}]{anchor\+\_\+name }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}returns the distance between the given anchor and the given rp\end{DoxyVerb}
+ \mbox{\Hypertarget{classread_mes_1_1_measurements_af97d9bc67dffe24a1547fabebc31e9ad}\label{classread_mes_1_1_measurements_af97d9bc67dffe24a1547fabebc31e9ad}} 
+\index{read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}!read\+\_\+mes@{read\+\_\+mes}}
+\index{read\+\_\+mes@{read\+\_\+mes}!read\+Mes\+::\+Measurements@{read\+Mes\+::\+Measurements}}
+\subsubsection{\texorpdfstring{read\+\_\+mes()}{read\_mes()}}
+{\footnotesize\ttfamily def read\+\_\+mes (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{mode = {\ttfamily \textquotesingle{}POS\textquotesingle{}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}reads the target json file and returns the reference points 
+and the rangings series for each of them\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/read\+Mes.\+py\end{DoxyCompactItemize}

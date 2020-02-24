@@ -1,0 +1,67 @@
+\hypertarget{namespacesound}{}\section{sound Namespace Reference}
+\label{namespacesound}\index{sound@{sound}}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classsound_1_1_melody}{Melody}}
+\item 
+class \mbox{\hyperlink{classsound_1_1_sound}{Sound}}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacesound_a33e04a55109645491e99140770b9b33c}\label{namespacesound_a33e04a55109645491e99140770b9b33c}} 
+dictionary {\bfseries freq\+\_\+dict} = \{\textquotesingle{}C\textquotesingle{}\+:32.\+70,\textquotesingle{}D\textquotesingle{}\+:36.\+71,\textquotesingle{}E\textquotesingle{}\+:41.\+20,\textquotesingle{}F\textquotesingle{}\+:43.\+65,\textquotesingle{}G\textquotesingle{}\+:49.\+00,\textquotesingle{}A\textquotesingle{}\+:55.\+00,\textquotesingle{}B\textquotesingle{}\+:61.\+74\}
+\item 
+\mbox{\Hypertarget{namespacesound_a6d5ae5d5a95f36d0d0448a2c603ec47f}\label{namespacesound_a6d5ae5d5a95f36d0d0448a2c603ec47f}} 
+float {\bfseries semitone\+\_\+coeff} = 1.\+059
+\item 
+list {\bfseries score}
+\item 
+\mbox{\Hypertarget{namespacesound_a01894a43a61c417313503684c2039eaa}\label{namespacesound_a01894a43a61c417313503684c2039eaa}} 
+{\bfseries melody} = \mbox{\hyperlink{classsound_1_1_melody}{Melody}}(score,120)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}****************************************************************************
+Copyright (C) 2019 LCIS Laboratory - Baptiste Pestourie
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, in version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+This program is part of the SecureLoc Project @https://github.com/Hedwyn/SecureLoc
+ ****************************************************************************
+
+@file Simulation.py
+@author Baptiste Pestourie
+@date 2019 November 1st
+@brief Sound library for the measurements mode - sound signals used when measurements are starting/finishing
+@see https://github.com/Hedwyn/SecureLoc
+\end{DoxyVerb}
+ 
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{namespacesound_aa696113932adb6a0fe9a99b49f87a7f6}\label{namespacesound_aa696113932adb6a0fe9a99b49f87a7f6}} 
+\index{sound@{sound}!score@{score}}
+\index{score@{score}!sound@{sound}}
+\subsubsection{\texorpdfstring{score}{score}}
+{\footnotesize\ttfamily list score}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 =  [(\textcolor{stringliteral}{'E4'},0.66),
+2              (\textcolor{stringliteral}{'G#4'},0.33),
+3              (\textcolor{stringliteral}{'A4'},0.33),
+4              (\textcolor{stringliteral}{'B4'},0.66),
+5              (\textcolor{stringliteral}{'G#4'},0.33),
+6              (\textcolor{stringliteral}{'B4'},1.0)
+7              ]
+\end{DoxyCode}

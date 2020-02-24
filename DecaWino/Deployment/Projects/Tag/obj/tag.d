@@ -37,8 +37,7 @@
  src/header/elapsedMillis.h src/header/Arduino.h \
  src/header/IntervalTimer.h src/header/DMAChannel.h \
  src/header/EventResponder.h src/header/DecaDuino.h \
- ../Projects/Anchor_c/src/header/anchor_c.h \
- ../Projects/PKCE/src/header/PKCE.h
+ ../Projects/Anchor_c/src/header/anchor_c.h
 
 ../Projects/Tag/src/header/tag.h:
 
@@ -171,5 +170,3 @@ src/header/EventResponder.h:
 src/header/DecaDuino.h:
 
 ../Projects/Anchor_c/src/header/anchor_c.h:
-
-../Projects/PKCE/src/header/PKCE.h:

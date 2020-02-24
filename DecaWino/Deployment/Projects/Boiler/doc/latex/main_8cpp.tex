@@ -1,0 +1,28 @@
+\hypertarget{main_8cpp}{}\section{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Boiler/src/cpp/main.cpp File Reference}
+\label{main_8cpp}\index{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Boiler/src/cpp/main.\+cpp@{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Boiler/src/cpp/main.\+cpp}}
+
+
+Main file the boiler firmware. The boiler firrmware is intended for temperature characterizations. 2 modes are possible, verifier(\+V) and prover(\+P). The verifier is sending continously frames, and the prover turns on reception intermittently according to a given Duty Cycle. The Duty Cycle can be set by changing the sleep\+\_\+time variable (= sleep time between two receptions) of the device. The default sleep\+\_\+time when the device is turned on is defined in S\+L\+E\+E\+P\+\_\+\+T\+I\+ME. Otherwise this parameter can be changed though the serial port. Send \textquotesingle{}1\mbox{[}new\+\_\+sleep\+\_\+time\mbox{]}\textquotesingle{} to modify the value. Send \textquotesingle{}0\textquotesingle{} to both P and V to start a boiling process; the prover will switch to a duty cyle of 100\% for a maiximum temeprature gradient. See the platform documentation and related papers for details.  
+
+
+{\ttfamily \#include \char`\"{}Boiler.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}} 
+int {\bfseries main} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Main file the boiler firmware. The boiler firrmware is intended for temperature characterizations. 2 modes are possible, verifier(\+V) and prover(\+P). The verifier is sending continously frames, and the prover turns on reception intermittently according to a given Duty Cycle. The Duty Cycle can be set by changing the sleep\+\_\+time variable (= sleep time between two receptions) of the device. The default sleep\+\_\+time when the device is turned on is defined in S\+L\+E\+E\+P\+\_\+\+T\+I\+ME. Otherwise this parameter can be changed though the serial port. Send \textquotesingle{}1\mbox{[}new\+\_\+sleep\+\_\+time\mbox{]}\textquotesingle{} to modify the value. Send \textquotesingle{}0\textquotesingle{} to both P and V to start a boiling process; the prover will switch to a duty cyle of 100\% for a maiximum temeprature gradient. See the platform documentation and related papers for details. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2020 February 1st 
+\end{DoxyDate}
+\begin{DoxySeeAlso}{See also}
+\href{https://github.com/Hedwyn/SecureLoc}{\tt https\+://github.\+com/\+Hedwyn/\+Secure\+Loc} 
+\end{DoxySeeAlso}

@@ -1,18 +1,47 @@
+/****************************************************************************
+* Copyright (C) 2019 LCIS Laboratory - Baptiste Pestourie
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, in version 3.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*
+* This program is part of the SecureLoc Project @https://github.com/Hedwyn/SecureLoc
+ ****************************************************************************/
+
+/**
+ * @file Anchor_c.cpp
+ * @author Baptiste Pestourie
+ * @date 2019 December 1st
+ * @brief Source file for the cooperative anchor firmware. This firmware is intended for DecaWino chips.
+ * Anchors are fixed stations performing ranging with mobile tags.
+ * The cooperative anchor firmware allow an anchor to design a tag to participate in a verification process. See the platform documentation for details.
+ * @see https://github.com/Hedwyn/SecureLoc
+ */
+
+
 #include "anchor_c.h"
 /* libraries */
 
-static DecaDuino decaduino;
+static DecaDuino decaduino; /**< Instance for all DWM1000-related operations*/
 
 
 /* RX-TX buffers */
-static uint8_t rxData[128];
-static uint8_t txData[128];
-static uint16_t rxLen;
+static uint8_t rxData[128]; /**< Reception buffer */
+static uint8_t txData[128]; /**< Emission buffer */
+static uint16_t rxLen; /**< Reception buffer length*/
 
 /* state machine iterators */
-static int state = TWR_ENGINE_STATE_INIT;
-static int previous_state = TWR_ENGINE_STATE_IDLE;
-static int next_state;
+static int state = TWR_ENGINE_STATE_INIT; /**< Current State variable for the FSM*/
+static int previous_state = TWR_ENGINE_STATE_IDLE; /**< Previous state variable for the FSM- used to keep track of state changes*/
+static int next_state; /**< Next state variable for the FSM - state to go after a serial call*/
 static const char * states[50]=
 {
 "Init",
@@ -24,58 +53,56 @@ static const char * states[50]=
 "WAIT DATA",
 "Extract Timestamps",
 "Send to Pi",
-};
+};/**< States names for the debug output*/
 
 /* RX IDs - when receiving frames from tags or anchors */
-static byte targetID[][8]= { {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x01},// bots
-                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x02},
-                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01}, //anchors
-                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02},
-                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03},
-                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04},
-                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05},
-                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06},
-                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07},
-                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08},
-                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x09}};
-static byte rxID[8];
-static byte nextTarget[8];
-static int next_target_idx = 0; //  index on tag to localize in the next round
+static byte targetID[][8]= { {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x01},
+                     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x02}};/**< Mobile tags IDs*/
+static byte rxID[8];/**< Recipient ID buffer when receving a frame*/
+static byte nextTarget[8]; /**< Buffer for the ID of the next tag to localize*/
+static int next_target_idx = 0;  /**< Index of the next tag to localize ID in the tag's ID list targetID[]*/
 
 
 /* Anchor ID's */
-static byte MYID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, NODE_ID}; // identifiant de l'ancre
-static byte anchorID[8]; //anchorID field for received frames
-static byte MY_NEXT_ANCHOR_ID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // filled by getId()
-static byte nextAnchorID[8] ={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // buffer for the next anchor field in RX frames
+static byte MYID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, NODE_ID};  /**< Node's anchor ID */
+static byte anchorID[8]; /**< Buffer for the anchor ID field in Rx frames */
+static byte MY_NEXT_ANCHOR_ID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; /**< ID of the following anchor in the TDMA scheduling. Filled bu getID() */
+static byte nextAnchorID[8] ={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; /**< Buffer for the following anchor ID field in Rx frames */
 
 /* Two-Way Ranging protocol   */
-static unsigned long timeout;
-static bool has_timedout;
-static uint64_t t1, t2, t3, t4;
-static int32_t tof,tof_skew;
-static float distance, distance_skew;
+static unsigned long timeout; /**< Timeout variable for all the watchdogs (on Acknowledgment/DATA/Start frames) */
+static bool has_timedout; /**< Whether the last ranging process has time out or not */
+static uint64_t t1, t2, t3, t4; /**< Timestamp for Two-Way Ranging */
+static int32_t tof; /**< Time-of-flight calculated after TWR protocol */
+static int32_t tof_skew;  /**< Time-of-flight calculated after TWR protocol after skew correction */
+static float distance; /**< Distance calculated after TWR protocol */
+static float distance_skew;/**< Distance calculated after TWR protocol after skew correction */
 
 
 /* Serial communications */
-static char serial_command, target_id;
-static bool is_target_anchor;
+static char serial_command; /**< Serial command (on one digit) received on the last serial communication */
+static char target_id; /**< Target Anchor ID for a given serial command, e.g. inter-anchor ranging */
+static bool is_target_anchor; /**< whether the target of the current ranging is an anchor or not */
 
 /* Scheduling */
-static int aloha_delay;
-static bool my_turn;
-static uint64_t slot_start;
-static uint64_t last_start_frame;
-static int delayed;
+static int aloha_delay; /**< In Aloha scheduling mode, the delay to wait after a collision*/
+static bool my_turn; /**< Switches true when the anchor can start a ranging process */
+static uint64_t slot_start; /**< Timestamp for the beginning of the next TDMA slot. This timestamp is used by a delayed send */
+static uint64_t last_start_frame; /**< Timestamp of the last start frame received, required to calculate the start timestamp of the next TDMA in slot_start */
+static int delayed; /**< Boolean, true if delayed transmissions are enabled */
 
 /* Cooperative methods */
+/** Ghost Anchor Request structure sent to designated tags in cooperative protocols.
+  * The tag receiving this will have to localize another tag at a given time
+  * The designated tag usesa specific anchor ID for that purpose
+  */
 struct control_frame{
-  byte anchor_id;
-  int target_idx;
-  byte next_anchor_id;
-  byte sleep_slots; // in slot number
+  byte anchor_id; /**< ID that the designated tag is going to use to its anchor turn */
+  int target_idx; /**<  ID of the target that the designated tag should localize*/
+  byte next_anchor_id; /**< ID of the next anchor to call during the designated tag verification process*/
+  byte sleep_slots; /**< Number of slots that the designated tag should sleep before starting the verification process*/
 };
-static control_frame next_ghost_anchor = {.anchor_id = 0, .target_idx = 0, .next_anchor_id = 0, .sleep_slots = 0};
+static control_frame next_ghost_anchor = {.anchor_id = 0, .target_idx = 0, .next_anchor_id = 0, .sleep_slots = 0}; /**< Ghost anchor request sent to designated tags */
 
 
 #ifdef MASTER
@@ -88,6 +115,11 @@ void getNextGhostAnchor() {
 }
 #endif
 
+
+/** @brief Gets the anchor ID from header file configuration in default mode
+  * @author Baptiste Pestourie
+  * @date 2019 December 1st
+*/
 void getID() {
 	#ifdef NODE_ID
 		/* setting up anchor id */
@@ -111,6 +143,12 @@ void getID() {
 	#endif
 }
 
+
+/** @brief Attributes an ID to the anchor
+  * @param id - The Id to give to the anchor
+  * @author Baptiste Pestourie
+  * @date 2019 December 1st
+*/
 void getID(byte id) {
   MYID[7] = id;
 }
@@ -138,6 +176,7 @@ int get_next_target_idx(byte tag_ID[8]) {
 }
 
 int byte_array_cmp(byte b1[8], byte b2[8]) {
+  /* checks for equality between two byte array */
 	int i = 0, ret = 1;
 	for (i = 0; i <8; i++) {
 		if (b1[i] != b2[i]) {
@@ -184,6 +223,7 @@ void anchor_RxTxConfig() {
 
 
 int anchor_loop() {
+  /* using default parameters */
   return(anchor_loop(MYID, MY_NEXT_ANCHOR_ID));
 }
 
@@ -197,6 +237,8 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 
   switch (state) {
     case TWR_ENGINE_STATE_INIT:
+      /** Starting state of the FSM. CHecks for timeouts and restart a TWR cycle for the Master anchor.
+      * For the others, skip directly to IDLE state */
       #ifdef MASTER
       if (myID[7] == MASTER_ID) {
         timeout = millis() + START_TIMEOUT + SLOT_LENGTH * 1E-3;
@@ -214,6 +256,8 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
       break;
 
 		case TWR_ENGINE_STATE_IDLE :
+      /* Scheduling state. In Aloha, goes straight to ranging mode.
+      In TDMA, checks for the frame of the previous anchor and calculates the starting timestamp of the next ranging from the slot length */
       if (ALOHA) {
         state = TWR_ENGINE_PREPARE_RANGING;
 				break;
@@ -251,10 +295,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 				if (byte_array_cmp(nextAnchorID, myID))
 				{
           last_start_frame = decaduino.getLastRxTimestamp();
-					//my_turn = true;
-				// }
-				// /* checking DATA frames for end of cycle */
-				// if (my_turn && ( rxData[0] == TWR_MSG_TYPE_DATA_REPLY )) {
+
 					Serial.println("$It's my turn");
           Serial.print("$ID of the next anchor: ");
           print_byte_array(myNextAnchorID);
@@ -274,6 +315,8 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
       break;
 
     case TWR_ENGINE_STATE_SERIAL:
+      /* State for Serial communications.
+      Handle commands from the host */
        // reading serial command
        serial_command = Serial.read(); // { used as termination character
        while ((serial_command == '\r') || (serial_command == '\n')) {
@@ -305,7 +348,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 
             break;
           case 1:
-            Serial.println("$ command #2 received");
+            Serial.println("$ command #2 received"); // command excerpt for future implementations
             break;
           case 2:
             Serial.println("$ Starting PKCE");
@@ -328,6 +371,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
       break;
 
     case TWR_ENGINE_PREPARE_RANGING:
+    /** Checks for serial commands, otherwise proceeds to start the ranging process */
   		if (ALOHA) {
   			delay(aloha_delay);
   		}
@@ -345,6 +389,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
       break;
 
     case TWR_ENGINE_STATE_SEND_START:
+    /** Sending a ranging request (START frame) to the target tag */
 			/* Frame format : tagID | anchorID | nextAnchorID  */
       #ifdef MASTER
         if (myID[7] == MASTER_ID) {
@@ -388,6 +433,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
       break;
 
     case TWR_ENGINE_STATE_WAIT_ACK:
+    /** Waiting for the reply (Acknowledgment frame) of the target device */
       if ( millis() > timeout ) {
         state = TWR_ENGINE_STATE_INIT;
         DPRINTFLN("$timeout on waiting ACK");
@@ -423,6 +469,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
       break;
 
     case TWR_ENGINE_STATE_WAIT_DATA_REPLY:
+    /** Waiting for the timestamps (DATA frame) of the target device */
       if ( millis() > timeout ) {
 				DPRINTFLN("$timeout on waiting DATA");
         ret = TWR_COMPLETE;
@@ -453,7 +500,8 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
       }
       break;
 
-    case TWR_ENGINE_STATE_EXTRACT_T2_T3: //Etat d'extraction des distances. Décryptage et id
+    case TWR_ENGINE_STATE_EXTRACT_T2_T3:
+      /** Extracting timestamps from DATA frame and calculating the distance */
 			/* extracting timestamps */
       t2 = decaduino.decodeUint64(&rxData[17]);
       t3 = decaduino.decodeUint64(&rxData[25]);
@@ -479,6 +527,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
       break;
 
     case TWR_ENGINE_STATE_SEND_DATA_PI :
+      /** Sends the Ranging results along with PHY data to the host RPI on serial port */
 			/* Frame format *anchorID|tagID|t1|t2|t3|t4|RSSI# */
       Serial.print("*");
       print_byte_array(myID);

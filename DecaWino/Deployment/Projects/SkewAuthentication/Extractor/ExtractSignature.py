@@ -1,8 +1,9 @@
-COM_PORT = 'COM17'
+COM_PORT = 'COM21'
+COM_PORT_TARGET = 'COM17'
 #DIRECTORY = 'References/'
 DIRECTORY = 'Challenges/'
 LOG_PATH = '../skew_' + COM_PORT + '.txt'
-SIGNATURE_FILE = DIRECTORY + 'signature_' + COM_PORT + '.txt'
+SIGNATURE_FILE = DIRECTORY + 'signature_' + COM_PORT_TARGET + '.txt'
 
 with open(LOG_PATH, 'r') as f:
     signature = ''

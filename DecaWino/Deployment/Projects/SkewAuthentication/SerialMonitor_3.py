@@ -1,8 +1,9 @@
 from serial import *
 import json
 
-PORT1 = 'COM17'
-PORT2 = 'COM24'
+PORT1 = 'COM29'
+PORT2 = 'COM17'
+PORT3 = 'COM19'
 
 out_file = 'skew.json'
 out_txt = 'skew_'
@@ -16,6 +17,8 @@ try:
     ports.append(port1)
     port2 = Serial(PORT2)
     ports.append(port2)
+    #port3 = Serial(PORT3)
+    #port3.append(port3)
 
 
 except:

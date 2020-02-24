@@ -1,0 +1,107 @@
+\hypertarget{classjson_logs_1_1json_logs}{}\section{json\+Logs Class Reference}
+\label{classjson_logs_1_1json_logs}\index{json\+Logs@{json\+Logs}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classjson_logs_1_1json_logs_a062623fd6a2a37fc51eaf06162bc62a4}\label{classjson_logs_1_1json_logs_a062623fd6a2a37fc51eaf06162bc62a4}} 
+def {\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self, date=\textquotesingle{}\textquotesingle{}, name=\textquotesingle{}\textquotesingle{}, comment=\textquotesingle{}\textquotesingle{}, repo=\textquotesingle{}mqtt\textquotesingle{})
+\item 
+def \mbox{\hyperlink{classjson_logs_1_1json_logs_ab81dff542da19a7c4efea4c4111660c7}{init\+\_\+filename}} (self)
+\item 
+def \mbox{\hyperlink{classjson_logs_1_1json_logs_a80a87c5b622ec948e52d1bbd467a5f7f}{get\+\_\+pipe}} (self, conn)
+\item 
+def \mbox{\hyperlink{classjson_logs_1_1json_logs_a2f88c2aa4847cb5f1f57b49dc0e1794a}{logging}} (self)
+\item 
+\mbox{\Hypertarget{classjson_logs_1_1json_logs_a0c0f007859efa8fae579d20a82ec8704}\label{classjson_logs_1_1json_logs_a0c0f007859efa8fae579d20a82ec8704}} 
+def {\bfseries write} (self)
+\item 
+def \mbox{\hyperlink{classjson_logs_1_1json_logs_af1af6ddf04f00f958949618f79c33b82}{start}} (self)
+\item 
+def \mbox{\hyperlink{classjson_logs_1_1json_logs_a8639372c33e15084a7f7c4d9d87b7bfe}{close}} (self)
+\item 
+def \mbox{\hyperlink{classjson_logs_1_1json_logs_a79236e82e1d1ede4e7764e8bec7f1ed9}{read}} (self, filename=\textquotesingle{}\textquotesingle{})
+\item 
+def \mbox{\hyperlink{classjson_logs_1_1json_logs_add2df0fb8f3ad92514b450e14e5ff410}{read\+\_\+metadata}} (self, filename=\textquotesingle{}\textquotesingle{})
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classjson_logs_1_1json_logs_ade6a701b82b93dfb7eae4e79cd3b18a6}\label{classjson_logs_1_1json_logs_ade6a701b82b93dfb7eae4e79cd3b18a6}} 
+{\bfseries date}
+\item 
+\mbox{\Hypertarget{classjson_logs_1_1json_logs_a8c0288707ed90c2275d70e22bd1f16d9}\label{classjson_logs_1_1json_logs_a8c0288707ed90c2275d70e22bd1f16d9}} 
+{\bfseries comment}
+\item 
+\mbox{\Hypertarget{classjson_logs_1_1json_logs_a2ff994e16bf9521154de4cf659a3b689}\label{classjson_logs_1_1json_logs_a2ff994e16bf9521154de4cf659a3b689}} 
+{\bfseries filename}
+\item 
+\mbox{\Hypertarget{classjson_logs_1_1json_logs_a62849234f53973891144547e2076030a}\label{classjson_logs_1_1json_logs_a62849234f53973891144547e2076030a}} 
+{\bfseries pipe}
+\item 
+\mbox{\Hypertarget{classjson_logs_1_1json_logs_a4f69d305a71aad1db266a8447901389c}\label{classjson_logs_1_1json_logs_a4f69d305a71aad1db266a8447901389c}} 
+{\bfseries repo}
+\item 
+\mbox{\Hypertarget{classjson_logs_1_1json_logs_af1b662fe6ae53fbcd5a505235805d788}\label{classjson_logs_1_1json_logs_af1b662fe6ae53fbcd5a505235805d788}} 
+{\bfseries lock}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}Json log class - contains the json operations methods\end{DoxyVerb}
+ 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classjson_logs_1_1json_logs_a8639372c33e15084a7f7c4d9d87b7bfe}\label{classjson_logs_1_1json_logs_a8639372c33e15084a7f7c4d9d87b7bfe}} 
+\index{json\+Logs\+::json\+Logs@{json\+Logs\+::json\+Logs}!close@{close}}
+\index{close@{close}!json\+Logs\+::json\+Logs@{json\+Logs\+::json\+Logs}}
+\subsubsection{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily def close (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}closes the logs file\end{DoxyVerb}
+ \mbox{\Hypertarget{classjson_logs_1_1json_logs_a80a87c5b622ec948e52d1bbd467a5f7f}\label{classjson_logs_1_1json_logs_a80a87c5b622ec948e52d1bbd467a5f7f}} 
+\index{json\+Logs\+::json\+Logs@{json\+Logs\+::json\+Logs}!get\+\_\+pipe@{get\+\_\+pipe}}
+\index{get\+\_\+pipe@{get\+\_\+pipe}!json\+Logs\+::json\+Logs@{json\+Logs\+::json\+Logs}}
+\subsubsection{\texorpdfstring{get\+\_\+pipe()}{get\_pipe()}}
+{\footnotesize\ttfamily def get\+\_\+pipe (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{conn }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}gets the parent connexion for communication with the main process\end{DoxyVerb}
+ \mbox{\Hypertarget{classjson_logs_1_1json_logs_ab81dff542da19a7c4efea4c4111660c7}\label{classjson_logs_1_1json_logs_ab81dff542da19a7c4efea4c4111660c7}} 
+\index{json\+Logs\+::json\+Logs@{json\+Logs\+::json\+Logs}!init\+\_\+filename@{init\+\_\+filename}}
+\index{init\+\_\+filename@{init\+\_\+filename}!json\+Logs\+::json\+Logs@{json\+Logs\+::json\+Logs}}
+\subsubsection{\texorpdfstring{init\+\_\+filename()}{init\_filename()}}
+{\footnotesize\ttfamily def init\+\_\+filename (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}generates the filename from the date\end{DoxyVerb}
+ \mbox{\Hypertarget{classjson_logs_1_1json_logs_a2f88c2aa4847cb5f1f57b49dc0e1794a}\label{classjson_logs_1_1json_logs_a2f88c2aa4847cb5f1f57b49dc0e1794a}} 
+\index{json\+Logs\+::json\+Logs@{json\+Logs\+::json\+Logs}!logging@{logging}}
+\index{logging@{logging}!json\+Logs\+::json\+Logs@{json\+Logs\+::json\+Logs}}
+\subsubsection{\texorpdfstring{logging()}{logging()}}
+{\footnotesize\ttfamily def logging (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}creates the pipe to get data from the main process and starts the logging process\end{DoxyVerb}
+ \mbox{\Hypertarget{classjson_logs_1_1json_logs_a79236e82e1d1ede4e7764e8bec7f1ed9}\label{classjson_logs_1_1json_logs_a79236e82e1d1ede4e7764e8bec7f1ed9}} 
+\index{json\+Logs\+::json\+Logs@{json\+Logs\+::json\+Logs}!read@{read}}
+\index{read@{read}!json\+Logs\+::json\+Logs@{json\+Logs\+::json\+Logs}}
+\subsubsection{\texorpdfstring{read()}{read()}}
+{\footnotesize\ttfamily def read (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{filename = {\ttfamily \textquotesingle{}\textquotesingle{}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}reads logs file and returns the data in an array\end{DoxyVerb}
+ \mbox{\Hypertarget{classjson_logs_1_1json_logs_add2df0fb8f3ad92514b450e14e5ff410}\label{classjson_logs_1_1json_logs_add2df0fb8f3ad92514b450e14e5ff410}} 
+\index{json\+Logs\+::json\+Logs@{json\+Logs\+::json\+Logs}!read\+\_\+metadata@{read\+\_\+metadata}}
+\index{read\+\_\+metadata@{read\+\_\+metadata}!json\+Logs\+::json\+Logs@{json\+Logs\+::json\+Logs}}
+\subsubsection{\texorpdfstring{read\+\_\+metadata()}{read\_metadata()}}
+{\footnotesize\ttfamily def read\+\_\+metadata (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{filename = {\ttfamily \textquotesingle{}\textquotesingle{}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}reads logs file and returns the metadata\end{DoxyVerb}
+ \mbox{\Hypertarget{classjson_logs_1_1json_logs_af1af6ddf04f00f958949618f79c33b82}\label{classjson_logs_1_1json_logs_af1af6ddf04f00f958949618f79c33b82}} 
+\index{json\+Logs\+::json\+Logs@{json\+Logs\+::json\+Logs}!start@{start}}
+\index{start@{start}!json\+Logs\+::json\+Logs@{json\+Logs\+::json\+Logs}}
+\subsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily def start (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}allows writing on the log file, blocks reading access\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/json\+Logs.\+py\end{DoxyCompactItemize}

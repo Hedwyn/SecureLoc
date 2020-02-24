@@ -1,0 +1,80 @@
+\hypertarget{namespace_gauss_newton}{}\section{Gauss\+Newton Namespace Reference}
+\label{namespace_gauss_newton}\index{Gauss\+Newton@{Gauss\+Newton}}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_gauss_newton_1_1_g_ndataset}{G\+Ndataset}}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespace_gauss_newton_a11c318bc24f03725e9bc293ef30829bc}{G\+N\+\_\+test}} ()
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Test}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}****************************************************************************
+Copyright (C) 2019 LCIS Laboratory - Baptiste Pestourie
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, in version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+This program is part of the SecureLoc Project @https://github.com/Hedwyn/SecureLoc
+ ****************************************************************************
+
+@file GaussNewton.py
+@author Baptiste Pestourie
+@date 2019 July 1st
+@brief Application class - handles the localization engine scheduling and main operations
+@see https://github.com/Hedwyn/SecureLoc
+@see Adapted from https://github.com/basil-conto/gauss-newton,
+shared by Basil L. Contovounesios
+This code has been modified so it can handle 3D instead of 1D variables.
+Some variables have been renamed.A dynamic correction feature has been added so as the correction vector is decreasing over the iterations.
+All the functions have been integrated into a single class.
+\end{DoxyVerb}
+ 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespace_gauss_newton_a11c318bc24f03725e9bc293ef30829bc}\label{namespace_gauss_newton_a11c318bc24f03725e9bc293ef30829bc}} 
+\index{Gauss\+Newton@{Gauss\+Newton}!G\+N\+\_\+test@{G\+N\+\_\+test}}
+\index{G\+N\+\_\+test@{G\+N\+\_\+test}!Gauss\+Newton@{Gauss\+Newton}}
+\subsubsection{\texorpdfstring{G\+N\+\_\+test()}{GN\_test()}}
+{\footnotesize\ttfamily def Gauss\+Newton.\+G\+N\+\_\+test (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Test function for this module. Applies GN algorithm on given datasets.\end{DoxyVerb}
+ 
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{namespace_gauss_newton_ab085d1bf4cff8b1045750706b11f8662}\label{namespace_gauss_newton_ab085d1bf4cff8b1045750706b11f8662}} 
+\index{Gauss\+Newton@{Gauss\+Newton}!Test@{Test}}
+\index{Test@{Test}!Gauss\+Newton@{Gauss\+Newton}}
+\subsubsection{\texorpdfstring{Test}{Test}}
+{\footnotesize\ttfamily Test}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 =  GNdataset(
+2        name = \textcolor{stringliteral}{"Test"},
+3        expr = \textcolor{stringliteral}{"sqrt((x-b1)**2 + (y-b2)**2 + (z-b3)**2)"},
+4     symbols = sp.symbols(\textcolor{stringliteral}{"x y z b1:4"}),
+5       xvals = np.array(( 0., 0.9, 1.8)),
+6       yvals = np.array(( 0., 4.8, 0.)),
+7       zvals = np.array(( 0., 0., 0.)),
+8       rangingvals = np.array((1.8,4.8,0.)),
+9       cvals = \textcolor{keywordtype}{None},
+10      starts = np.array(((0.0, 0.4,0.), ))
+11 )
+\end{DoxyCode}

@@ -1,3 +1,26 @@
+"""****************************************************************************
+Copyright (C) 2019 LCIS Laboratory - Baptiste Pestourie
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, in version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+This program is part of the SecureLoc Project @https://github.com/Hedwyn/SecureLoc
+ ****************************************************************************
+
+@file Simulation.py
+@author Baptiste Pestourie
+@date 2019 November 1st
+@brief Handles all the simulation operations in the 3D engine - includes attacks simulation, anchor simulation and tag simulation
+@see https://github.com/Hedwyn/SecureLoc
+"""
+
 import paho.mqtt.client as mqtt
 from anchor import Anchor
 import math
@@ -10,7 +33,7 @@ from Attacks import Attack
 DEFAULT_ATTACK_CONFIG_FILE = "attacks_config.json"
 
 class Simulator:
-
+    """Handles all the simulation operations in the 3D engine - includes attacks simulation, anchor simulation and tag simulation""""
     def __init__(self, mqttc = None):
         self.fictive_anchors = []
         self.fictive_tags = []

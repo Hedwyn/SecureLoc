@@ -1,3 +1,27 @@
+"""****************************************************************************
+Copyright (C) 2019 LCIS Laboratory - Baptiste Pestourie
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, in version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+This program is part of the SecureLoc Project @https://github.com/Hedwyn/SecureLoc
+ ****************************************************************************
+
+@file Menu.py
+@author Baptiste Pestourie
+@date 2018 March 1st
+@brief Interface for the localization engine control - triggers filtering & attack simulation
+@see https://github.com/Hedwyn/SecureLoc
+"""
+
+
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
@@ -11,7 +35,7 @@ from functools import partial
 
 
 class Menu(Thread):
-
+    """Interface for the localization engine control - triggers filtering & attack simulation"""
     def __init__(self):
         Thread.__init__(self)
 
@@ -81,7 +105,7 @@ class Menu(Thread):
 
 
             self.var.append( DoubleVar() )
-            # 
+            #
             # self.scale.append( Scale(self.root, variable = self.var[i], label = MENU_LABELS[i],
             #                     length = 200, orient = HORIZONTAL, from_ = -2.0 , to = 2.0,
             #                     digits = 4, resolution = 0.01,background = "#dcecf5",

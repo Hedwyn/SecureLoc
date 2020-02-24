@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hide',['hide',['../classanchor_1_1_anchor.html#a12e06a9e912fa15726fa881e560338ce',1,'anchor.Anchor.hide()'],['../classmovingentity_1_1_moving_entity.html#aba5d3e7134693e0fce8628bf9834c883',1,'movingentity.MovingEntity.hide()']]]
+  ['hide',['hide',['../class_rendering_1_1_rendered_node.html#ac3c535fd36dc5473ff98017920898352',1,'Rendering::RenderedNode']]]
 ];

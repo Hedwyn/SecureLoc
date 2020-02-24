@@ -1,8 +1,8 @@
 from serial import *
 import json
 
-PORT1 = 'COM18'
-PORT2 = 'COM29'
+PORT1 = 'COM17'
+PORT2 = 'COM21'
 
 
 out_file = 'skew.json'
@@ -41,9 +41,9 @@ with open(out_file,'w+') as f:
         skew[port] = 0
         ctr[port] = 0
 
-    for port in ports:
-        msg = "11"
-        port.write(msg.encode())
+    # for port in ports:
+    #     msg = "11"
+    #     port.write(msg.encode())
     while not(exit_flag):
         try:
             for port in ports:

@@ -237,6 +237,11 @@
 #define DW1000_REGISTER_DIGITAL_TRANSCEIVER_CONFIGURATION 	0x27
 #define DWM1000_REGISTER_OFFSET_RXPACC_NOSAT 				0x2C
 #define DWM1000_REGISTER_OFFSET_DRX_SFDTOC					0x20
+#define DWM1000_REGISTER_OFFSET_DRX_CAR_INT 				0x28
+
+#define CRI_CHANNEL_2_COEFFICIENT -0.9313E-3
+#define FC_1 3494.4
+#define N_SAMPLES 1024
 
 #define DW1000_REGISTER_ANALOG_RF_CONFIGURATION 		  	0x28
 #define DW1000_REGISTER_OFFSET_RF_RXCTRL					0x0B
@@ -1262,6 +1267,15 @@ class DecaDuino {
 		* @date 20150905
 		*/
 		double getLastRxSkew();
+
+
+		/**
+		* @brief Returns last received frame's clock skew using the Carrier Recovery Integrator method (p 148)
+		* @return Last received frame's clock skew
+		* @author Baptiste Pestourie
+		* @date 20190201
+		*/
+		double getLastRxSkewCRI();
 
 		/**
 		* @brief Returns current antenna delay value

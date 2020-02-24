@@ -1,0 +1,59 @@
+\hypertarget{class_attacks_1_1_attack}{}\section{Attack Class Reference}
+\label{class_attacks_1_1_attack}\index{Attack@{Attack}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_attacks_1_1_attack_ac7e11b0c699f3512b8b1ae903ba3944c}\label{class_attacks_1_1_attack_ac7e11b0c699f3512b8b1ae903ba3944c}} 
+def {\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self, success\+\_\+rate, dos\+\_\+rate, distance\+\_\+distribution)
+\item 
+def \mbox{\hyperlink{class_attacks_1_1_attack_ab16da2c66772b1363a9db1e338f1e445}{apply}} (self, data)
+\item 
+def \mbox{\hyperlink{class_attacks_1_1_attack_a648687d12cef0a0d27e179d15311187d}{distance\+\_\+distribution\+\_\+apply}} (self, distance)
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_attacks_1_1_attack_a7c855ec6d163e10846e723e0d5d96fce}\label{class_attacks_1_1_attack_a7c855ec6d163e10846e723e0d5d96fce}} 
+{\bfseries success\+\_\+rate}
+\item 
+\mbox{\Hypertarget{class_attacks_1_1_attack_a2ab94bd38ebfc77d36946b4e6007ecfa}\label{class_attacks_1_1_attack_a2ab94bd38ebfc77d36946b4e6007ecfa}} 
+{\bfseries dos\+\_\+rate}
+\item 
+\mbox{\Hypertarget{class_attacks_1_1_attack_a590a35947be7c58e794475226eba6178}\label{class_attacks_1_1_attack_a590a35947be7c58e794475226eba6178}} 
+{\bfseries distance\+\_\+distribution}
+\item 
+\mbox{\Hypertarget{class_attacks_1_1_attack_a7a229a4786deeddd59c6091247a8c8a6}\label{class_attacks_1_1_attack_a7a229a4786deeddd59c6091247a8c8a6}} 
+{\bfseries offset}
+\item 
+\mbox{\Hypertarget{class_attacks_1_1_attack_aca9a7ee02fb8663e9e2971ca4052b0c6}\label{class_attacks_1_1_attack_aca9a7ee02fb8663e9e2971ca4052b0c6}} 
+{\bfseries targets}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}An attack is represented by three parameters:
+    - Success rate, i.e., probability that the attack generates modifies the distance output
+    - DoS rate, i.e., probability that the attack denies a given sample
+    - Distance distribution, i.e., in case of distance how the distance will be modified. This is given as a probabilistic distribution\end{DoxyVerb}
+ 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_attacks_1_1_attack_ab16da2c66772b1363a9db1e338f1e445}\label{class_attacks_1_1_attack_ab16da2c66772b1363a9db1e338f1e445}} 
+\index{Attacks\+::\+Attack@{Attacks\+::\+Attack}!apply@{apply}}
+\index{apply@{apply}!Attacks\+::\+Attack@{Attacks\+::\+Attack}}
+\subsubsection{\texorpdfstring{apply()}{apply()}}
+{\footnotesize\ttfamily def apply (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{data }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Simulates the effect of an attack on a dataset. True if dataset if kept, false otherwise\end{DoxyVerb}
+ \mbox{\Hypertarget{class_attacks_1_1_attack_a648687d12cef0a0d27e179d15311187d}\label{class_attacks_1_1_attack_a648687d12cef0a0d27e179d15311187d}} 
+\index{Attacks\+::\+Attack@{Attacks\+::\+Attack}!distance\+\_\+distribution\+\_\+apply@{distance\+\_\+distribution\+\_\+apply}}
+\index{distance\+\_\+distribution\+\_\+apply@{distance\+\_\+distribution\+\_\+apply}!Attacks\+::\+Attack@{Attacks\+::\+Attack}}
+\subsubsection{\texorpdfstring{distance\+\_\+distribution\+\_\+apply()}{distance\_distribution\_apply()}}
+{\footnotesize\ttfamily def distance\+\_\+distribution\+\_\+apply (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{distance }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}applies the distance distribution of the attack on the current distance of the sample\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/Attacks.\+py\end{DoxyCompactItemize}

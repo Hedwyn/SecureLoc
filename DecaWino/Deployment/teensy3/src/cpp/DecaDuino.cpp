@@ -1014,6 +1014,31 @@ double DecaDuino::getLastRxSkew() {
 	return clkOffset;
 }
 
+double DecaDuino::getLastRxSkewCRI() {
+	int8_t buf[7];
+	int32_t skew_32;
+	double skew;
+	readSpiSubAddress(DW1000_REGISTER_DIGITAL_TRANSCEIVER_CONFIGURATION, DWM1000_REGISTER_OFFSET_DRX_CAR_INT,  (uint8_t *) buf, 3);
+	// readSpiSubAddress(0x27, 0x28, &buf[0], 1);
+	// readSpiSubAddress(0x27, 0x2A, &buf[1], 1);
+	// readSpiSubAddress(0x27, 0x2C, &buf[2], 1);
+	// readSpiSubAddress(0x27, 0x25, &buf[3], 1);
+	// readSpiSubAddress(0x27, 0x26, &buf[4], 1);
+	// readSpiSubAddress(0x27, 0x27, &buf[5], 1);
+	//skew_32 =  *( (uint32_t *) buf );
+	//buf[1] &= 0x1F;
+	// Serial.println((int) buf[0]);
+	// Serial.println((int) buf[1]);
+	// Serial.println((int) buf[2]);
+	// Serial.println((int) buf[3]);
+	// Serial.println((int) buf[4]);
+	// Serial.println((int) buf[5]);
+
+	//skew_32 = ( (256 - buf[1]) * 256 + (256 - buf[0]) );
+	skew_32 = 65536 * buf[2] + 256 * buf[1] + buf[0];
+	skew = (double) skew_32 * -0.0009313;
+	return(skew);
+}
 
 uint16_t DecaDuino::getPanId() {
 

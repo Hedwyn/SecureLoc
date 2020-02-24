@@ -1,0 +1,229 @@
+\hypertarget{anchor__c_8cpp}{}\section{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Anchor\+\_\+c/src/cpp/anchor\+\_\+c.cpp File Reference}
+\label{anchor__c_8cpp}\index{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Anchor\+\_\+c/src/cpp/anchor\+\_\+c.\+cpp@{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Anchor\+\_\+c/src/cpp/anchor\+\_\+c.\+cpp}}
+
+
+Source file for the cooperative anchor firmware. This firmware is intended for Deca\+Wino chips. Anchors are fixed stations performing ranging with mobile tags. The cooperative anchor firmware allow an anchor to design a tag to participate in a verification process. See the platform documentation for details.  
+
+
+{\ttfamily \#include \char`\"{}anchor\+\_\+c.\+h\char`\"{}}\newline
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcontrol__frame}{control\+\_\+frame}}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{anchor__c_8cpp_a1aae65bfb986e31a55fb2c0d110cd9cf}{get\+ID}} ()
+\begin{DoxyCompactList}\small\item\em Gets the anchor ID from header file configuration in default mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{anchor__c_8cpp_ac4d2cf5dabb492e0fd9e61db5569ed0e}{get\+ID}} (byte id)
+\begin{DoxyCompactList}\small\item\em Attributes an ID to the anchor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{anchor__c_8cpp_a44620c59e3eba142cc41cb7cc8183cc4}{print\+\_\+byte\+\_\+array}} (byte b\mbox{[}8\mbox{]})
+\begin{DoxyCompactList}\small\item\em Displays an 8-\/bytes array on the serial port. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{anchor__c_8cpp_acae09739fa483c0b1b6b8ceb064846dc}\label{anchor__c_8cpp_acae09739fa483c0b1b6b8ceb064846dc}} 
+int {\bfseries get\+\_\+next\+\_\+target\+\_\+idx} (byte tag\+\_\+\+ID\mbox{[}8\mbox{]})
+\item 
+int \mbox{\hyperlink{anchor__c_8cpp_a4aad4b6f80cf0ef4be418d7318e91a44}{byte\+\_\+array\+\_\+cmp}} (byte b1\mbox{[}8\mbox{]}, byte b2\mbox{[}8\mbox{]})
+\begin{DoxyCompactList}\small\item\em Checks if two 8-\/bytes array are equal. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{anchor__c_8cpp_a229865cac3d89d939060fc2a0a46fc92}{anchor\+\_\+setup}} ()
+\begin{DoxyCompactList}\small\item\em Deca\+Wino setup for anchor mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{anchor__c_8cpp_ac10c0d7c63ddb78c74ce6b942778aeb0}{anchor\+\_\+\+Rx\+Tx\+Config}} ()
+\begin{DoxyCompactList}\small\item\em R\+X/\+TX setup for D\+W1000 in anchor mode. Sets the channel, preamble length, preamble code and P\+RF. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{anchor__c_8cpp_a1b20c779e29c5b89547defddfab8bd7b}{anchor\+\_\+loop}} ()
+\begin{DoxyCompactList}\small\item\em One iteration of the main F\+SM loop for T\+WR, with default ID parameters in header file. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{anchor__c_8cpp_a5cae2d846207eb429d7ed0f84b4439c7}{anchor\+\_\+loop}} (byte $\ast$my\+ID, byte $\ast$my\+Next\+Anchor\+ID)
+\begin{DoxyCompactList}\small\item\em One iteration of the main F\+SM loop for T\+WR. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Source file for the cooperative anchor firmware. This firmware is intended for Deca\+Wino chips. Anchors are fixed stations performing ranging with mobile tags. The cooperative anchor firmware allow an anchor to design a tag to participate in a verification process. See the platform documentation for details. 
+
+This is the main file to use to program a Deca\+Wino as a cooperative anchor. This firmware is intended for Deca\+Wino chips. Anchors are fixed stations performing ranging with mobile tags. The cooperative anchor firmware allow an anchor to design a tag to participate in a verification process. See the platform documentation for details.
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+\begin{DoxySeeAlso}{See also}
+\href{https://github.com/Hedwyn/SecureLoc}{\tt https\+://github.\+com/\+Hedwyn/\+Secure\+Loc} 
+\end{DoxySeeAlso}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{anchor__c_8cpp_a1b20c779e29c5b89547defddfab8bd7b}\label{anchor__c_8cpp_a1b20c779e29c5b89547defddfab8bd7b}} 
+\index{anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}!anchor\+\_\+loop@{anchor\+\_\+loop}}
+\index{anchor\+\_\+loop@{anchor\+\_\+loop}!anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}}
+\subsubsection{\texorpdfstring{anchor\+\_\+loop()}{anchor\_loop()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int anchor\+\_\+loop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+One iteration of the main F\+SM loop for T\+WR, with default ID parameters in header file. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+\begin{DoxyReturn}{Returns}
+T\+WR state (/!\textbackslash{} different from the F\+SM state)) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{anchor__c_8cpp_a5cae2d846207eb429d7ed0f84b4439c7}\label{anchor__c_8cpp_a5cae2d846207eb429d7ed0f84b4439c7}} 
+\index{anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}!anchor\+\_\+loop@{anchor\+\_\+loop}}
+\index{anchor\+\_\+loop@{anchor\+\_\+loop}!anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}}
+\subsubsection{\texorpdfstring{anchor\+\_\+loop()}{anchor\_loop()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int anchor\+\_\+loop (\begin{DoxyParamCaption}\item[{byte $\ast$}]{my\+ID,  }\item[{byte $\ast$}]{my\+Next\+Anchor\+ID }\end{DoxyParamCaption})}
+
+
+
+One iteration of the main F\+SM loop for T\+WR. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em my\+ID} & anchor ID to use \\
+\hline
+{\em my\+Next\+Anchor\+ID} & ID of the following anchor \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T\+WR state (/!\textbackslash{} different from the F\+SM state)) 
+\end{DoxyReturn}
+Starting state of the F\+SM. C\+Hecks for timeouts and restart a T\+WR cycle for the Master anchor. For the others, skip directly to I\+D\+LE state ~\newline
+~\newline
+~\newline
+~\newline
+~\newline
+~\newline
+ Checks for serial commands, otherwise proceeds to start the ranging process ~\newline
+~\newline
+~\newline
+~\newline
+~\newline
+ Sending a ranging request (S\+T\+A\+RT frame) to the target tag ~\newline
+~\newline
+~\newline
+~\newline
+ Waiting for the reply (Acknowledgment frame) of the target device ~\newline
+~\newline
+~\newline
+ Waiting for the timestamps (D\+A\+TA frame) of the target device ~\newline
+~\newline
+ Extracting timestamps from D\+A\+TA frame and calculating the distance ~\newline
+ Sends the Ranging results along with P\+HY data to the host R\+PI on serial port \mbox{\Hypertarget{anchor__c_8cpp_ac10c0d7c63ddb78c74ce6b942778aeb0}\label{anchor__c_8cpp_ac10c0d7c63ddb78c74ce6b942778aeb0}} 
+\index{anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}!anchor\+\_\+\+Rx\+Tx\+Config@{anchor\+\_\+\+Rx\+Tx\+Config}}
+\index{anchor\+\_\+\+Rx\+Tx\+Config@{anchor\+\_\+\+Rx\+Tx\+Config}!anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}}
+\subsubsection{\texorpdfstring{anchor\+\_\+\+Rx\+Tx\+Config()}{anchor\_RxTxConfig()}}
+{\footnotesize\ttfamily void anchor\+\_\+\+Rx\+Tx\+Config (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+R\+X/\+TX setup for D\+W1000 in anchor mode. Sets the channel, preamble length, preamble code and P\+RF. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+\mbox{\Hypertarget{anchor__c_8cpp_a229865cac3d89d939060fc2a0a46fc92}\label{anchor__c_8cpp_a229865cac3d89d939060fc2a0a46fc92}} 
+\index{anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}!anchor\+\_\+setup@{anchor\+\_\+setup}}
+\index{anchor\+\_\+setup@{anchor\+\_\+setup}!anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}}
+\subsubsection{\texorpdfstring{anchor\+\_\+setup()}{anchor\_setup()}}
+{\footnotesize\ttfamily void anchor\+\_\+setup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Deca\+Wino setup for anchor mode. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+\mbox{\Hypertarget{anchor__c_8cpp_a4aad4b6f80cf0ef4be418d7318e91a44}\label{anchor__c_8cpp_a4aad4b6f80cf0ef4be418d7318e91a44}} 
+\index{anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}!byte\+\_\+array\+\_\+cmp@{byte\+\_\+array\+\_\+cmp}}
+\index{byte\+\_\+array\+\_\+cmp@{byte\+\_\+array\+\_\+cmp}!anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}}
+\subsubsection{\texorpdfstring{byte\+\_\+array\+\_\+cmp()}{byte\_array\_cmp()}}
+{\footnotesize\ttfamily int byte\+\_\+array\+\_\+cmp (\begin{DoxyParamCaption}\item[{byte}]{b1\mbox{[}8\mbox{]},  }\item[{byte}]{b2\mbox{[}8\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Checks if two 8-\/bytes array are equal. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em 8-\/bytes} & array (ID format) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if all the elements in both arrays are equal 
+\end{DoxyReturn}
+\mbox{\Hypertarget{anchor__c_8cpp_a1aae65bfb986e31a55fb2c0d110cd9cf}\label{anchor__c_8cpp_a1aae65bfb986e31a55fb2c0d110cd9cf}} 
+\index{anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}!get\+ID@{get\+ID}}
+\index{get\+ID@{get\+ID}!anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}}
+\subsubsection{\texorpdfstring{get\+I\+D()}{getID()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void get\+ID (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets the anchor ID from header file configuration in default mode. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+\mbox{\Hypertarget{anchor__c_8cpp_ac4d2cf5dabb492e0fd9e61db5569ed0e}\label{anchor__c_8cpp_ac4d2cf5dabb492e0fd9e61db5569ed0e}} 
+\index{anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}!get\+ID@{get\+ID}}
+\index{get\+ID@{get\+ID}!anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}}
+\subsubsection{\texorpdfstring{get\+I\+D()}{getID()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void get\+ID (\begin{DoxyParamCaption}\item[{byte}]{id }\end{DoxyParamCaption})}
+
+
+
+Attributes an ID to the anchor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & -\/ The Id to give to the anchor \\
+\hline
+\end{DoxyParams}
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+\mbox{\Hypertarget{anchor__c_8cpp_a44620c59e3eba142cc41cb7cc8183cc4}\label{anchor__c_8cpp_a44620c59e3eba142cc41cb7cc8183cc4}} 
+\index{anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}!print\+\_\+byte\+\_\+array@{print\+\_\+byte\+\_\+array}}
+\index{print\+\_\+byte\+\_\+array@{print\+\_\+byte\+\_\+array}!anchor\+\_\+c.\+cpp@{anchor\+\_\+c.\+cpp}}
+\subsubsection{\texorpdfstring{print\+\_\+byte\+\_\+array()}{print\_byte\_array()}}
+{\footnotesize\ttfamily void print\+\_\+byte\+\_\+array (\begin{DoxyParamCaption}\item[{byte}]{b\mbox{[}8\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Displays an 8-\/bytes array on the serial port. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}

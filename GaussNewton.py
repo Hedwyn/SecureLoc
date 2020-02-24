@@ -1,10 +1,29 @@
-"""Adapted from https://github.com/basil-conto/gauss-newton,
+"""****************************************************************************
+Copyright (C) 2019 LCIS Laboratory - Baptiste Pestourie
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, in version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+This program is part of the SecureLoc Project @https://github.com/Hedwyn/SecureLoc
+ ****************************************************************************
+
+@file GaussNewton.py
+@author Baptiste Pestourie
+@date 2019 July 1st
+@brief Application class - handles the localization engine scheduling and main operations
+@see https://github.com/Hedwyn/SecureLoc
+@see Adapted from https://github.com/basil-conto/gauss-newton,
 shared by Basil L. Contovounesios
 This code has been modified so it can handle 3D instead of 1D variables.
-Some variables have been renamed.
-A dynamic correction feature has been added so as the correction vector is decreasing over the iterations.
+Some variables have been renamed.A dynamic correction feature has been added so as the correction vector is decreasing over the iterations.
 All the functions have been integrated into a single class.
-
 """
 
 import numpy as np
@@ -15,7 +34,6 @@ from parameters import *
 
 
 class GNdataset:
-
     """Representation of a NIST nonlinear regression dataset.
     The class attributes are the same as the constructor parameters.
     """
@@ -121,10 +139,10 @@ class GNdataset:
         # Evaluate substituted partial derivatives for all x-values
         vals = [sp.lambdify((self._x,) + (self._y,) + (self._z,) , sub, "numpy")(self.xvals,self.yvals,self.zvals) for sub in subs]
         # Arrange values in column-major order
-        
+
         d_print("jacobian:\n" + str(np.column_stack(vals)))
         return np.column_stack(vals)
-       
+
 
     def solve(self,x0, start_ratio = 1, dynamic_ratio = 0.8, tol = 1e-10, maxits = 5):
         """Gauss-Newton algorithm for solving nonlinear least squares problems.
@@ -132,16 +150,16 @@ class GNdataset:
         ----------
         x0 : tuple, list or ndarray
             Initial guesses or starting estimates for the system.
-            
+
         start_ratio: the ratio of the correction vector that is applied at the first iteration. Shoud be 1 or less.
-        dynamic_ratio: multiplicative ratio applied at each iteration on the correction vector; 
+        dynamic_ratio: multiplicative ratio applied at each iteration on the correction vector;
                        allows decreasing the magnitude of the correction vector at each iteration.
         tol : float
             Tolerance threshold. Not used here. When enabled, the problem is considered solved when this value
             becomes smaller than the magnitude of the correction vector.
             Defaults to 1e-10.
         maxits : int
-            Maximum number of iterations of the algorithm to perform. 
+            Maximum number of iterations of the algorithm to perform.
             If the tolerance threshold is disabled, the number of iterations will always be maxits.
             Defaults to 5.
         Return
@@ -158,20 +176,20 @@ class GNdataset:
 
         dx = np.ones(len(x0))   # Correction vector
         xn = np.array(x0)       # Approximation of solution
-        
+
         i = 0
         ratio = start_ratio
         while (i < maxits): #and (dx[dx > tol].size > 0):
             # correction = pinv(jacobian) . residual vector
             dx  = ratio * np.dot(np.linalg.pinv(self.jacobian(xn)), -self.residuals(xn))
-     
-            
+
+
             d_print("xn:" + str(xn))
             xn += dx            # x_{n + 1} = x_n + dx_n
-            
+
             i  += 1
             ratio *= dynamic_ratio
-    
+
         return xn, i
 
 def GN_test():
@@ -191,7 +209,7 @@ def GN_test():
 
 
 
-# Example dataset for rangings    
+# Example dataset for rangings
 Test = GNdataset(
        name = "Test",
        expr = "sqrt((x-b1)**2 + (y-b2)**2 + (z-b3)**2)",
@@ -204,8 +222,7 @@ Test = GNdataset(
      starts = np.array(((0.0, 0.4,0.), ))
 )
 
-     
+
 
 if __name__ == "__main__":
-    GN_test()    
-
+    GN_test()

@@ -1,0 +1,175 @@
+\hypertarget{class_gauss_newton_1_1_g_ndataset}{}\section{G\+Ndataset Class Reference}
+\label{class_gauss_newton_1_1_g_ndataset}\index{G\+Ndataset@{G\+Ndataset}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{class_gauss_newton_1_1_g_ndataset_a968de9ac0e395fe6cfdec7fb16a99b3d}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, name, expr, symbols, xvals, yvals, zvals, rangingvals, cvals, starts)
+\item 
+def \mbox{\hyperlink{class_gauss_newton_1_1_g_ndataset_a9a47563093dfc5ba12274b66e368920c}{\+\_\+\+\_\+repr\+\_\+\+\_\+}} (self)
+\item 
+def \mbox{\hyperlink{class_gauss_newton_1_1_g_ndataset_a23e8041ce1015febe4fdace3225714f9}{\+\_\+\+\_\+str\+\_\+\+\_\+}} (self)
+\item 
+def \mbox{\hyperlink{class_gauss_newton_1_1_g_ndataset_ac19fa38fbddb146e4803a28f9a0ddcf2}{model}} (self, x=None, y=None, z=None, b=None)
+\item 
+def \mbox{\hyperlink{class_gauss_newton_1_1_g_ndataset_a5127ea775c557e887e1ef8172a5f5d39}{residuals}} (self, b)
+\item 
+def \mbox{\hyperlink{class_gauss_newton_1_1_g_ndataset_a7482d05a91eb0abc6797b33e1bb3d955}{jacobian}} (self, b)
+\item 
+def \mbox{\hyperlink{class_gauss_newton_1_1_g_ndataset_a761f3746fb20b84ec70f2939300ca517}{solve}} (self, x0, start\+\_\+ratio=1, dynamic\+\_\+ratio=0.\+8, tol=1e-\/10, maxits=5)
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_gauss_newton_1_1_g_ndataset_a97b40a45a893919b7c3d281b502b4d37}\label{class_gauss_newton_1_1_g_ndataset_a97b40a45a893919b7c3d281b502b4d37}} 
+{\bfseries starts}
+\item 
+\mbox{\Hypertarget{class_gauss_newton_1_1_g_ndataset_a591fb19f856c8faff2c302734ad80cc0}\label{class_gauss_newton_1_1_g_ndataset_a591fb19f856c8faff2c302734ad80cc0}} 
+{\bfseries symbols}
+\item 
+\mbox{\Hypertarget{class_gauss_newton_1_1_g_ndataset_aa03e4b7a2a776a396d9b717346c30025}\label{class_gauss_newton_1_1_g_ndataset_aa03e4b7a2a776a396d9b717346c30025}} 
+{\bfseries cvals}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}Representation of a NIST nonlinear regression dataset.
+The class attributes are the same as the constructor parameters.
+\end{DoxyVerb}
+ 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_gauss_newton_1_1_g_ndataset_a968de9ac0e395fe6cfdec7fb16a99b3d}\label{class_gauss_newton_1_1_g_ndataset_a968de9ac0e395fe6cfdec7fb16a99b3d}} 
+\index{Gauss\+Newton\+::\+G\+Ndataset@{Gauss\+Newton\+::\+G\+Ndataset}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!Gauss\+Newton\+::\+G\+Ndataset@{Gauss\+Newton\+::\+G\+Ndataset}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+init\+\_\+\+\_\+()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def \+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{name,  }\item[{}]{expr,  }\item[{}]{symbols,  }\item[{}]{xvals,  }\item[{}]{yvals,  }\item[{}]{zvals,  }\item[{}]{rangingvals,  }\item[{}]{cvals,  }\item[{}]{starts }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Create a new Dataset.
+Parameters / Attributes
+-----------------------
+name : string
+    Name of dataset, e.g. "Misra1a".
+expr : string
+    Representation of dataset's model in a format understood by
+    sympy.sympify().
+symbols : tuple or list
+    SymPy Symbols found in `expr`. The first one should be the predictor
+    variable and the rest are interpreted as model parameters.
+xvals : ndarray
+    Observed or generated values for predictor variable.
+rangingvals : ndarray
+    Observed or generated values for response variable.
+cvals : ndarray
+    Certified values (i.e. reference solutions) for model parameters.
+starts : ndarray
+    Nested set of initial guesses or starting estimates for the least
+    squares solution of the system.
+\end{DoxyVerb}
+ 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_gauss_newton_1_1_g_ndataset_a9a47563093dfc5ba12274b66e368920c}\label{class_gauss_newton_1_1_g_ndataset_a9a47563093dfc5ba12274b66e368920c}} 
+\index{Gauss\+Newton\+::\+G\+Ndataset@{Gauss\+Newton\+::\+G\+Ndataset}!\+\_\+\+\_\+repr\+\_\+\+\_\+@{\+\_\+\+\_\+repr\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+repr\+\_\+\+\_\+@{\+\_\+\+\_\+repr\+\_\+\+\_\+}!Gauss\+Newton\+::\+G\+Ndataset@{Gauss\+Newton\+::\+G\+Ndataset}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+repr\+\_\+\+\_\+()}{\_\_repr\_\_()}}
+{\footnotesize\ttfamily def \+\_\+\+\_\+repr\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Return Dataset description in the form <Dataset NAME at ADDRESS>.\end{DoxyVerb}
+ \mbox{\Hypertarget{class_gauss_newton_1_1_g_ndataset_a23e8041ce1015febe4fdace3225714f9}\label{class_gauss_newton_1_1_g_ndataset_a23e8041ce1015febe4fdace3225714f9}} 
+\index{Gauss\+Newton\+::\+G\+Ndataset@{Gauss\+Newton\+::\+G\+Ndataset}!\+\_\+\+\_\+str\+\_\+\+\_\+@{\+\_\+\+\_\+str\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+str\+\_\+\+\_\+@{\+\_\+\+\_\+str\+\_\+\+\_\+}!Gauss\+Newton\+::\+G\+Ndataset@{Gauss\+Newton\+::\+G\+Ndataset}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+str\+\_\+\+\_\+()}{\_\_str\_\_()}}
+{\footnotesize\ttfamily def \+\_\+\+\_\+str\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Return name of Dataset, e.g. "Misra1a".\end{DoxyVerb}
+ \mbox{\Hypertarget{class_gauss_newton_1_1_g_ndataset_a7482d05a91eb0abc6797b33e1bb3d955}\label{class_gauss_newton_1_1_g_ndataset_a7482d05a91eb0abc6797b33e1bb3d955}} 
+\index{Gauss\+Newton\+::\+G\+Ndataset@{Gauss\+Newton\+::\+G\+Ndataset}!jacobian@{jacobian}}
+\index{jacobian@{jacobian}!Gauss\+Newton\+::\+G\+Ndataset@{Gauss\+Newton\+::\+G\+Ndataset}}
+\subsubsection{\texorpdfstring{jacobian()}{jacobian()}}
+{\footnotesize\ttfamily def jacobian (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{b }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Evaluate the model's Jacobian matrix with the given parameters.
+Parameters
+----------
+b : tuple, list or ndarray
+    Values for the model parameters.
+Return
+------
+out : ndarray
+    Evaluation of the model's Jacobian matrix in column-major order wrt
+    the model parameters.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{class_gauss_newton_1_1_g_ndataset_ac19fa38fbddb146e4803a28f9a0ddcf2}\label{class_gauss_newton_1_1_g_ndataset_ac19fa38fbddb146e4803a28f9a0ddcf2}} 
+\index{Gauss\+Newton\+::\+G\+Ndataset@{Gauss\+Newton\+::\+G\+Ndataset}!model@{model}}
+\index{model@{model}!Gauss\+Newton\+::\+G\+Ndataset@{Gauss\+Newton\+::\+G\+Ndataset}}
+\subsubsection{\texorpdfstring{model()}{model()}}
+{\footnotesize\ttfamily def model (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{x = {\ttfamily None},  }\item[{}]{y = {\ttfamily None},  }\item[{}]{z = {\ttfamily None},  }\item[{}]{b = {\ttfamily None} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Evaluate the model with the given predictor variable and parameters.
+Parameters
+----------
+x : ndarray
+    Values for the predictor variable. Defaults to the model's observed
+    or generated values.
+b : tuple, list or ndarray
+    Values for the model parameters. Defaults to their certified values.
+Return
+------
+y : ndarray
+    Corresponding values for the response variable.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{class_gauss_newton_1_1_g_ndataset_a5127ea775c557e887e1ef8172a5f5d39}\label{class_gauss_newton_1_1_g_ndataset_a5127ea775c557e887e1ef8172a5f5d39}} 
+\index{Gauss\+Newton\+::\+G\+Ndataset@{Gauss\+Newton\+::\+G\+Ndataset}!residuals@{residuals}}
+\index{residuals@{residuals}!Gauss\+Newton\+::\+G\+Ndataset@{Gauss\+Newton\+::\+G\+Ndataset}}
+\subsubsection{\texorpdfstring{residuals()}{residuals()}}
+{\footnotesize\ttfamily def residuals (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{b }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Evaluate the residuals f(x, b) - y with the given parameters.
+Parameters
+----------
+b : tuple, list or ndarray
+    Values for the model parameters.
+Return
+------
+out : ndarray
+    Residual vector for the given model parameters.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{class_gauss_newton_1_1_g_ndataset_a761f3746fb20b84ec70f2939300ca517}\label{class_gauss_newton_1_1_g_ndataset_a761f3746fb20b84ec70f2939300ca517}} 
+\index{Gauss\+Newton\+::\+G\+Ndataset@{Gauss\+Newton\+::\+G\+Ndataset}!solve@{solve}}
+\index{solve@{solve}!Gauss\+Newton\+::\+G\+Ndataset@{Gauss\+Newton\+::\+G\+Ndataset}}
+\subsubsection{\texorpdfstring{solve()}{solve()}}
+{\footnotesize\ttfamily def solve (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{x0,  }\item[{}]{start\+\_\+ratio = {\ttfamily 1},  }\item[{}]{dynamic\+\_\+ratio = {\ttfamily 0.8},  }\item[{}]{tol = {\ttfamily 1e-\/10},  }\item[{}]{maxits = {\ttfamily 5} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Gauss-Newton algorithm for solving nonlinear least squares problems.
+Parameters
+----------
+x0 : tuple, list or ndarray
+    Initial guesses or starting estimates for the system.
+
+start_ratio: the ratio of the correction vector that is applied at the first iteration. Shoud be 1 or less.
+dynamic_ratio: multiplicative ratio applied at each iteration on the correction vector;
+       allows decreasing the magnitude of the correction vector at each iteration.
+tol : float
+    Tolerance threshold. Not used here. When enabled, the problem is considered solved when this value
+    becomes smaller than the magnitude of the correction vector.
+    Defaults to 1e-10.
+maxits : int
+    Maximum number of iterations of the algorithm to perform.
+    If the tolerance threshold is disabled, the number of iterations will always be maxits.
+    Defaults to 5.
+Return
+------
+sol : ndarray
+    Resultant values.
+its : int
+    Number of iterations performed.
+Note
+----
+Uses numpy.linalg.pinv() in place of similar functions from scipy, both
+because it was found to be faster and to eliminate the extra dependency.
+\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/Gauss\+Newton.\+py\end{DoxyCompactItemize}

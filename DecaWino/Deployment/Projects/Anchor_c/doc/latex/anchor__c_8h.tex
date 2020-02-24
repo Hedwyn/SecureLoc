@@ -1,0 +1,523 @@
+\hypertarget{anchor__c_8h}{}\section{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Anchor\+\_\+c/src/header/anchor\+\_\+c.h File Reference}
+\label{anchor__c_8h}\index{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Anchor\+\_\+c/src/header/anchor\+\_\+c.\+h@{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Anchor\+\_\+c/src/header/anchor\+\_\+c.\+h}}
+
+
+Header file for the cooperative anchor firmware. This firmware is intended for Deca\+Wino chips. Anchors are fixed stations performing ranging with mobile tags. The cooperative anchor firmware allow an anchor to design a tag to participate in a verification process. See the platform documentation for details.  
+
+
+{\ttfamily \#include $<$S\+P\+I.\+h$>$}\newline
+{\ttfamily \#include $<$Deca\+Duino.\+h$>$}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a99c8dafec4d0173d7cdf5de73f9cef69}{E\+X\+T\+E\+N\+D\+ED}}~1
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a55adda1b2ce56b29cafbdd025bfaeebc}{A\+L\+O\+HA}}~0
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a060c0b0e5f54bd35f2fc92e85b6773ab}{A\+L\+O\+H\+A\+\_\+\+C\+O\+L\+L\+I\+S\+I\+O\+N\+\_\+\+D\+E\+L\+AY}}~20
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_af1afee9556b3ca858092d58c729a0649}{D\+M\+AX}}~10
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_ae457777c1a4a1aff4de8f5b9e3fac05d}{N\+B\+\_\+\+A\+N\+C\+H\+O\+RS}}~1
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_ae19bfd2ea75b7ddfc0c9e520240ab733}{N\+O\+D\+E\+\_\+\+ID}}~0
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a150a81da38cd990da60c0363014b246b}{M\+A\+S\+T\+E\+R\+\_\+\+ID}}~1
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a4f936282297efd37aad4e4f5734fe10e}{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+TH}}~100000
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a9b61d4c3842266e74a8ff12bb478448d}{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+MS}}~(\mbox{\hyperlink{anchor__c_8h_a4f936282297efd37aad4e4f5734fe10e}{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+TH}} / 1000)
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a5c15a1497fab169cf87b9b2058d4dc30}{I\+N\+\_\+\+US}}~1\+E6
+\item 
+\mbox{\Hypertarget{anchor__c_8h_a1cb996bb5c8d0991d1456a6e5df88bce}\label{anchor__c_8h_a1cb996bb5c8d0991d1456a6e5df88bce}} 
+\#define {\bfseries \+\_\+\+D\+E\+B\+U\+G\+\_\+}
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_ab2759269c92e6d05675a698378dac492}{D\+P\+R\+I\+N\+TF}}~Serial.\+print
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_af227566f7e17ac6e442f456682535224}{D\+P\+R\+I\+N\+T\+F\+LN}}~Serial.\+println
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_ae58a5dbc8abde6b2ef372b773b15db20}{A\+S\+C\+I\+I\+\_\+\+N\+U\+M\+B\+E\+R\+S\+\_\+\+O\+F\+F\+S\+ET}}~48
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a767078db7eb37ffc0d4f029d3e64e5ec}{A\+I\+R\+\_\+\+S\+P\+E\+E\+D\+\_\+\+O\+F\+\_\+\+L\+I\+G\+HT}}~299700000.\+0
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_aecf388aeabc7f32bb9cc514227a4d6ec}{D\+W1000\+\_\+\+T\+I\+M\+E\+B\+A\+SE}}~15.\+65\+E-\/12
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a4ddd570ad03298cdcf6728dcc3b82985}{C\+A\+L\+I\+B\+R\+A\+T\+I\+ON}}~0.\+9
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_aa1fb4f272db7698d9667f109d81bf1b5}{S\+P\+E\+E\+D\+\_\+\+C\+O\+E\+FF}}~\mbox{\hyperlink{anchor__c_8h_a767078db7eb37ffc0d4f029d3e64e5ec}{A\+I\+R\+\_\+\+S\+P\+E\+E\+D\+\_\+\+O\+F\+\_\+\+L\+I\+G\+HT}}$\ast$\mbox{\hyperlink{anchor__c_8h_aecf388aeabc7f32bb9cc514227a4d6ec}{D\+W1000\+\_\+\+T\+I\+M\+E\+B\+A\+SE}}$\ast$\mbox{\hyperlink{anchor__c_8h_a4ddd570ad03298cdcf6728dcc3b82985}{C\+A\+L\+I\+B\+R\+A\+T\+I\+ON}}
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_ad380e380939eae9a5d6c8f228f0fe7c8}{T\+X\+\_\+\+T\+I\+M\+E\+O\+UT}}~10
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a5e53751a27267574b92f23d01951a259}{A\+C\+K\+\_\+\+T\+I\+M\+E\+O\+UT}}~\mbox{\hyperlink{anchor__c_8h_a9b61d4c3842266e74a8ff12bb478448d}{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+MS}}
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_abce801f11f46f7a2f8d9d4bfd0b77672}{D\+A\+T\+A\+\_\+\+T\+I\+M\+E\+O\+UT}}~\mbox{\hyperlink{anchor__c_8h_a9b61d4c3842266e74a8ff12bb478448d}{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+MS}}
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a0525bb869371e594a31064887054b8ef}{S\+T\+A\+R\+T\+\_\+\+T\+I\+M\+E\+O\+UT}}~(\mbox{\hyperlink{anchor__c_8h_ae457777c1a4a1aff4de8f5b9e3fac05d}{N\+B\+\_\+\+A\+N\+C\+H\+O\+RS}} $\ast$ \mbox{\hyperlink{anchor__c_8h_a9b61d4c3842266e74a8ff12bb478448d}{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+MS}})
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a2444cfca40c9e6220c8482b67057d34c}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+N\+IT}}~0
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a9742f8698e0f1524a55bd96ac701b89f}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+D\+LE}}~1
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a305fd92d5a9c781654dd75cac54ce401}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+R\+I\+AL}}~2
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a3df00f8f35f39aecd3a48b65b52d47b0}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+P\+R\+E\+P\+A\+R\+E\+\_\+\+R\+A\+N\+G\+I\+NG}}~3
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_ae49bab51abacdb25a8597218661e1ca4}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+S\+T\+A\+RT}}~4
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a0f2aad11922251266db6830717394e3c}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+A\+CK}}~5
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_aadf1cc5fe7d1c33c54d072b5c278eed6}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}}~6
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a592e2360d2a193388eaf8203dd5c9ba0}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+E\+X\+T\+R\+A\+C\+T\+\_\+\+T2\+\_\+\+T3}}~7
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a2608c6aec872ce5104e533fe6ddaa35f}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+D\+A\+T\+A\+\_\+\+PI}}~8
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a8198baeb96a824cb010840fe9eb5bc2f}{T\+W\+R\+\_\+\+O\+N\+\_\+\+G\+O\+I\+NG}}~0
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_af475d26f99a56b508a4488de32948922}{T\+W\+R\+\_\+\+C\+O\+M\+P\+L\+E\+TE}}~1
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a4740f2edc79f06ad6a4dca738990555d}{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+T\+A\+RT}}~1
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_ab02c91f5ea65f95c537e44d1e55b08df}{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+CK}}~2
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a14079cb86399454a47187f9dd15035d1}{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}}~3
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_adfccf1f8155a41a6fca7fcb86a9c7557}{N\+B\+\_\+\+R\+O\+B\+O\+TS}}~1
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a740f39a508d6d660248f66ce94807d96}{C\+O\+O\+P\+E\+R\+A\+T\+I\+VE}}~0
+\item 
+\mbox{\Hypertarget{anchor__c_8h_a6656c7def827a0dbde72549da05ecd12}\label{anchor__c_8h_a6656c7def827a0dbde72549da05ecd12}} 
+\#define {\bfseries N\+B\+\_\+\+G\+H\+O\+S\+T\+\_\+\+A\+N\+C\+H\+O\+RS}~0
+\item 
+\#define \mbox{\hyperlink{anchor__c_8h_a8d5f17f4df5d95624ef5c8581789f6e3}{N\+B\+\_\+\+T\+O\+T\+A\+L\+\_\+\+A\+N\+C\+H\+O\+RS}}~(\mbox{\hyperlink{anchor__c_8h_ae457777c1a4a1aff4de8f5b9e3fac05d}{N\+B\+\_\+\+A\+N\+C\+H\+O\+RS}} + N\+B\+\_\+\+G\+H\+O\+S\+T\+\_\+\+A\+N\+C\+H\+O\+RS)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{anchor__c_8h_a229865cac3d89d939060fc2a0a46fc92}{anchor\+\_\+setup}} ()
+\begin{DoxyCompactList}\small\item\em Deca\+Wino setup for anchor mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{anchor__c_8h_ac10c0d7c63ddb78c74ce6b942778aeb0}{anchor\+\_\+\+Rx\+Tx\+Config}} ()
+\begin{DoxyCompactList}\small\item\em R\+X/\+TX setup for D\+W1000 in anchor mode. Sets the channel, preamble length, preamble code and P\+RF. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{anchor__c_8h_a44620c59e3eba142cc41cb7cc8183cc4}{print\+\_\+byte\+\_\+array}} (byte b\mbox{[}8\mbox{]})
+\begin{DoxyCompactList}\small\item\em Displays an 8-\/bytes array on the serial port. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{anchor__c_8h_a4aad4b6f80cf0ef4be418d7318e91a44}{byte\+\_\+array\+\_\+cmp}} (byte b1\mbox{[}8\mbox{]}, byte b2\mbox{[}8\mbox{]})
+\begin{DoxyCompactList}\small\item\em Checks if two 8-\/bytes array are equal. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{anchor__c_8h_a25f45532a8a2602bced37f701b365e8b}{get\+\_\+tag\+\_\+idx}} (byte tag\+\_\+\+ID\mbox{[}8\mbox{]})
+\begin{DoxyCompactList}\small\item\em Finds the index of a given tag ID in the tag ID list. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{anchor__c_8h_a1b20c779e29c5b89547defddfab8bd7b}{anchor\+\_\+loop}} ()
+\begin{DoxyCompactList}\small\item\em One iteration of the main F\+SM loop for T\+WR, with default ID parameters in header file. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{anchor__c_8h_a5cae2d846207eb429d7ed0f84b4439c7}{anchor\+\_\+loop}} (byte $\ast$my\+ID, byte $\ast$my\+Next\+Anchor\+ID)
+\begin{DoxyCompactList}\small\item\em One iteration of the main F\+SM loop for T\+WR. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Header file for the cooperative anchor firmware. This firmware is intended for Deca\+Wino chips. Anchors are fixed stations performing ranging with mobile tags. The cooperative anchor firmware allow an anchor to design a tag to participate in a verification process. See the platform documentation for details. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+\begin{DoxySeeAlso}{See also}
+\href{https://github.com/Hedwyn/SecureLoc}{\tt https\+://github.\+com/\+Hedwyn/\+Secure\+Loc} 
+\end{DoxySeeAlso}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{anchor__c_8h_a5e53751a27267574b92f23d01951a259}\label{anchor__c_8h_a5e53751a27267574b92f23d01951a259}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!A\+C\+K\+\_\+\+T\+I\+M\+E\+O\+UT@{A\+C\+K\+\_\+\+T\+I\+M\+E\+O\+UT}}
+\index{A\+C\+K\+\_\+\+T\+I\+M\+E\+O\+UT@{A\+C\+K\+\_\+\+T\+I\+M\+E\+O\+UT}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{A\+C\+K\+\_\+\+T\+I\+M\+E\+O\+UT}{ACK\_TIMEOUT}}
+{\footnotesize\ttfamily \#define A\+C\+K\+\_\+\+T\+I\+M\+E\+O\+UT~\mbox{\hyperlink{anchor__c_8h_a9b61d4c3842266e74a8ff12bb478448d}{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+MS}}}
+
+Acknowledgment watchdog in T\+WR protocol \mbox{\Hypertarget{anchor__c_8h_a767078db7eb37ffc0d4f029d3e64e5ec}\label{anchor__c_8h_a767078db7eb37ffc0d4f029d3e64e5ec}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!A\+I\+R\+\_\+\+S\+P\+E\+E\+D\+\_\+\+O\+F\+\_\+\+L\+I\+G\+HT@{A\+I\+R\+\_\+\+S\+P\+E\+E\+D\+\_\+\+O\+F\+\_\+\+L\+I\+G\+HT}}
+\index{A\+I\+R\+\_\+\+S\+P\+E\+E\+D\+\_\+\+O\+F\+\_\+\+L\+I\+G\+HT@{A\+I\+R\+\_\+\+S\+P\+E\+E\+D\+\_\+\+O\+F\+\_\+\+L\+I\+G\+HT}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{A\+I\+R\+\_\+\+S\+P\+E\+E\+D\+\_\+\+O\+F\+\_\+\+L\+I\+G\+HT}{AIR\_SPEED\_OF\_LIGHT}}
+{\footnotesize\ttfamily \#define A\+I\+R\+\_\+\+S\+P\+E\+E\+D\+\_\+\+O\+F\+\_\+\+L\+I\+G\+HT~299700000.\+0}
+
+Speed of light constant to extract distances from time-\/of-\/flight measurements \mbox{\Hypertarget{anchor__c_8h_a55adda1b2ce56b29cafbdd025bfaeebc}\label{anchor__c_8h_a55adda1b2ce56b29cafbdd025bfaeebc}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!A\+L\+O\+HA@{A\+L\+O\+HA}}
+\index{A\+L\+O\+HA@{A\+L\+O\+HA}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{A\+L\+O\+HA}{ALOHA}}
+{\footnotesize\ttfamily \#define A\+L\+O\+HA~0}
+
+Enables A\+L\+O\+HA scheduling-\/ check any documentation on A\+L\+O\+HA for further information \mbox{\Hypertarget{anchor__c_8h_a060c0b0e5f54bd35f2fc92e85b6773ab}\label{anchor__c_8h_a060c0b0e5f54bd35f2fc92e85b6773ab}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!A\+L\+O\+H\+A\+\_\+\+C\+O\+L\+L\+I\+S\+I\+O\+N\+\_\+\+D\+E\+L\+AY@{A\+L\+O\+H\+A\+\_\+\+C\+O\+L\+L\+I\+S\+I\+O\+N\+\_\+\+D\+E\+L\+AY}}
+\index{A\+L\+O\+H\+A\+\_\+\+C\+O\+L\+L\+I\+S\+I\+O\+N\+\_\+\+D\+E\+L\+AY@{A\+L\+O\+H\+A\+\_\+\+C\+O\+L\+L\+I\+S\+I\+O\+N\+\_\+\+D\+E\+L\+AY}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{A\+L\+O\+H\+A\+\_\+\+C\+O\+L\+L\+I\+S\+I\+O\+N\+\_\+\+D\+E\+L\+AY}{ALOHA\_COLLISION\_DELAY}}
+{\footnotesize\ttfamily \#define A\+L\+O\+H\+A\+\_\+\+C\+O\+L\+L\+I\+S\+I\+O\+N\+\_\+\+D\+E\+L\+AY~20}
+
+Delayed to wait when detecting collisions in A\+L\+O\+HA mode \mbox{\Hypertarget{anchor__c_8h_ae58a5dbc8abde6b2ef372b773b15db20}\label{anchor__c_8h_ae58a5dbc8abde6b2ef372b773b15db20}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!A\+S\+C\+I\+I\+\_\+\+N\+U\+M\+B\+E\+R\+S\+\_\+\+O\+F\+F\+S\+ET@{A\+S\+C\+I\+I\+\_\+\+N\+U\+M\+B\+E\+R\+S\+\_\+\+O\+F\+F\+S\+ET}}
+\index{A\+S\+C\+I\+I\+\_\+\+N\+U\+M\+B\+E\+R\+S\+\_\+\+O\+F\+F\+S\+ET@{A\+S\+C\+I\+I\+\_\+\+N\+U\+M\+B\+E\+R\+S\+\_\+\+O\+F\+F\+S\+ET}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{A\+S\+C\+I\+I\+\_\+\+N\+U\+M\+B\+E\+R\+S\+\_\+\+O\+F\+F\+S\+ET}{ASCII\_NUMBERS\_OFFSET}}
+{\footnotesize\ttfamily \#define A\+S\+C\+I\+I\+\_\+\+N\+U\+M\+B\+E\+R\+S\+\_\+\+O\+F\+F\+S\+ET~48}
+
+Char to printable value conversion for serial communications \mbox{\Hypertarget{anchor__c_8h_a4ddd570ad03298cdcf6728dcc3b82985}\label{anchor__c_8h_a4ddd570ad03298cdcf6728dcc3b82985}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!C\+A\+L\+I\+B\+R\+A\+T\+I\+ON@{C\+A\+L\+I\+B\+R\+A\+T\+I\+ON}}
+\index{C\+A\+L\+I\+B\+R\+A\+T\+I\+ON@{C\+A\+L\+I\+B\+R\+A\+T\+I\+ON}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{C\+A\+L\+I\+B\+R\+A\+T\+I\+ON}{CALIBRATION}}
+{\footnotesize\ttfamily \#define C\+A\+L\+I\+B\+R\+A\+T\+I\+ON~0.\+9}
+
+Calibration coefficient to apply to the distance measurements \mbox{\Hypertarget{anchor__c_8h_a740f39a508d6d660248f66ce94807d96}\label{anchor__c_8h_a740f39a508d6d660248f66ce94807d96}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!C\+O\+O\+P\+E\+R\+A\+T\+I\+VE@{C\+O\+O\+P\+E\+R\+A\+T\+I\+VE}}
+\index{C\+O\+O\+P\+E\+R\+A\+T\+I\+VE@{C\+O\+O\+P\+E\+R\+A\+T\+I\+VE}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{C\+O\+O\+P\+E\+R\+A\+T\+I\+VE}{COOPERATIVE}}
+{\footnotesize\ttfamily \#define C\+O\+O\+P\+E\+R\+A\+T\+I\+VE~0}
+
+Enables cooperative mode -\/ see documentation for further details \mbox{\Hypertarget{anchor__c_8h_abce801f11f46f7a2f8d9d4bfd0b77672}\label{anchor__c_8h_abce801f11f46f7a2f8d9d4bfd0b77672}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!D\+A\+T\+A\+\_\+\+T\+I\+M\+E\+O\+UT@{D\+A\+T\+A\+\_\+\+T\+I\+M\+E\+O\+UT}}
+\index{D\+A\+T\+A\+\_\+\+T\+I\+M\+E\+O\+UT@{D\+A\+T\+A\+\_\+\+T\+I\+M\+E\+O\+UT}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{D\+A\+T\+A\+\_\+\+T\+I\+M\+E\+O\+UT}{DATA\_TIMEOUT}}
+{\footnotesize\ttfamily \#define D\+A\+T\+A\+\_\+\+T\+I\+M\+E\+O\+UT~\mbox{\hyperlink{anchor__c_8h_a9b61d4c3842266e74a8ff12bb478448d}{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+MS}}}
+
+D\+A\+TA watchdog in T\+WR protocol \mbox{\Hypertarget{anchor__c_8h_af1afee9556b3ca858092d58c729a0649}\label{anchor__c_8h_af1afee9556b3ca858092d58c729a0649}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!D\+M\+AX@{D\+M\+AX}}
+\index{D\+M\+AX@{D\+M\+AX}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{D\+M\+AX}{DMAX}}
+{\footnotesize\ttfamily \#define D\+M\+AX~10}
+
+Maximum distance considered as realistic -\/ should be adapted to the environment \mbox{\Hypertarget{anchor__c_8h_ab2759269c92e6d05675a698378dac492}\label{anchor__c_8h_ab2759269c92e6d05675a698378dac492}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!D\+P\+R\+I\+N\+TF@{D\+P\+R\+I\+N\+TF}}
+\index{D\+P\+R\+I\+N\+TF@{D\+P\+R\+I\+N\+TF}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{D\+P\+R\+I\+N\+TF}{DPRINTF}}
+{\footnotesize\ttfamily \#define D\+P\+R\+I\+N\+TF~Serial.\+print}
+
+When defined, enables debug ouput on the serial port \mbox{\Hypertarget{anchor__c_8h_af227566f7e17ac6e442f456682535224}\label{anchor__c_8h_af227566f7e17ac6e442f456682535224}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!D\+P\+R\+I\+N\+T\+F\+LN@{D\+P\+R\+I\+N\+T\+F\+LN}}
+\index{D\+P\+R\+I\+N\+T\+F\+LN@{D\+P\+R\+I\+N\+T\+F\+LN}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{D\+P\+R\+I\+N\+T\+F\+LN}{DPRINTFLN}}
+{\footnotesize\ttfamily \#define D\+P\+R\+I\+N\+T\+F\+LN~Serial.\+println}
+
+When defined, enables debug ouput on the serial port \mbox{\Hypertarget{anchor__c_8h_aecf388aeabc7f32bb9cc514227a4d6ec}\label{anchor__c_8h_aecf388aeabc7f32bb9cc514227a4d6ec}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!D\+W1000\+\_\+\+T\+I\+M\+E\+B\+A\+SE@{D\+W1000\+\_\+\+T\+I\+M\+E\+B\+A\+SE}}
+\index{D\+W1000\+\_\+\+T\+I\+M\+E\+B\+A\+SE@{D\+W1000\+\_\+\+T\+I\+M\+E\+B\+A\+SE}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{D\+W1000\+\_\+\+T\+I\+M\+E\+B\+A\+SE}{DW1000\_TIMEBASE}}
+{\footnotesize\ttfamily \#define D\+W1000\+\_\+\+T\+I\+M\+E\+B\+A\+SE~15.\+65\+E-\/12}
+
+Resolution of the system clock -\/ value of 1 bit \mbox{\Hypertarget{anchor__c_8h_a99c8dafec4d0173d7cdf5de73f9cef69}\label{anchor__c_8h_a99c8dafec4d0173d7cdf5de73f9cef69}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!E\+X\+T\+E\+N\+D\+ED@{E\+X\+T\+E\+N\+D\+ED}}
+\index{E\+X\+T\+E\+N\+D\+ED@{E\+X\+T\+E\+N\+D\+ED}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{E\+X\+T\+E\+N\+D\+ED}{EXTENDED}}
+{\footnotesize\ttfamily \#define E\+X\+T\+E\+N\+D\+ED~1}
+
+Enables extended D\+A\+TA mode-\/ sends an extended set of P\+HY data to R\+PI (T\+O\+DO) \mbox{\Hypertarget{anchor__c_8h_a5c15a1497fab169cf87b9b2058d4dc30}\label{anchor__c_8h_a5c15a1497fab169cf87b9b2058d4dc30}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!I\+N\+\_\+\+US@{I\+N\+\_\+\+US}}
+\index{I\+N\+\_\+\+US@{I\+N\+\_\+\+US}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{I\+N\+\_\+\+US}{IN\_US}}
+{\footnotesize\ttfamily \#define I\+N\+\_\+\+US~1\+E6}
+
+Second to microsecond conversion \mbox{\Hypertarget{anchor__c_8h_a150a81da38cd990da60c0363014b246b}\label{anchor__c_8h_a150a81da38cd990da60c0363014b246b}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!M\+A\+S\+T\+E\+R\+\_\+\+ID@{M\+A\+S\+T\+E\+R\+\_\+\+ID}}
+\index{M\+A\+S\+T\+E\+R\+\_\+\+ID@{M\+A\+S\+T\+E\+R\+\_\+\+ID}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{M\+A\+S\+T\+E\+R\+\_\+\+ID}{MASTER\_ID}}
+{\footnotesize\ttfamily \#define M\+A\+S\+T\+E\+R\+\_\+\+ID~1}
+
+Enables Master anchor mode. The Master anchor is responsible for the cooperative operations and the T\+D\+MA watchdog \mbox{\Hypertarget{anchor__c_8h_ae457777c1a4a1aff4de8f5b9e3fac05d}\label{anchor__c_8h_ae457777c1a4a1aff4de8f5b9e3fac05d}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!N\+B\+\_\+\+A\+N\+C\+H\+O\+RS@{N\+B\+\_\+\+A\+N\+C\+H\+O\+RS}}
+\index{N\+B\+\_\+\+A\+N\+C\+H\+O\+RS@{N\+B\+\_\+\+A\+N\+C\+H\+O\+RS}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{N\+B\+\_\+\+A\+N\+C\+H\+O\+RS}{NB\_ANCHORS}}
+{\footnotesize\ttfamily \#define N\+B\+\_\+\+A\+N\+C\+H\+O\+RS~1}
+
+Default total number of anchors, should be defined during compilation \mbox{\Hypertarget{anchor__c_8h_adfccf1f8155a41a6fca7fcb86a9c7557}\label{anchor__c_8h_adfccf1f8155a41a6fca7fcb86a9c7557}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!N\+B\+\_\+\+R\+O\+B\+O\+TS@{N\+B\+\_\+\+R\+O\+B\+O\+TS}}
+\index{N\+B\+\_\+\+R\+O\+B\+O\+TS@{N\+B\+\_\+\+R\+O\+B\+O\+TS}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{N\+B\+\_\+\+R\+O\+B\+O\+TS}{NB\_ROBOTS}}
+{\footnotesize\ttfamily \#define N\+B\+\_\+\+R\+O\+B\+O\+TS~1}
+
+Total number of mobile tags \mbox{\Hypertarget{anchor__c_8h_a8d5f17f4df5d95624ef5c8581789f6e3}\label{anchor__c_8h_a8d5f17f4df5d95624ef5c8581789f6e3}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!N\+B\+\_\+\+T\+O\+T\+A\+L\+\_\+\+A\+N\+C\+H\+O\+RS@{N\+B\+\_\+\+T\+O\+T\+A\+L\+\_\+\+A\+N\+C\+H\+O\+RS}}
+\index{N\+B\+\_\+\+T\+O\+T\+A\+L\+\_\+\+A\+N\+C\+H\+O\+RS@{N\+B\+\_\+\+T\+O\+T\+A\+L\+\_\+\+A\+N\+C\+H\+O\+RS}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{N\+B\+\_\+\+T\+O\+T\+A\+L\+\_\+\+A\+N\+C\+H\+O\+RS}{NB\_TOTAL\_ANCHORS}}
+{\footnotesize\ttfamily \#define N\+B\+\_\+\+T\+O\+T\+A\+L\+\_\+\+A\+N\+C\+H\+O\+RS~(\mbox{\hyperlink{anchor__c_8h_ae457777c1a4a1aff4de8f5b9e3fac05d}{N\+B\+\_\+\+A\+N\+C\+H\+O\+RS}} + N\+B\+\_\+\+G\+H\+O\+S\+T\+\_\+\+A\+N\+C\+H\+O\+RS)}
+
+Total number of anchors inclujding ghost anchors \mbox{\Hypertarget{anchor__c_8h_ae19bfd2ea75b7ddfc0c9e520240ab733}\label{anchor__c_8h_ae19bfd2ea75b7ddfc0c9e520240ab733}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!N\+O\+D\+E\+\_\+\+ID@{N\+O\+D\+E\+\_\+\+ID}}
+\index{N\+O\+D\+E\+\_\+\+ID@{N\+O\+D\+E\+\_\+\+ID}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{N\+O\+D\+E\+\_\+\+ID}{NODE\_ID}}
+{\footnotesize\ttfamily \#define N\+O\+D\+E\+\_\+\+ID~0}
+
+Default tag ID. Should be defined during compilation when deploying \mbox{\Hypertarget{anchor__c_8h_a4f936282297efd37aad4e4f5734fe10e}\label{anchor__c_8h_a4f936282297efd37aad4e4f5734fe10e}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+TH@{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+TH}}
+\index{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+TH@{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+TH}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+TH}{SLOT\_LENGTH}}
+{\footnotesize\ttfamily \#define S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+TH~100000}
+
+T\+D\+MA slot length, in microseconds \mbox{\Hypertarget{anchor__c_8h_a9b61d4c3842266e74a8ff12bb478448d}\label{anchor__c_8h_a9b61d4c3842266e74a8ff12bb478448d}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+MS@{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+MS}}
+\index{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+MS@{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+MS}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+MS}{SLOT\_LENGTH\_MS}}
+{\footnotesize\ttfamily \#define S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+MS~(\mbox{\hyperlink{anchor__c_8h_a4f936282297efd37aad4e4f5734fe10e}{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+TH}} / 1000)}
+
+T\+D\+MA slot length, in milliseconds \mbox{\Hypertarget{anchor__c_8h_aa1fb4f272db7698d9667f109d81bf1b5}\label{anchor__c_8h_aa1fb4f272db7698d9667f109d81bf1b5}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!S\+P\+E\+E\+D\+\_\+\+C\+O\+E\+FF@{S\+P\+E\+E\+D\+\_\+\+C\+O\+E\+FF}}
+\index{S\+P\+E\+E\+D\+\_\+\+C\+O\+E\+FF@{S\+P\+E\+E\+D\+\_\+\+C\+O\+E\+FF}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{S\+P\+E\+E\+D\+\_\+\+C\+O\+E\+FF}{SPEED\_COEFF}}
+{\footnotesize\ttfamily \#define S\+P\+E\+E\+D\+\_\+\+C\+O\+E\+FF~\mbox{\hyperlink{anchor__c_8h_a767078db7eb37ffc0d4f029d3e64e5ec}{A\+I\+R\+\_\+\+S\+P\+E\+E\+D\+\_\+\+O\+F\+\_\+\+L\+I\+G\+HT}}$\ast$\mbox{\hyperlink{anchor__c_8h_aecf388aeabc7f32bb9cc514227a4d6ec}{D\+W1000\+\_\+\+T\+I\+M\+E\+B\+A\+SE}}$\ast$\mbox{\hyperlink{anchor__c_8h_a4ddd570ad03298cdcf6728dcc3b82985}{C\+A\+L\+I\+B\+R\+A\+T\+I\+ON}}}
+
+Calibrated speed of light constantt \mbox{\Hypertarget{anchor__c_8h_a0525bb869371e594a31064887054b8ef}\label{anchor__c_8h_a0525bb869371e594a31064887054b8ef}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!S\+T\+A\+R\+T\+\_\+\+T\+I\+M\+E\+O\+UT@{S\+T\+A\+R\+T\+\_\+\+T\+I\+M\+E\+O\+UT}}
+\index{S\+T\+A\+R\+T\+\_\+\+T\+I\+M\+E\+O\+UT@{S\+T\+A\+R\+T\+\_\+\+T\+I\+M\+E\+O\+UT}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{S\+T\+A\+R\+T\+\_\+\+T\+I\+M\+E\+O\+UT}{START\_TIMEOUT}}
+{\footnotesize\ttfamily \#define S\+T\+A\+R\+T\+\_\+\+T\+I\+M\+E\+O\+UT~(\mbox{\hyperlink{anchor__c_8h_ae457777c1a4a1aff4de8f5b9e3fac05d}{N\+B\+\_\+\+A\+N\+C\+H\+O\+RS}} $\ast$ \mbox{\hyperlink{anchor__c_8h_a9b61d4c3842266e74a8ff12bb478448d}{S\+L\+O\+T\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+MS}})}
+
+S\+T\+A\+RT watchdog for T\+D\+MA scheduling -\/ triggered when previous anchor stayed quiet \mbox{\Hypertarget{anchor__c_8h_af475d26f99a56b508a4488de32948922}\label{anchor__c_8h_af475d26f99a56b508a4488de32948922}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+W\+R\+\_\+\+C\+O\+M\+P\+L\+E\+TE@{T\+W\+R\+\_\+\+C\+O\+M\+P\+L\+E\+TE}}
+\index{T\+W\+R\+\_\+\+C\+O\+M\+P\+L\+E\+TE@{T\+W\+R\+\_\+\+C\+O\+M\+P\+L\+E\+TE}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+C\+O\+M\+P\+L\+E\+TE}{TWR\_COMPLETE}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+C\+O\+M\+P\+L\+E\+TE~1}
+
+Ret value for main loop -\/ T\+WR protocol complete \mbox{\Hypertarget{anchor__c_8h_a3df00f8f35f39aecd3a48b65b52d47b0}\label{anchor__c_8h_a3df00f8f35f39aecd3a48b65b52d47b0}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+P\+R\+E\+P\+A\+R\+E\+\_\+\+R\+A\+N\+G\+I\+NG@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+P\+R\+E\+P\+A\+R\+E\+\_\+\+R\+A\+N\+G\+I\+NG}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+P\+R\+E\+P\+A\+R\+E\+\_\+\+R\+A\+N\+G\+I\+NG@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+P\+R\+E\+P\+A\+R\+E\+\_\+\+R\+A\+N\+G\+I\+NG}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+P\+R\+E\+P\+A\+R\+E\+\_\+\+R\+A\+N\+G\+I\+NG}{TWR\_ENGINE\_PREPARE\_RANGING}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+P\+R\+E\+P\+A\+R\+E\+\_\+\+R\+A\+N\+G\+I\+NG~3}
+
+When reaching the attributed T\+D\+MA slot, starts T\+WR protocol \mbox{\Hypertarget{anchor__c_8h_a592e2360d2a193388eaf8203dd5c9ba0}\label{anchor__c_8h_a592e2360d2a193388eaf8203dd5c9ba0}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+E\+X\+T\+R\+A\+C\+T\+\_\+\+T2\+\_\+\+T3@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+E\+X\+T\+R\+A\+C\+T\+\_\+\+T2\+\_\+\+T3}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+E\+X\+T\+R\+A\+C\+T\+\_\+\+T2\+\_\+\+T3@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+E\+X\+T\+R\+A\+C\+T\+\_\+\+T2\+\_\+\+T3}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+E\+X\+T\+R\+A\+C\+T\+\_\+\+T2\+\_\+\+T3}{TWR\_ENGINE\_STATE\_EXTRACT\_T2\_T3}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+E\+X\+T\+R\+A\+C\+T\+\_\+\+T2\+\_\+\+T3~7}
+
+Computes time-\/of-\/flight \& distance \mbox{\Hypertarget{anchor__c_8h_a9742f8698e0f1524a55bd96ac701b89f}\label{anchor__c_8h_a9742f8698e0f1524a55bd96ac701b89f}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+D\+LE@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+D\+LE}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+D\+LE@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+D\+LE}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+D\+LE}{TWR\_ENGINE\_STATE\_IDLE}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+D\+LE~1}
+
+Handles T\+D\+M\+A/\+Aloha scheduling in-\/between T\+WR protocols \mbox{\Hypertarget{anchor__c_8h_a2444cfca40c9e6220c8482b67057d34c}\label{anchor__c_8h_a2444cfca40c9e6220c8482b67057d34c}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+N\+IT@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+N\+IT}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+N\+IT@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+N\+IT}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+N\+IT}{TWR\_ENGINE\_STATE\_INIT}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+N\+IT~0}
+
+Default starting state \mbox{\Hypertarget{anchor__c_8h_a2608c6aec872ce5104e533fe6ddaa35f}\label{anchor__c_8h_a2608c6aec872ce5104e533fe6ddaa35f}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+D\+A\+T\+A\+\_\+\+PI@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+D\+A\+T\+A\+\_\+\+PI}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+D\+A\+T\+A\+\_\+\+PI@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+D\+A\+T\+A\+\_\+\+PI}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+D\+A\+T\+A\+\_\+\+PI}{TWR\_ENGINE\_STATE\_SEND\_DATA\_PI}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+D\+A\+T\+A\+\_\+\+PI~8}
+
+Sends the distance \& other P\+HY data to host R\+PI \mbox{\Hypertarget{anchor__c_8h_ae49bab51abacdb25a8597218661e1ca4}\label{anchor__c_8h_ae49bab51abacdb25a8597218661e1ca4}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+S\+T\+A\+RT@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+S\+T\+A\+RT}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+S\+T\+A\+RT@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+S\+T\+A\+RT}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+S\+T\+A\+RT}{TWR\_ENGINE\_STATE\_SEND\_START}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+S\+T\+A\+RT~4}
+
+Sends S\+T\+A\+RT to the target tag \mbox{\Hypertarget{anchor__c_8h_a305fd92d5a9c781654dd75cac54ce401}\label{anchor__c_8h_a305fd92d5a9c781654dd75cac54ce401}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+R\+I\+AL@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+R\+I\+AL}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+R\+I\+AL@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+R\+I\+AL}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+R\+I\+AL}{TWR\_ENGINE\_STATE\_SERIAL}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+R\+I\+AL~2}
+
+Handles serial communications with the host R\+PI \mbox{\Hypertarget{anchor__c_8h_a0f2aad11922251266db6830717394e3c}\label{anchor__c_8h_a0f2aad11922251266db6830717394e3c}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+A\+CK@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+A\+CK}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+A\+CK@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+A\+CK}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+A\+CK}{TWR\_ENGINE\_STATE\_WAIT\_ACK}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+A\+CK~5}
+
+A\+CK polling -\/ back to I\+N\+IT if timeout \mbox{\Hypertarget{anchor__c_8h_aadf1cc5fe7d1c33c54d072b5c278eed6}\label{anchor__c_8h_aadf1cc5fe7d1c33c54d072b5c278eed6}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}{TWR\_ENGINE\_STATE\_WAIT\_DATA\_REPLY}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY~6}
+
+D\+A\+TA polling -\/ back to I\+N\+IT if timeout \mbox{\Hypertarget{anchor__c_8h_ab02c91f5ea65f95c537e44d1e55b08df}\label{anchor__c_8h_ab02c91f5ea65f95c537e44d1e55b08df}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+CK@{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+CK}}
+\index{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+CK@{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+CK}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+CK}{TWR\_MSG\_TYPE\_ACK}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+CK~2}
+
+A\+CK frame header \mbox{\Hypertarget{anchor__c_8h_a14079cb86399454a47187f9dd15035d1}\label{anchor__c_8h_a14079cb86399454a47187f9dd15035d1}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY@{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}}
+\index{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY@{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}{TWR\_MSG\_TYPE\_DATA\_REPLY}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY~3}
+
+D\+A\+TA frame header \mbox{\Hypertarget{anchor__c_8h_a4740f2edc79f06ad6a4dca738990555d}\label{anchor__c_8h_a4740f2edc79f06ad6a4dca738990555d}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+T\+A\+RT@{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+T\+A\+RT}}
+\index{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+T\+A\+RT@{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+T\+A\+RT}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+T\+A\+RT}{TWR\_MSG\_TYPE\_START}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+T\+A\+RT~1}
+
+S\+T\+A\+RT frame header \mbox{\Hypertarget{anchor__c_8h_a8198baeb96a824cb010840fe9eb5bc2f}\label{anchor__c_8h_a8198baeb96a824cb010840fe9eb5bc2f}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+W\+R\+\_\+\+O\+N\+\_\+\+G\+O\+I\+NG@{T\+W\+R\+\_\+\+O\+N\+\_\+\+G\+O\+I\+NG}}
+\index{T\+W\+R\+\_\+\+O\+N\+\_\+\+G\+O\+I\+NG@{T\+W\+R\+\_\+\+O\+N\+\_\+\+G\+O\+I\+NG}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+O\+N\+\_\+\+G\+O\+I\+NG}{TWR\_ON\_GOING}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+O\+N\+\_\+\+G\+O\+I\+NG~0}
+
+Ret value for main loop -\/ T\+WR protocol is still running \mbox{\Hypertarget{anchor__c_8h_ad380e380939eae9a5d6c8f228f0fe7c8}\label{anchor__c_8h_ad380e380939eae9a5d6c8f228f0fe7c8}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!T\+X\+\_\+\+T\+I\+M\+E\+O\+UT@{T\+X\+\_\+\+T\+I\+M\+E\+O\+UT}}
+\index{T\+X\+\_\+\+T\+I\+M\+E\+O\+UT@{T\+X\+\_\+\+T\+I\+M\+E\+O\+UT}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{T\+X\+\_\+\+T\+I\+M\+E\+O\+UT}{TX\_TIMEOUT}}
+{\footnotesize\ttfamily \#define T\+X\+\_\+\+T\+I\+M\+E\+O\+UT~10}
+
+Watchdog for failed transmission that never complete 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{anchor__c_8h_a1b20c779e29c5b89547defddfab8bd7b}\label{anchor__c_8h_a1b20c779e29c5b89547defddfab8bd7b}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!anchor\+\_\+loop@{anchor\+\_\+loop}}
+\index{anchor\+\_\+loop@{anchor\+\_\+loop}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{anchor\+\_\+loop()}{anchor\_loop()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int anchor\+\_\+loop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+One iteration of the main F\+SM loop for T\+WR, with default ID parameters in header file. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+\begin{DoxyReturn}{Returns}
+T\+WR state (/!\textbackslash{} different from the F\+SM state)) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{anchor__c_8h_a5cae2d846207eb429d7ed0f84b4439c7}\label{anchor__c_8h_a5cae2d846207eb429d7ed0f84b4439c7}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!anchor\+\_\+loop@{anchor\+\_\+loop}}
+\index{anchor\+\_\+loop@{anchor\+\_\+loop}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{anchor\+\_\+loop()}{anchor\_loop()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int anchor\+\_\+loop (\begin{DoxyParamCaption}\item[{byte $\ast$}]{my\+ID,  }\item[{byte $\ast$}]{my\+Next\+Anchor\+ID }\end{DoxyParamCaption})}
+
+
+
+One iteration of the main F\+SM loop for T\+WR. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em my\+ID} & anchor ID to use \\
+\hline
+{\em my\+Next\+Anchor\+ID} & ID of the following anchor \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T\+WR state (/!\textbackslash{} different from the F\+SM state)) 
+\end{DoxyReturn}
+Starting state of the F\+SM. C\+Hecks for timeouts and restart a T\+WR cycle for the Master anchor. For the others, skip directly to I\+D\+LE state ~\newline
+~\newline
+~\newline
+~\newline
+~\newline
+~\newline
+ Checks for serial commands, otherwise proceeds to start the ranging process ~\newline
+~\newline
+~\newline
+~\newline
+~\newline
+ Sending a ranging request (S\+T\+A\+RT frame) to the target tag ~\newline
+~\newline
+~\newline
+~\newline
+ Waiting for the reply (Acknowledgment frame) of the target device ~\newline
+~\newline
+~\newline
+ Waiting for the timestamps (D\+A\+TA frame) of the target device ~\newline
+~\newline
+ Extracting timestamps from D\+A\+TA frame and calculating the distance ~\newline
+ Sends the Ranging results along with P\+HY data to the host R\+PI on serial port \mbox{\Hypertarget{anchor__c_8h_ac10c0d7c63ddb78c74ce6b942778aeb0}\label{anchor__c_8h_ac10c0d7c63ddb78c74ce6b942778aeb0}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!anchor\+\_\+\+Rx\+Tx\+Config@{anchor\+\_\+\+Rx\+Tx\+Config}}
+\index{anchor\+\_\+\+Rx\+Tx\+Config@{anchor\+\_\+\+Rx\+Tx\+Config}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{anchor\+\_\+\+Rx\+Tx\+Config()}{anchor\_RxTxConfig()}}
+{\footnotesize\ttfamily void anchor\+\_\+\+Rx\+Tx\+Config (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+R\+X/\+TX setup for D\+W1000 in anchor mode. Sets the channel, preamble length, preamble code and P\+RF. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+\mbox{\Hypertarget{anchor__c_8h_a229865cac3d89d939060fc2a0a46fc92}\label{anchor__c_8h_a229865cac3d89d939060fc2a0a46fc92}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!anchor\+\_\+setup@{anchor\+\_\+setup}}
+\index{anchor\+\_\+setup@{anchor\+\_\+setup}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{anchor\+\_\+setup()}{anchor\_setup()}}
+{\footnotesize\ttfamily void anchor\+\_\+setup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Deca\+Wino setup for anchor mode. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+\mbox{\Hypertarget{anchor__c_8h_a4aad4b6f80cf0ef4be418d7318e91a44}\label{anchor__c_8h_a4aad4b6f80cf0ef4be418d7318e91a44}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!byte\+\_\+array\+\_\+cmp@{byte\+\_\+array\+\_\+cmp}}
+\index{byte\+\_\+array\+\_\+cmp@{byte\+\_\+array\+\_\+cmp}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{byte\+\_\+array\+\_\+cmp()}{byte\_array\_cmp()}}
+{\footnotesize\ttfamily int byte\+\_\+array\+\_\+cmp (\begin{DoxyParamCaption}\item[{byte}]{b1\mbox{[}8\mbox{]},  }\item[{byte}]{b2\mbox{[}8\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Checks if two 8-\/bytes array are equal. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em 8-\/bytes} & array (ID format) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if all the elements in both arrays are equal 
+\end{DoxyReturn}
+\mbox{\Hypertarget{anchor__c_8h_a25f45532a8a2602bced37f701b365e8b}\label{anchor__c_8h_a25f45532a8a2602bced37f701b365e8b}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!get\+\_\+tag\+\_\+idx@{get\+\_\+tag\+\_\+idx}}
+\index{get\+\_\+tag\+\_\+idx@{get\+\_\+tag\+\_\+idx}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{get\+\_\+tag\+\_\+idx()}{get\_tag\_idx()}}
+{\footnotesize\ttfamily int get\+\_\+tag\+\_\+idx (\begin{DoxyParamCaption}\item[{byte}]{tag\+\_\+\+ID\mbox{[}8\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Finds the index of a given tag ID in the tag ID list. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em b1} & 8-\/byte array \\
+\hline
+{\em b2} & 8-\/byte array \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the index of the tag ID if found, -\/1 otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{anchor__c_8h_a44620c59e3eba142cc41cb7cc8183cc4}\label{anchor__c_8h_a44620c59e3eba142cc41cb7cc8183cc4}} 
+\index{anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}!print\+\_\+byte\+\_\+array@{print\+\_\+byte\+\_\+array}}
+\index{print\+\_\+byte\+\_\+array@{print\+\_\+byte\+\_\+array}!anchor\+\_\+c.\+h@{anchor\+\_\+c.\+h}}
+\subsubsection{\texorpdfstring{print\+\_\+byte\+\_\+array()}{print\_byte\_array()}}
+{\footnotesize\ttfamily void print\+\_\+byte\+\_\+array (\begin{DoxyParamCaption}\item[{byte}]{b\mbox{[}8\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Displays an 8-\/bytes array on the serial port. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}

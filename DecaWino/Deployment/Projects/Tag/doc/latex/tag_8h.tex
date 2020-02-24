@@ -1,0 +1,197 @@
+\hypertarget{tag_8h}{}\section{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Tag/src/header/tag.h File Reference}
+\label{tag_8h}\index{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Tag/src/header/tag.\+h@{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Tag/src/header/tag.\+h}}
+
+
+Header file for the cooperative anchor firmware. This firmware is intended for Deca\+Wino chips. Tags are the mobile nodes localized by the anchors.  
+
+
+{\ttfamily \#include $<$S\+P\+I.\+h$>$}\newline
+{\ttfamily \#include $<$Deca\+Duino.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}anchor\+\_\+c.\+h\char`\"{}}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{tag_8h_a1cb996bb5c8d0991d1456a6e5df88bce}\label{tag_8h_a1cb996bb5c8d0991d1456a6e5df88bce}} 
+\#define {\bfseries \+\_\+\+D\+E\+B\+U\+G\+\_\+}
+\item 
+\#define \mbox{\hyperlink{tag_8h_ab2759269c92e6d05675a698378dac492}{D\+P\+R\+I\+N\+TF}}~Serial.\+print
+\item 
+\#define \mbox{\hyperlink{tag_8h_af227566f7e17ac6e442f456682535224}{D\+P\+R\+I\+N\+T\+F\+LN}}~Serial.\+println
+\item 
+\#define \mbox{\hyperlink{tag_8h_acf792dcc5f0d1bc2b8d1287b17d72ac1}{T23}}~100000000
+\item 
+\#define \mbox{\hyperlink{tag_8h_ae19bfd2ea75b7ddfc0c9e520240ab733}{N\+O\+D\+E\+\_\+\+ID}}~1
+\item 
+\#define \mbox{\hyperlink{tag_8h_a2444cfca40c9e6220c8482b67057d34c}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+N\+IT}}~0
+\item 
+\#define \mbox{\hyperlink{tag_8h_a6ea9070a7d365904acf88bf052580916}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+G\+H\+O\+S\+T\+\_\+\+A\+N\+C\+H\+OR}}~1
+\item 
+\#define \mbox{\hyperlink{tag_8h_a7026ad78f131aa0c2ccba846cd7e3c0f}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+R\+X\+\_\+\+ON}}~2
+\item 
+\#define \mbox{\hyperlink{tag_8h_aa34f054266b020cbd58c5ef2d7e7cbd6}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+S\+T\+A\+RT}}~3
+\item 
+\#define \mbox{\hyperlink{tag_8h_ad78484575278a4b4ba4b2650ed43fce6}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+A\+CK}}~4
+\item 
+\#define \mbox{\hyperlink{tag_8h_a544a65d55154ef599147a2f8f2295800}{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}}~5
+\item 
+\#define \mbox{\hyperlink{tag_8h_a4740f2edc79f06ad6a4dca738990555d}{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+T\+A\+RT}}~1
+\item 
+\#define \mbox{\hyperlink{tag_8h_ab02c91f5ea65f95c537e44d1e55b08df}{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+CK}}~2
+\item 
+\#define \mbox{\hyperlink{tag_8h_a14079cb86399454a47187f9dd15035d1}{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}}~3
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{tag_8h_a78056916bc3b389f4878ce6cfaab616e}{tag\+\_\+setup}} ()
+\begin{DoxyCompactList}\small\item\em Deca\+Wino setup for Tag mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{tag_8h_acac0bb5a09c034814b60e97c4fa5bdf1}{tag\+\_\+\+Rx\+Tx\+Config}} ()
+\begin{DoxyCompactList}\small\item\em R\+X/\+TX setup for D\+W1000 in tag mode. Sets the channel, preamble length, preamble code and P\+RF. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{tag_8h_afe461d27b9c48d5921c00d521181f12f}{loop}} ()
+\begin{DoxyCompactList}\small\item\em One iteration of the main F\+SM loop for T\+WR, with default ID parameters in header file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Header file for the cooperative anchor firmware. This firmware is intended for Deca\+Wino chips. Tags are the mobile nodes localized by the anchors. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+\begin{DoxySeeAlso}{See also}
+\href{https://github.com/Hedwyn/SecureLoc}{\tt https\+://github.\+com/\+Hedwyn/\+Secure\+Loc} 
+\end{DoxySeeAlso}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{tag_8h_ab2759269c92e6d05675a698378dac492}\label{tag_8h_ab2759269c92e6d05675a698378dac492}} 
+\index{tag.\+h@{tag.\+h}!D\+P\+R\+I\+N\+TF@{D\+P\+R\+I\+N\+TF}}
+\index{D\+P\+R\+I\+N\+TF@{D\+P\+R\+I\+N\+TF}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{D\+P\+R\+I\+N\+TF}{DPRINTF}}
+{\footnotesize\ttfamily \#define D\+P\+R\+I\+N\+TF~Serial.\+print}
+
+When defined, enables debug ouput on the serial port \mbox{\Hypertarget{tag_8h_af227566f7e17ac6e442f456682535224}\label{tag_8h_af227566f7e17ac6e442f456682535224}} 
+\index{tag.\+h@{tag.\+h}!D\+P\+R\+I\+N\+T\+F\+LN@{D\+P\+R\+I\+N\+T\+F\+LN}}
+\index{D\+P\+R\+I\+N\+T\+F\+LN@{D\+P\+R\+I\+N\+T\+F\+LN}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{D\+P\+R\+I\+N\+T\+F\+LN}{DPRINTFLN}}
+{\footnotesize\ttfamily \#define D\+P\+R\+I\+N\+T\+F\+LN~Serial.\+println}
+
+When defined, enables debug ouput on the serial port \mbox{\Hypertarget{tag_8h_ae19bfd2ea75b7ddfc0c9e520240ab733}\label{tag_8h_ae19bfd2ea75b7ddfc0c9e520240ab733}} 
+\index{tag.\+h@{tag.\+h}!N\+O\+D\+E\+\_\+\+ID@{N\+O\+D\+E\+\_\+\+ID}}
+\index{N\+O\+D\+E\+\_\+\+ID@{N\+O\+D\+E\+\_\+\+ID}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{N\+O\+D\+E\+\_\+\+ID}{NODE\_ID}}
+{\footnotesize\ttfamily \#define N\+O\+D\+E\+\_\+\+ID~1}
+
+Default tag ID. Should be defined during compilation when deploying \mbox{\Hypertarget{tag_8h_acf792dcc5f0d1bc2b8d1287b17d72ac1}\label{tag_8h_acf792dcc5f0d1bc2b8d1287b17d72ac1}} 
+\index{tag.\+h@{tag.\+h}!T23@{T23}}
+\index{T23@{T23}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{T23}{T23}}
+{\footnotesize\ttfamily \#define T23~100000000}
+
+When delayed send is enabled, waiting time between A\+CK and D\+A\+TA frame \mbox{\Hypertarget{tag_8h_a6ea9070a7d365904acf88bf052580916}\label{tag_8h_a6ea9070a7d365904acf88bf052580916}} 
+\index{tag.\+h@{tag.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+G\+H\+O\+S\+T\+\_\+\+A\+N\+C\+H\+OR@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+G\+H\+O\+S\+T\+\_\+\+A\+N\+C\+H\+OR}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+G\+H\+O\+S\+T\+\_\+\+A\+N\+C\+H\+OR@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+G\+H\+O\+S\+T\+\_\+\+A\+N\+C\+H\+OR}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+G\+H\+O\+S\+T\+\_\+\+A\+N\+C\+H\+OR}{TWR\_ENGINE\_GHOST\_ANCHOR}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+G\+H\+O\+S\+T\+\_\+\+A\+N\+C\+H\+OR~1}
+
+State for ghost anchor operations when designated as such \mbox{\Hypertarget{tag_8h_a2444cfca40c9e6220c8482b67057d34c}\label{tag_8h_a2444cfca40c9e6220c8482b67057d34c}} 
+\index{tag.\+h@{tag.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+N\+IT@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+N\+IT}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+N\+IT@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+N\+IT}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+N\+IT}{TWR\_ENGINE\_STATE\_INIT}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+I\+N\+IT~0}
+
+Default starting state \mbox{\Hypertarget{tag_8h_a7026ad78f131aa0c2ccba846cd7e3c0f}\label{tag_8h_a7026ad78f131aa0c2ccba846cd7e3c0f}} 
+\index{tag.\+h@{tag.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+R\+X\+\_\+\+ON@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+R\+X\+\_\+\+ON}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+R\+X\+\_\+\+ON@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+R\+X\+\_\+\+ON}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+R\+X\+\_\+\+ON}{TWR\_ENGINE\_STATE\_RX\_ON}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+R\+X\+\_\+\+ON~2}
+
+Turns on reception, checks for ghost anchor calls \mbox{\Hypertarget{tag_8h_ad78484575278a4b4ba4b2650ed43fce6}\label{tag_8h_ad78484575278a4b4ba4b2650ed43fce6}} 
+\index{tag.\+h@{tag.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+A\+CK@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+A\+CK}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+A\+CK@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+A\+CK}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+A\+CK}{TWR\_ENGINE\_STATE\_SEND\_ACK}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+A\+CK~4}
+
+Sends A\+CK frame in T\+WR protocol-\/ gets t3 when sending \mbox{\Hypertarget{tag_8h_a544a65d55154ef599147a2f8f2295800}\label{tag_8h_a544a65d55154ef599147a2f8f2295800}} 
+\index{tag.\+h@{tag.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}{TWR\_ENGINE\_STATE\_SEND\_DATA\_REPLY}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+S\+E\+N\+D\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY~5}
+
+Sends D\+A\+TA frame containing (t2,t3) in T\+WR protocol \mbox{\Hypertarget{tag_8h_aa34f054266b020cbd58c5ef2d7e7cbd6}\label{tag_8h_aa34f054266b020cbd58c5ef2d7e7cbd6}} 
+\index{tag.\+h@{tag.\+h}!T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+S\+T\+A\+RT@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+S\+T\+A\+RT}}
+\index{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+S\+T\+A\+RT@{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+S\+T\+A\+RT}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+S\+T\+A\+RT}{TWR\_ENGINE\_STATE\_WAIT\_START}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+E\+N\+G\+I\+N\+E\+\_\+\+S\+T\+A\+T\+E\+\_\+\+W\+A\+I\+T\+\_\+\+S\+T\+A\+RT~3}
+
+Start frames polling -\/ gets t2 when receiving \mbox{\Hypertarget{tag_8h_ab02c91f5ea65f95c537e44d1e55b08df}\label{tag_8h_ab02c91f5ea65f95c537e44d1e55b08df}} 
+\index{tag.\+h@{tag.\+h}!T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+CK@{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+CK}}
+\index{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+CK@{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+CK}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+CK}{TWR\_MSG\_TYPE\_ACK}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+A\+CK~2}
+
+A\+CK frame header \mbox{\Hypertarget{tag_8h_a14079cb86399454a47187f9dd15035d1}\label{tag_8h_a14079cb86399454a47187f9dd15035d1}} 
+\index{tag.\+h@{tag.\+h}!T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY@{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}}
+\index{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY@{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY}{TWR\_MSG\_TYPE\_DATA\_REPLY}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+D\+A\+T\+A\+\_\+\+R\+E\+P\+LY~3}
+
+D\+A\+TA frame header \mbox{\Hypertarget{tag_8h_a4740f2edc79f06ad6a4dca738990555d}\label{tag_8h_a4740f2edc79f06ad6a4dca738990555d}} 
+\index{tag.\+h@{tag.\+h}!T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+T\+A\+RT@{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+T\+A\+RT}}
+\index{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+T\+A\+RT@{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+T\+A\+RT}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+T\+A\+RT}{TWR\_MSG\_TYPE\_START}}
+{\footnotesize\ttfamily \#define T\+W\+R\+\_\+\+M\+S\+G\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+T\+A\+RT~1}
+
+S\+T\+A\+RT frame header 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{tag_8h_afe461d27b9c48d5921c00d521181f12f}\label{tag_8h_afe461d27b9c48d5921c00d521181f12f}} 
+\index{tag.\+h@{tag.\+h}!loop@{loop}}
+\index{loop@{loop}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{loop()}{loop()}}
+{\footnotesize\ttfamily void loop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+One iteration of the main F\+SM loop for T\+WR, with default ID parameters in header file. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 January 1st 
+\end{DoxyDate}
+\mbox{\Hypertarget{tag_8h_acac0bb5a09c034814b60e97c4fa5bdf1}\label{tag_8h_acac0bb5a09c034814b60e97c4fa5bdf1}} 
+\index{tag.\+h@{tag.\+h}!tag\+\_\+\+Rx\+Tx\+Config@{tag\+\_\+\+Rx\+Tx\+Config}}
+\index{tag\+\_\+\+Rx\+Tx\+Config@{tag\+\_\+\+Rx\+Tx\+Config}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{tag\+\_\+\+Rx\+Tx\+Config()}{tag\_RxTxConfig()}}
+{\footnotesize\ttfamily void tag\+\_\+\+Rx\+Tx\+Config (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+R\+X/\+TX setup for D\+W1000 in tag mode. Sets the channel, preamble length, preamble code and P\+RF. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 January 1st 
+\end{DoxyDate}
+\mbox{\Hypertarget{tag_8h_a78056916bc3b389f4878ce6cfaab616e}\label{tag_8h_a78056916bc3b389f4878ce6cfaab616e}} 
+\index{tag.\+h@{tag.\+h}!tag\+\_\+setup@{tag\+\_\+setup}}
+\index{tag\+\_\+setup@{tag\+\_\+setup}!tag.\+h@{tag.\+h}}
+\subsubsection{\texorpdfstring{tag\+\_\+setup()}{tag\_setup()}}
+{\footnotesize\ttfamily void tag\+\_\+setup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Deca\+Wino setup for Tag mode. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2020 January 1st 
+\end{DoxyDate}

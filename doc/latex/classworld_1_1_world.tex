@@ -1,0 +1,163 @@
+\hypertarget{classworld_1_1_world}{}\section{World Class Reference}
+\label{classworld_1_1_world}\index{World@{World}}
+Inheritance diagram for World\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classworld_1_1_world}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classworld_1_1_world_ac775ee34451fdfa742b318538164070e}\label{classworld_1_1_world_ac775ee34451fdfa742b318538164070e}} 
+def {\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+}
+\item 
+def \mbox{\hyperlink{classworld_1_1_world_afc14fa698ef83ef5c8e17a2ee98d1375}{create\+\_\+anchors}} (self)
+\item 
+def \mbox{\hyperlink{classworld_1_1_world_a660f28d74c53fc654edf9e0d60c68d45}{gen\+\_\+anchors\+\_\+name}} (self, nb\+\_\+anchors)
+\item 
+def \mbox{\hyperlink{classworld_1_1_world_afdf01fd0b61dfe848a1606619c1b2902}{get\+\_\+target}} (self, robot)
+\item 
+\mbox{\Hypertarget{classworld_1_1_world_a55dd74ce9332b8fb3f6d5ff5dbd22aca}\label{classworld_1_1_world_a55dd74ce9332b8fb3f6d5ff5dbd22aca}} 
+def {\bfseries update\+\_\+anchor}
+\item 
+\mbox{\Hypertarget{classworld_1_1_world_abfeee52c12f31bb94f7d6699303b515f}\label{classworld_1_1_world_abfeee52c12f31bb94f7d6699303b515f}} 
+def {\bfseries ranging} (self, x, y, z, anchor\+\_\+idx)
+\item 
+def \mbox{\hyperlink{classworld_1_1_world_a04f4980a53d4b6e76ba5d02deb413780}{get\+\_\+distance}} (self, pos1, pos2)
+\item 
+def \mbox{\hyperlink{classworld_1_1_world_a5c63acf39eabba08715324da0d0ba2bd}{mse}} (self, rangings, pos)
+\item 
+def \mbox{\hyperlink{classworld_1_1_world_a9ee2b3e42f5d883afd028a9526c392d1}{gauss\+\_\+newton}} (self, rangings, start\+\_\+pos)
+\item 
+def \mbox{\hyperlink{classworld_1_1_world_a68d603f9d2b9759ddca06127f0899689}{iterate}} (self, rangings, start\+\_\+pos)
+\item 
+def \mbox{\hyperlink{classworld_1_1_world_a5b503b944cc95fd96a0e04f48e8c46fc}{localize}} (self, target)
+\item 
+def \mbox{\hyperlink{classworld_1_1_world_abd1ed1c4492cfa667fe9fda253df6173}{trilateration}} (self, target, anchor1, anchor2, anchor3=None, mode=\textquotesingle{}2\+D\textquotesingle{})
+\item 
+def \mbox{\hyperlink{classworld_1_1_world_a6886efcaba6a255c9d7566ba44f518f9}{update\+\_\+correction}} (self, rangings, solution)
+\item 
+def \mbox{\hyperlink{classworld_1_1_world_a34e56a6b0b7a51cc806cd0648a7ed275}{predict\+\_\+pos}} (self, robot)
+\item 
+def \mbox{\hyperlink{classworld_1_1_world_ad5a97b080a28cc5abda3903a686a56ff}{chose\+\_\+closest\+\_\+solution}} (self, solutions\+\_\+list, position)
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classworld_1_1_world_a5558ace5433f9aabbf0a0ec059900d94}\label{classworld_1_1_world_a5558ace5433f9aabbf0a0ec059900d94}} 
+{\bfseries width}
+\item 
+\mbox{\Hypertarget{classworld_1_1_world_a509290c21d570ff479c1b9d9b1fe8810}\label{classworld_1_1_world_a509290c21d570ff479c1b9d9b1fe8810}} 
+{\bfseries height}
+\item 
+\mbox{\Hypertarget{classworld_1_1_world_aba54450ad49ad1b46e29721241611d50}\label{classworld_1_1_world_aba54450ad49ad1b46e29721241611d50}} 
+{\bfseries anchors}
+\item 
+\mbox{\Hypertarget{classworld_1_1_world_a5d2c023108742a1ce78ba9823c06ea35}\label{classworld_1_1_world_a5d2c023108742a1ce78ba9823c06ea35}} 
+{\bfseries target}
+\item 
+\mbox{\Hypertarget{classworld_1_1_world_ac6c1eeb684483c821de0ec90f6c47cb9}\label{classworld_1_1_world_ac6c1eeb684483c821de0ec90f6c47cb9}} 
+{\bfseries shown}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}World class, represents the room in which the robots will evolve.
+The world contains the anchors with their positions, and is able
+to return the positions of the robots or whatever is moving in it\end{DoxyVerb}
+ 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classworld_1_1_world_ad5a97b080a28cc5abda3903a686a56ff}\label{classworld_1_1_world_ad5a97b080a28cc5abda3903a686a56ff}} 
+\index{world\+::\+World@{world\+::\+World}!chose\+\_\+closest\+\_\+solution@{chose\+\_\+closest\+\_\+solution}}
+\index{chose\+\_\+closest\+\_\+solution@{chose\+\_\+closest\+\_\+solution}!world\+::\+World@{world\+::\+World}}
+\subsubsection{\texorpdfstring{chose\+\_\+closest\+\_\+solution()}{chose\_closest\_solution()}}
+{\footnotesize\ttfamily def chose\+\_\+closest\+\_\+solution (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{solutions\+\_\+list,  }\item[{}]{position }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}returns the closest solution of solutions_list from the given position\end{DoxyVerb}
+ \mbox{\Hypertarget{classworld_1_1_world_afc14fa698ef83ef5c8e17a2ee98d1375}\label{classworld_1_1_world_afc14fa698ef83ef5c8e17a2ee98d1375}} 
+\index{world\+::\+World@{world\+::\+World}!create\+\_\+anchors@{create\+\_\+anchors}}
+\index{create\+\_\+anchors@{create\+\_\+anchors}!world\+::\+World@{world\+::\+World}}
+\subsubsection{\texorpdfstring{create\+\_\+anchors()}{create\_anchors()}}
+{\footnotesize\ttfamily def create\+\_\+anchors (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Displays anchors\end{DoxyVerb}
+ \mbox{\Hypertarget{classworld_1_1_world_a9ee2b3e42f5d883afd028a9526c392d1}\label{classworld_1_1_world_a9ee2b3e42f5d883afd028a9526c392d1}} 
+\index{world\+::\+World@{world\+::\+World}!gauss\+\_\+newton@{gauss\+\_\+newton}}
+\index{gauss\+\_\+newton@{gauss\+\_\+newton}!world\+::\+World@{world\+::\+World}}
+\subsubsection{\texorpdfstring{gauss\+\_\+newton()}{gauss\_newton()}}
+{\footnotesize\ttfamily def gauss\+\_\+newton (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{rangings,  }\item[{}]{start\+\_\+pos }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}applies Gauss-Newton on the set of rangings to find the tag's position. Uses the given position as starting point\end{DoxyVerb}
+ \mbox{\Hypertarget{classworld_1_1_world_a660f28d74c53fc654edf9e0d60c68d45}\label{classworld_1_1_world_a660f28d74c53fc654edf9e0d60c68d45}} 
+\index{world\+::\+World@{world\+::\+World}!gen\+\_\+anchors\+\_\+name@{gen\+\_\+anchors\+\_\+name}}
+\index{gen\+\_\+anchors\+\_\+name@{gen\+\_\+anchors\+\_\+name}!world\+::\+World@{world\+::\+World}}
+\subsubsection{\texorpdfstring{gen\+\_\+anchors\+\_\+name()}{gen\_anchors\_name()}}
+{\footnotesize\ttfamily def gen\+\_\+anchors\+\_\+name (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{nb\+\_\+anchors }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}generates a list of anchors id for the given total number of anchors\end{DoxyVerb}
+ \mbox{\Hypertarget{classworld_1_1_world_a04f4980a53d4b6e76ba5d02deb413780}\label{classworld_1_1_world_a04f4980a53d4b6e76ba5d02deb413780}} 
+\index{world\+::\+World@{world\+::\+World}!get\+\_\+distance@{get\+\_\+distance}}
+\index{get\+\_\+distance@{get\+\_\+distance}!world\+::\+World@{world\+::\+World}}
+\subsubsection{\texorpdfstring{get\+\_\+distance()}{get\_distance()}}
+{\footnotesize\ttfamily def get\+\_\+distance (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{pos1,  }\item[{}]{pos2 }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}returns the distance between pos1 and pos2\end{DoxyVerb}
+ \mbox{\Hypertarget{classworld_1_1_world_afdf01fd0b61dfe848a1606619c1b2902}\label{classworld_1_1_world_afdf01fd0b61dfe848a1606619c1b2902}} 
+\index{world\+::\+World@{world\+::\+World}!get\+\_\+target@{get\+\_\+target}}
+\index{get\+\_\+target@{get\+\_\+target}!world\+::\+World@{world\+::\+World}}
+\subsubsection{\texorpdfstring{get\+\_\+target()}{get\_target()}}
+{\footnotesize\ttfamily def get\+\_\+target (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{robot }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}gets the id of the robot to localize\end{DoxyVerb}
+ \mbox{\Hypertarget{classworld_1_1_world_a68d603f9d2b9759ddca06127f0899689}\label{classworld_1_1_world_a68d603f9d2b9759ddca06127f0899689}} 
+\index{world\+::\+World@{world\+::\+World}!iterate@{iterate}}
+\index{iterate@{iterate}!world\+::\+World@{world\+::\+World}}
+\subsubsection{\texorpdfstring{iterate()}{iterate()}}
+{\footnotesize\ttfamily def iterate (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{rangings,  }\item[{}]{start\+\_\+pos }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Finds the minimum MSE in the neighborhood of start_pos and repeats the process from that new position\end{DoxyVerb}
+ \mbox{\Hypertarget{classworld_1_1_world_a5b503b944cc95fd96a0e04f48e8c46fc}\label{classworld_1_1_world_a5b503b944cc95fd96a0e04f48e8c46fc}} 
+\index{world\+::\+World@{world\+::\+World}!localize@{localize}}
+\index{localize@{localize}!world\+::\+World@{world\+::\+World}}
+\subsubsection{\texorpdfstring{localize()}{localize()}}
+{\footnotesize\ttfamily def localize (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{target }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}localizes the given target\end{DoxyVerb}
+ \mbox{\Hypertarget{classworld_1_1_world_a5c63acf39eabba08715324da0d0ba2bd}\label{classworld_1_1_world_a5c63acf39eabba08715324da0d0ba2bd}} 
+\index{world\+::\+World@{world\+::\+World}!mse@{mse}}
+\index{mse@{mse}!world\+::\+World@{world\+::\+World}}
+\subsubsection{\texorpdfstring{mse()}{mse()}}
+{\footnotesize\ttfamily def mse (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{rangings,  }\item[{}]{pos }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Calculates the Mean Square Error of the given position.
+Error is defined as the difference between the ranging of the given position and the given rangings\end{DoxyVerb}
+ \mbox{\Hypertarget{classworld_1_1_world_a34e56a6b0b7a51cc806cd0648a7ed275}\label{classworld_1_1_world_a34e56a6b0b7a51cc806cd0648a7ed275}} 
+\index{world\+::\+World@{world\+::\+World}!predict\+\_\+pos@{predict\+\_\+pos}}
+\index{predict\+\_\+pos@{predict\+\_\+pos}!world\+::\+World@{world\+::\+World}}
+\subsubsection{\texorpdfstring{predict\+\_\+pos()}{predict\_pos()}}
+{\footnotesize\ttfamily def predict\+\_\+pos (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{robot }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}estimates the position at the next iteration based on tag's speed\end{DoxyVerb}
+ \mbox{\Hypertarget{classworld_1_1_world_abd1ed1c4492cfa667fe9fda253df6173}\label{classworld_1_1_world_abd1ed1c4492cfa667fe9fda253df6173}} 
+\index{world\+::\+World@{world\+::\+World}!trilateration@{trilateration}}
+\index{trilateration@{trilateration}!world\+::\+World@{world\+::\+World}}
+\subsubsection{\texorpdfstring{trilateration()}{trilateration()}}
+{\footnotesize\ttfamily def trilateration (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{target,  }\item[{}]{anchor1,  }\item[{}]{anchor2,  }\item[{}]{anchor3 = {\ttfamily None},  }\item[{}]{mode = {\ttfamily \textquotesingle{}2D\textquotesingle{}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}computes the trilateration of target based on the rangings from anchor 1 and 2.
+Two solutions are obtained based on Pythagora's theorem, both are returned\end{DoxyVerb}
+ \mbox{\Hypertarget{classworld_1_1_world_a6886efcaba6a255c9d7566ba44f518f9}\label{classworld_1_1_world_a6886efcaba6a255c9d7566ba44f518f9}} 
+\index{world\+::\+World@{world\+::\+World}!update\+\_\+correction@{update\+\_\+correction}}
+\index{update\+\_\+correction@{update\+\_\+correction}!world\+::\+World@{world\+::\+World}}
+\subsubsection{\texorpdfstring{update\+\_\+correction()}{update\_correction()}}
+{\footnotesize\ttfamily def update\+\_\+correction (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{rangings,  }\item[{}]{solution }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}dynamically corrects the offset applied to the rangings, by comparing the received ranging value to the estimated one.
+    The correction is based on a ratio of the difference between the two values\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/world.\+py\end{DoxyCompactItemize}

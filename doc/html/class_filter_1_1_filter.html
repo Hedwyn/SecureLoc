@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SecureLoc: Filter.Filter Class Reference</title>
+<title>SecureLoc Localization Engine: Filter Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -20,10 +20,10 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="logoLCIS.PNG"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">SecureLoc
+   <div id="projectname">SecureLoc Localization Engine
    </div>
+   <div id="projectbrief">UWB indoor positioning system</div>
   </td>
  </tr>
  </tbody>
@@ -68,86 +68,55 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="class_filter_1_1_filter-members.html">List of all members</a>  </div>
+<a href="#pub-attribs">Data Fields</a>  </div>
   <div class="headertitle">
-<div class="title">Filter.Filter Class Reference</div>  </div>
+<div class="title">Filter Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0c6134f6eb4058ca0fc2566b7edc2dbd"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#a0c6134f6eb4058ca0fc2566b7edc2dbd">__init__</a> (self, <a class="el" href="class_filter_1_1_filter.html#a76f02684bd0cec5168854c5c178ec440">mode</a>=&quot;SW&quot;, param=[])</td></tr>
-<tr class="separator:a0c6134f6eb4058ca0fc2566b7edc2dbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11b2474b9655e55828f883d07e90c7ad"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#a11b2474b9655e55828f883d07e90c7ad">apply</a> (self, args=None)</td></tr>
-<tr class="separator:a11b2474b9655e55828f883d07e90c7ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b336310e8592aab555f6a3dcf921c29"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#a2b336310e8592aab555f6a3dcf921c29">sliding_window</a> (self, ranging_list, nb_samples, nb_eliminations_start, nb_eliminations_end=0)</td></tr>
-<tr class="separator:a2b336310e8592aab555f6a3dcf921c29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20b3bb4eb0a94fecffc311c332e5bc60"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#a20b3bb4eb0a94fecffc311c332e5bc60">set_thold_acceleration</a> (self, <a class="el" href="class_filter_1_1_filter.html#a7025b0fde65e9f4df0eb873d71b5f28f">thold_acceleration</a>)</td></tr>
-<tr class="separator:a20b3bb4eb0a94fecffc311c332e5bc60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9aa28616fd5b336161d3efab6705aad3"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#a9aa28616fd5b336161d3efab6705aad3">get_abs_acc</a> (self, <a class="el" href="namespace_filter.html#a78c6402241058155a7bee5a8e7f91002">acceleration</a>)</td></tr>
-<tr class="separator:a9aa28616fd5b336161d3efab6705aad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad83e9badbdf5bb6ed5e247c4a693e4db"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#ad83e9badbdf5bb6ed5e247c4a693e4db">saturation</a> (self, pre_pos, <a class="el" href="namespace_filter.html#a3635cfe4ff59089856d4d8fe0ca9494e">pos</a>, <a class="el" href="namespace_filter.html#a49b401c39c56c9fbcc39acf4eed93ea5">speed</a>, current_acc, step)</td></tr>
-<tr class="separator:ad83e9badbdf5bb6ed5e247c4a693e4db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5676f72012f9718887ab1e8bbf129973"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#a5676f72012f9718887ab1e8bbf129973">correction</a> (self, distance, coeff, offset)</td></tr>
-<tr class="separator:a5676f72012f9718887ab1e8bbf129973"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74fa11d293d3411bd3c44013a9a6acf6"><td class="memItemLeft" align="right" valign="top"><a id="a74fa11d293d3411bd3c44013a9a6acf6"></a>
+def&#160;</td><td class="memItemRight" valign="bottom"><b>__init__</b> (self, mode=&quot;SW&quot;, param=[])</td></tr>
+<tr class="separator:a74fa11d293d3411bd3c44013a9a6acf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9849d232d39b301ea2c8b2489e7bae25"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#a9849d232d39b301ea2c8b2489e7bae25">apply</a> (self, args=None)</td></tr>
+<tr class="separator:a9849d232d39b301ea2c8b2489e7bae25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a556284b0965efd1d347565d76c51a4ee"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#a556284b0965efd1d347565d76c51a4ee">sliding_window</a> (self, ranging_list, nb_samples, nb_eliminations_start, nb_eliminations_end=0)</td></tr>
+<tr class="separator:a556284b0965efd1d347565d76c51a4ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac495c6d2389da8dc58b01a672e6cfd11"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#ac495c6d2389da8dc58b01a672e6cfd11">set_thold_acceleration</a> (self, thold_acceleration)</td></tr>
+<tr class="separator:ac495c6d2389da8dc58b01a672e6cfd11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c58efe0f4ad2e2b24ca15cfcac279de"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#a2c58efe0f4ad2e2b24ca15cfcac279de">get_abs_acc</a> (self, acceleration)</td></tr>
+<tr class="separator:a2c58efe0f4ad2e2b24ca15cfcac279de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa13f0d1f1966e7f0dc438953a43d7c52"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#aa13f0d1f1966e7f0dc438953a43d7c52">saturation</a> (self, pre_pos, pos, speed, current_acc, step)</td></tr>
+<tr class="separator:aa13f0d1f1966e7f0dc438953a43d7c52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48a07f17663fd614b10c091f30ec782d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#a48a07f17663fd614b10c091f30ec782d">correction</a> (self, distance, coeff, offset)</td></tr>
+<tr class="separator:a48a07f17663fd614b10c091f30ec782d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a76f02684bd0cec5168854c5c178ec440"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#a76f02684bd0cec5168854c5c178ec440">mode</a></td></tr>
-<tr class="separator:a76f02684bd0cec5168854c5c178ec440"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a2d71d357a8d633ba77aaea5383bf04"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#a5a2d71d357a8d633ba77aaea5383bf04">param</a></td></tr>
-<tr class="separator:a5a2d71d357a8d633ba77aaea5383bf04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7025b0fde65e9f4df0eb873d71b5f28f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#a7025b0fde65e9f4df0eb873d71b5f28f">thold_acceleration</a></td></tr>
-<tr class="separator:a7025b0fde65e9f4df0eb873d71b5f28f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa05c1f12d4d85d891c7ad8074ac39ad1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filter_1_1_filter.html#aa05c1f12d4d85d891c7ad8074ac39ad1">thold</a></td></tr>
-<tr class="separator:aa05c1f12d4d85d891c7ad8074ac39ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+Data Fields</h2></td></tr>
+<tr class="memitem:a1a6b6fb557d8d37d59700faf4e4c9167"><td class="memItemLeft" align="right" valign="top"><a id="a1a6b6fb557d8d37d59700faf4e4c9167"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>mode</b></td></tr>
+<tr class="separator:a1a6b6fb557d8d37d59700faf4e4c9167"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51f20d6b1b54a2eee3be0e8adc96a0ae"><td class="memItemLeft" align="right" valign="top"><a id="a51f20d6b1b54a2eee3be0e8adc96a0ae"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>param</b></td></tr>
+<tr class="separator:a51f20d6b1b54a2eee3be0e8adc96a0ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc0e17141a32daebdc6c3855ff16605e"><td class="memItemLeft" align="right" valign="top"><a id="acc0e17141a32daebdc6c3855ff16605e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>thold_acceleration</b></td></tr>
+<tr class="separator:acc0e17141a32daebdc6c3855ff16605e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b3aab3856fbe5755a12e11bd5d95177"><td class="memItemLeft" align="right" valign="top"><a id="a2b3aab3856fbe5755a12e11bd5d95177"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>thold</b></td></tr>
+<tr class="separator:a2b3aab3856fbe5755a12e11bd5d95177"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><pre class="fragment">defines the different type of filters that can be applied on the ranging or position data</pre> </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a0c6134f6eb4058ca0fc2566b7edc2dbd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c6134f6eb4058ca0fc2566b7edc2dbd">&#9670;&nbsp;</a></span>__init__()</h2>
+<div class="textblock"><pre class="fragment">defines the different type of filters that can be applied on the ranging or position data</pre> </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a9849d232d39b301ea2c8b2489e7bae25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9849d232d39b301ea2c8b2489e7bae25">&#9670;&nbsp;</a></span>apply()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">def Filter.Filter.__init__ </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>mode</em> = <code>&quot;SW&quot;</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>param</em> = <code>[]</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a11b2474b9655e55828f883d07e90c7ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a11b2474b9655e55828f883d07e90c7ad">&#9670;&nbsp;</a></span>apply()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">def Filter.Filter.apply </td>
+          <td class="memname">def apply </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>
@@ -168,14 +137,14 @@ Public Attributes</h2></td></tr>
 <pre class="fragment">computes the filter associated to the chosen mode</pre> 
 </div>
 </div>
-<a id="a5676f72012f9718887ab1e8bbf129973"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5676f72012f9718887ab1e8bbf129973">&#9670;&nbsp;</a></span>correction()</h2>
+<a id="a48a07f17663fd614b10c091f30ec782d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48a07f17663fd614b10c091f30ec782d">&#9670;&nbsp;</a></span>correction()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">def Filter.Filter.correction </td>
+          <td class="memname">def correction </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>
@@ -208,14 +177,14 @@ Public Attributes</h2></td></tr>
 <pre class="fragment">linear correction for anchor rangings</pre> 
 </div>
 </div>
-<a id="a9aa28616fd5b336161d3efab6705aad3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9aa28616fd5b336161d3efab6705aad3">&#9670;&nbsp;</a></span>get_abs_acc()</h2>
+<a id="a2c58efe0f4ad2e2b24ca15cfcac279de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c58efe0f4ad2e2b24ca15cfcac279de">&#9670;&nbsp;</a></span>get_abs_acc()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">def Filter.Filter.get_abs_acc </td>
+          <td class="memname">def get_abs_acc </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>
@@ -236,14 +205,14 @@ Public Attributes</h2></td></tr>
 <pre class="fragment">returns absolute acceleration</pre> 
 </div>
 </div>
-<a id="ad83e9badbdf5bb6ed5e247c4a693e4db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad83e9badbdf5bb6ed5e247c4a693e4db">&#9670;&nbsp;</a></span>saturation()</h2>
+<a id="aa13f0d1f1966e7f0dc438953a43d7c52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa13f0d1f1966e7f0dc438953a43d7c52">&#9670;&nbsp;</a></span>saturation()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">def Filter.Filter.saturation </td>
+          <td class="memname">def saturation </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>
@@ -289,14 +258,14 @@ Public Attributes</h2></td></tr>
 Returns the new position</pre> 
 </div>
 </div>
-<a id="a20b3bb4eb0a94fecffc311c332e5bc60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a20b3bb4eb0a94fecffc311c332e5bc60">&#9670;&nbsp;</a></span>set_thold_acceleration()</h2>
+<a id="ac495c6d2389da8dc58b01a672e6cfd11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac495c6d2389da8dc58b01a672e6cfd11">&#9670;&nbsp;</a></span>set_thold_acceleration()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">def Filter.Filter.set_thold_acceleration </td>
+          <td class="memname">def set_thold_acceleration </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>
@@ -317,14 +286,14 @@ Returns the new position</pre>
 <pre class="fragment">modifies the threshold for maximum tolerated acceleration</pre> 
 </div>
 </div>
-<a id="a2b336310e8592aab555f6a3dcf921c29"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b336310e8592aab555f6a3dcf921c29">&#9670;&nbsp;</a></span>sliding_window()</h2>
+<a id="a556284b0965efd1d347565d76c51a4ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a556284b0965efd1d347565d76c51a4ee">&#9670;&nbsp;</a></span>sliding_window()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">def Filter.Filter.sliding_window </td>
+          <td class="memname">def sliding_window </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>
@@ -364,65 +333,8 @@ Returns the new position</pre>
 then returns the average of remaining values</pre> 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a76f02684bd0cec5168854c5c178ec440"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a76f02684bd0cec5168854c5c178ec440">&#9670;&nbsp;</a></span>mode</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Filter.Filter.mode</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5a2d71d357a8d633ba77aaea5383bf04"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a2d71d357a8d633ba77aaea5383bf04">&#9670;&nbsp;</a></span>param</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Filter.Filter.param</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa05c1f12d4d85d891c7ad8074ac39ad1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa05c1f12d4d85d891c7ad8074ac39ad1">&#9670;&nbsp;</a></span>thold</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Filter.Filter.thold</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7025b0fde65e9f4df0eb873d71b5f28f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7025b0fde65e9f4df0eb873d71b5f28f">&#9670;&nbsp;</a></span>thold_acceleration</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Filter.Filter.thold_acceleration</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>SecureLoc_MQTT/<a class="el" href="_filter_8py.html">Filter.py</a></li>
+<li>C:/Users/pestourb/Documents/GitHub/SecureLoc/Filter.py</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

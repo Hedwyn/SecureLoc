@@ -1,30 +1,59 @@
+/****************************************************************************
+* Copyright (C) 2019 LCIS Laboratory - Baptiste Pestourie
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, in version 3.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*
+* This program is part of the SecureLoc Project @https://github.com/Hedwyn/SecureLoc
+ ****************************************************************************/
+
+/**
+ * @file Tag.cpp
+ * @author Baptiste Pestourie
+ * @date 2019 December 1st
+ * @brief Source file for the cooperative anchor firmware. This firmware is intended for DecaWino chips.
+ * Tags are the mobile nodes localized by the anchors.
+ * @see https://github.com/Hedwyn/SecureLoc
+ */
+
+
 #include "tag.h"
 #include "anchor_c.h"
 
 
 
-static DecaDuino decaduino;
-int state, previous_state;
+static DecaDuino decaduino;/**< Instance for all DWM1000-related operations*/
+static int state;/**< Previous state variable for the FSM- used to keep track of state changes*/
+static int previous_state; /**< Next state variable for the FSM - state to go after a serial call*/
 
 /* UWB frames */
-uint8_t txData[128];
-uint8_t rxData[128];
-uint16_t rxLen;
+static uint8_t txData[128];/**< Emission buffer */
+static uint8_t rxData[128];/**< Reception buffer */
+static uint16_t rxLen;/**< Reception buffer length*/
 
 /* IDs */
-byte myID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, NODE_ID};
-byte targetID [8]; //Id robot reçue
-byte anchorID [8];   //Id de l'ancre émettrice
-byte sleep_slots;
+static byte myID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, NODE_ID};/**< Node's tag ID */
+static byte targetID [8]; /**< Buffer for the target ID field in RX frames */
+static byte anchorID [8];  /**< Buffer for the anchor ID field in RX frames */
+static byte sleep_slots; /**< Number of slots to sleep when turning to sleep mode */
 
 
 /* timestamps */
-uint64_t t2, t3,ts_ghost_anchor;      //temps de réception et temps de ré-émission
+static uint64_t t2, t3,ts_ghost_anchor;  /**< Timestamp for TWR process */
 
 /* cooperative methods */
-static byte next_target_id[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00};
-static byte ghost_anchor_id[8] ={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00};
-static byte next_anchor_id[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00};
+static byte next_target_id[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00}; /**< ID of the next target when acting as an anchor */
+static byte ghost_anchor_id[8] ={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00}; /**< ID tu claim when acting as an anchor */
+static byte next_anchor_id[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00};/**< ID to call when acting as an anchor */
 
 static const char * states[50]=
 {
@@ -34,7 +63,7 @@ static const char * states[50]=
 "Wait Start",
 "Send ACK",
 "Send Data"
-};
+};/**< States name for the debug output */
 
 int main() {
 	tag_setup();
@@ -110,12 +139,14 @@ void loop() {
   switch (state) {
 
     case TWR_ENGINE_STATE_INIT:
-      //decaduino.plmeRxDisableRequest();
+		/* Default starting state */
       state = TWR_ENGINE_STATE_RX_ON;
 
       break;
 
 		case TWR_ENGINE_GHOST_ANCHOR:
+			/* in Cooperative mode, state for ghost anchor operations.
+			The tag will switch to this state when designated by an anchor */
 			state = TWR_ENGINE_STATE_INIT;
 			Serial.println("Switching to ghost anchor mode");
 			Serial.print("Ghost Anchor ID: ");
@@ -130,6 +161,7 @@ void loop() {
 			break;
 
     case TWR_ENGINE_STATE_RX_ON:
+			/* Turns on reception and checks if the tag has been designated as ghost anchor in the previous ranging */
       decaduino.plmeRxEnableRequest();
       state = TWR_ENGINE_STATE_WAIT_START;
 			if (COOPERATIVE && (ghost_anchor_id[7] != 0)  && (decaduino.getSystemTimeCounter() > ts_ghost_anchor + sleep_slots * SLOT_LENGTH) ) {
@@ -142,6 +174,7 @@ void loop() {
       break;
 
     case TWR_ENGINE_STATE_WAIT_START:
+			/* Polling state for start request from anchors */
       if ( decaduino.rxFrameAvailable() ) {
         /* START format : START | targetID | anchorID */
         if ( rxData[0] == TWR_MSG_TYPE_START ) {
@@ -181,6 +214,8 @@ void loop() {
       break;
 
     case TWR_ENGINE_STATE_SEND_ACK:
+			/* After receiving a START, sends an acknowledgment as defined in TWR protocol.
+			Memorizes acknowledgment sending time */
       txData[0] = TWR_MSG_TYPE_ACK;           //On acquite le message (champs 0 du mesage)
       for( int i =0; i<8 ; i++){
         txData[1+i] = anchorID[i];
@@ -195,6 +230,7 @@ void loop() {
 
 
     case TWR_ENGINE_STATE_SEND_DATA_REPLY:
+			/* Sending last frame of TWR protocol, with the 2 timestamps measured */
       txData[0] = TWR_MSG_TYPE_DATA_REPLY;
       decaduino.encodeUint64(t2, &txData[17]);
       decaduino.encodeUint64(t3, &txData[25]);

@@ -1,0 +1,263 @@
+\hypertarget{classapplication_1_1_application}{}\section{Application Class Reference}
+\label{classapplication_1_1_application}\index{Application@{Application}}
+Inheritance diagram for Application\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classapplication_1_1_application}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_ae64f0875afe3067b97ba370b354b9213}\label{classapplication_1_1_application_ae64f0875afe3067b97ba370b354b9213}} 
+def {\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self)
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_a723c0a1022badcd24965be09a1ccad83}{U\+I\+\_\+management\+\_\+task}} (self, task)
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_a919e7c637c4e2c70b80ea71ff708e0c5}{add\+\_\+anchor}} (self, anchor\+\_\+pos)
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_afb149cfcea0378638df7b16662fb4516}{add\+\_\+tag}} (self, tag\+\_\+pos)
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_a44b040db1450b3e52875b18bf3c397ab}{create\+\_\+world}} (self)
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_abd46271df4663c0a6eafd65cc0225619}{create\+\_\+moving\+\_\+entities}} (self)
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_a5d5f203a22d435fe3ba8f20a98912951}{init\+\_\+mqtt}} (self)
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_ac8badcf7fda4f70c2c93bfe0e55edcb3}{on\+\_\+message}} (self, mqttc, obj, msg)
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_a875504ef90230b137861e39cc7ba6c7f}{init\+\_\+logs}} (self)
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_a9748ebedda92b7e9328841d6633080b6}{log\+\_\+dataset}} (self, \mbox{\hyperlink{classjson_structures_1_1dataset}{dataset}})
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_a976549ccc76753bc31f99185a789a595}{log\+\_\+pos}} (self, pos)
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_a5532bf93412434e87215e5dba8f0c366}{check\+Inputs}} (self)
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_a87078a437ca2d9fb5c7c7e3f3f964d7b}{update\+\_\+positions\+\_\+task}} (self, task)
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_a3b37792e871ae0aff20a7fc504b29458}{simulation\+\_\+layer}} (self, tag)
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_afded811885b0390450238ee8487d992a}{get\+\_\+rp}} (self, tabfile=\char`\"{}rp.\+tab\char`\"{})
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_aabeebafd4c55db0de5b62920f912b428}{update\+\_\+sock\+\_\+task}} (self, task)
+\item 
+def \mbox{\hyperlink{classapplication_1_1_application_aadd900346b1bd5c962657a1566f9fbb7}{manage\+\_\+measurements}} (self)
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a4ccc9b09cd5009aceaa248cf636be51d}\label{classapplication_1_1_application_a4ccc9b09cd5009aceaa248cf636be51d}} 
+{\bfseries tags}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_aa6981c1c0f4722a428c855b7ff4603d4}\label{classapplication_1_1_application_aa6981c1c0f4722a428c855b7ff4603d4}} 
+{\bfseries logs\+\_\+pipe}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_aba54450ad49ad1b46e29721241611d50}\label{classapplication_1_1_application_aba54450ad49ad1b46e29721241611d50}} 
+{\bfseries anchors}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a5122b177c209e63e9c26f64b84f44a68}\label{classapplication_1_1_application_a5122b177c209e63e9c26f64b84f44a68}} 
+{\bfseries pos\+\_\+array}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a9c7897b1ed7b191c2bb2b3cbcf8c07ff}\label{classapplication_1_1_application_a9c7897b1ed7b191c2bb2b3cbcf8c07ff}} 
+{\bfseries rangings}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a6f9bc23a0e2554f19b4036e10d681977}\label{classapplication_1_1_application_a6f9bc23a0e2554f19b4036e10d681977}} 
+{\bfseries ranging\+\_\+counter}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a63baf4774f1048f9dbfd5760bde1a3ad}\label{classapplication_1_1_application_a63baf4774f1048f9dbfd5760bde1a3ad}} 
+{\bfseries mes\+\_\+counter}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_ae55e74a083b645560070a790ecfaf83d}\label{classapplication_1_1_application_ae55e74a083b645560070a790ecfaf83d}} 
+{\bfseries ref\+\_\+points}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a3eca7195563a4c365bb41c312d8f7d3c}\label{classapplication_1_1_application_a3eca7195563a4c365bb41c312d8f7d3c}} 
+{\bfseries rp}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a68f4061e1fd07ed7c7042d2afa9b8286}\label{classapplication_1_1_application_a68f4061e1fd07ed7c7042d2afa9b8286}} 
+{\bfseries threads\+\_\+pipe}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_ad268f8672c706f6492e684c02b6e3d6e}\label{classapplication_1_1_application_ad268f8672c706f6492e684c02b6e3d6e}} 
+{\bfseries filters}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_aaa50d80c7b704568ea8315d5160a39d4}\label{classapplication_1_1_application_aaa50d80c7b704568ea8315d5160a39d4}} 
+\mbox{\hyperlink{classapplication_1_1_application_aaa50d80c7b704568ea8315d5160a39d4}{simulator}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{namespace_simulation}{Simulation}} layer config. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classapplication_1_1_application_aa98e4feadd3ff49c54b9494418d0c1b9}\label{classapplication_1_1_application_aa98e4feadd3ff49c54b9494418d0c1b9}} 
+{\bfseries keep\+\_\+dataset}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a905479d79c2aa8410d2fc374bc75cc5b}\label{classapplication_1_1_application_a905479d79c2aa8410d2fc374bc75cc5b}} 
+\mbox{\hyperlink{classapplication_1_1_application_a905479d79c2aa8410d2fc374bc75cc5b}{menu}}
+\begin{DoxyCompactList}\small\item\em menu configuration \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a0cce6087c1ee78f78ebb7e4b338dd790}\label{classapplication_1_1_application_a0cce6087c1ee78f78ebb7e4b338dd790}} 
+{\bfseries menu\+\_\+pipe}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a17a813ff016f566e53dfb54c93ba2913}\label{classapplication_1_1_application_a17a813ff016f566e53dfb54c93ba2913}} 
+\mbox{\hyperlink{classapplication_1_1_application_a17a813ff016f566e53dfb54c93ba2913}{dataset}}
+\begin{DoxyCompactList}\small\item\em logs config \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a1455b045e2343939799f2ff658d8e39c}\label{classapplication_1_1_application_a1455b045e2343939799f2ff658d8e39c}} 
+{\bfseries log\+\_\+flag}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a7a1f94eb5d0fcb264b366614d7525f87}\label{classapplication_1_1_application_a7a1f94eb5d0fcb264b366614d7525f87}} 
+{\bfseries exit\+\_\+flag}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_ad604cff3eb5d475cdc9f8eb5ab570fee}\label{classapplication_1_1_application_ad604cff3eb5d475cdc9f8eb5ab570fee}} 
+{\bfseries done}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_aa42a09469de866c0b3eecb8e90dc344f}\label{classapplication_1_1_application_aa42a09469de866c0b3eecb8e90dc344f}} 
+{\bfseries log2play}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a98121304a3885b9699b36513af09106b}\label{classapplication_1_1_application_a98121304a3885b9699b36513af09106b}} 
+{\bfseries playback\+\_\+path}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a41f34ddde8a8c59af60372d9f5e72d33}\label{classapplication_1_1_application_a41f34ddde8a8c59af60372d9f5e72d33}} 
+{\bfseries playback\+\_\+rangings}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a5fa42e2715ac629edc61832574f0c399}\label{classapplication_1_1_application_a5fa42e2715ac629edc61832574f0c399}} 
+{\bfseries playback\+\_\+counter}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_ab1c5110ce9bc51d1e16d285ab470a89a}\label{classapplication_1_1_application_ab1c5110ce9bc51d1e16d285ab470a89a}} 
+{\bfseries mqttc}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_ad5377048bcfeeababab31687e9bbda03}\label{classapplication_1_1_application_ad5377048bcfeeababab31687e9bbda03}} 
+{\bfseries logs\+\_\+mqtt}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a4f5f05e7cf862586d58b123ebeac3e62}\label{classapplication_1_1_application_a4f5f05e7cf862586d58b123ebeac3e62}} 
+{\bfseries logs\+\_\+pos}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_ad5d8bd2f2c7ba06f51a39486c579491f}\label{classapplication_1_1_application_ad5d8bd2f2c7ba06f51a39486c579491f}} 
+{\bfseries logs\+\_\+rangings}
+\item 
+\mbox{\Hypertarget{classapplication_1_1_application_a95d27c454bae5de9e80962221646154e}\label{classapplication_1_1_application_a95d27c454bae5de9e80962221646154e}} 
+\mbox{\hyperlink{classapplication_1_1_application_a95d27c454bae5de9e80962221646154e}{world}}
+\begin{DoxyCompactList}\small\item\em anchor creation \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classapplication_1_1_application_aca5bd7c00943f5ff8a4cf50e52782628}\label{classapplication_1_1_application_aca5bd7c00943f5ff8a4cf50e52782628}} 
+{\bfseries processed\+\_\+robot}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}Main application class\end{DoxyVerb}
+ 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classapplication_1_1_application_a919e7c637c4e2c70b80ea71ff708e0c5}\label{classapplication_1_1_application_a919e7c637c4e2c70b80ea71ff708e0c5}} 
+\index{application\+::\+Application@{application\+::\+Application}!add\+\_\+anchor@{add\+\_\+anchor}}
+\index{add\+\_\+anchor@{add\+\_\+anchor}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{add\+\_\+anchor()}{add\_anchor()}}
+{\footnotesize\ttfamily def add\+\_\+anchor (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{anchor\+\_\+pos }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}adds an anchor to the current world. Should be used to create a fictive anchor\end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_afb149cfcea0378638df7b16662fb4516}\label{classapplication_1_1_application_afb149cfcea0378638df7b16662fb4516}} 
+\index{application\+::\+Application@{application\+::\+Application}!add\+\_\+tag@{add\+\_\+tag}}
+\index{add\+\_\+tag@{add\+\_\+tag}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{add\+\_\+tag()}{add\_tag()}}
+{\footnotesize\ttfamily def add\+\_\+tag (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{tag\+\_\+pos }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}adds an tag to the current world. Should be used to create a fictive tag\end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_a5532bf93412434e87215e5dba8f0c366}\label{classapplication_1_1_application_a5532bf93412434e87215e5dba8f0c366}} 
+\index{application\+::\+Application@{application\+::\+Application}!check\+Inputs@{check\+Inputs}}
+\index{check\+Inputs@{check\+Inputs}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{check\+Inputs()}{checkInputs()}}
+{\footnotesize\ttfamily def check\+Inputs (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}manages user keyboard interaction \end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_abd46271df4663c0a6eafd65cc0225619}\label{classapplication_1_1_application_abd46271df4663c0a6eafd65cc0225619}} 
+\index{application\+::\+Application@{application\+::\+Application}!create\+\_\+moving\+\_\+entities@{create\+\_\+moving\+\_\+entities}}
+\index{create\+\_\+moving\+\_\+entities@{create\+\_\+moving\+\_\+entities}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{create\+\_\+moving\+\_\+entities()}{create\_moving\_entities()}}
+{\footnotesize\ttfamily def create\+\_\+moving\+\_\+entities (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Create moving entities\end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_a44b040db1450b3e52875b18bf3c397ab}\label{classapplication_1_1_application_a44b040db1450b3e52875b18bf3c397ab}} 
+\index{application\+::\+Application@{application\+::\+Application}!create\+\_\+world@{create\+\_\+world}}
+\index{create\+\_\+world@{create\+\_\+world}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{create\+\_\+world()}{create\_world()}}
+{\footnotesize\ttfamily def create\+\_\+world (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Creates the 3D world in which entities will evolve\end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_afded811885b0390450238ee8487d992a}\label{classapplication_1_1_application_afded811885b0390450238ee8487d992a}} 
+\index{application\+::\+Application@{application\+::\+Application}!get\+\_\+rp@{get\+\_\+rp}}
+\index{get\+\_\+rp@{get\+\_\+rp}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{get\+\_\+rp()}{get\_rp()}}
+{\footnotesize\ttfamily def get\+\_\+rp (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{tabfile = {\ttfamily \char`\"{}rp.tab\char`\"{}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}For measurements mode only. Gets the reference points in the configuration file\end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_a875504ef90230b137861e39cc7ba6c7f}\label{classapplication_1_1_application_a875504ef90230b137861e39cc7ba6c7f}} 
+\index{application\+::\+Application@{application\+::\+Application}!init\+\_\+logs@{init\+\_\+logs}}
+\index{init\+\_\+logs@{init\+\_\+logs}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{init\+\_\+logs()}{init\_logs()}}
+{\footnotesize\ttfamily def init\+\_\+logs (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}initializes json logs with current date & time, and creates the
+pipe for loggin thread communication\end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_a5d5f203a22d435fe3ba8f20a98912951}\label{classapplication_1_1_application_a5d5f203a22d435fe3ba8f20a98912951}} 
+\index{application\+::\+Application@{application\+::\+Application}!init\+\_\+mqtt@{init\+\_\+mqtt}}
+\index{init\+\_\+mqtt@{init\+\_\+mqtt}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{init\+\_\+mqtt()}{init\_mqtt()}}
+{\footnotesize\ttfamily def init\+\_\+mqtt (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}creates the mqtt client and handles the subscriptions\end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_a9748ebedda92b7e9328841d6633080b6}\label{classapplication_1_1_application_a9748ebedda92b7e9328841d6633080b6}} 
+\index{application\+::\+Application@{application\+::\+Application}!log\+\_\+dataset@{log\+\_\+dataset}}
+\index{log\+\_\+dataset@{log\+\_\+dataset}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{log\+\_\+dataset()}{log\_dataset()}}
+{\footnotesize\ttfamily def log\+\_\+dataset (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{dataset }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}writes the last dataset received in logs file\end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_a976549ccc76753bc31f99185a789a595}\label{classapplication_1_1_application_a976549ccc76753bc31f99185a789a595}} 
+\index{application\+::\+Application@{application\+::\+Application}!log\+\_\+pos@{log\+\_\+pos}}
+\index{log\+\_\+pos@{log\+\_\+pos}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{log\+\_\+pos()}{log\_pos()}}
+{\footnotesize\ttfamily def log\+\_\+pos (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{pos }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}writes the id of the robot and its last pos recorded in logs file\end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_aadd900346b1bd5c962657a1566f9fbb7}\label{classapplication_1_1_application_aadd900346b1bd5c962657a1566f9fbb7}} 
+\index{application\+::\+Application@{application\+::\+Application}!manage\+\_\+measurements@{manage\+\_\+measurements}}
+\index{manage\+\_\+measurements@{manage\+\_\+measurements}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{manage\+\_\+measurements()}{manage\_measurements()}}
+{\footnotesize\ttfamily def manage\+\_\+measurements (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}handles the pace of measurements. Measurements modes consist of series of measures separated by short rests.
+The duration can be set by the user\end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_ac8badcf7fda4f70c2c93bfe0e55edcb3}\label{classapplication_1_1_application_ac8badcf7fda4f70c2c93bfe0e55edcb3}} 
+\index{application\+::\+Application@{application\+::\+Application}!on\+\_\+message@{on\+\_\+message}}
+\index{on\+\_\+message@{on\+\_\+message}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{on\+\_\+message()}{on\_message()}}
+{\footnotesize\ttfamily def on\+\_\+message (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{mqttc,  }\item[{}]{obj,  }\item[{}]{msg }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}handles data resfreshing when a mqtt message is received\end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_a3b37792e871ae0aff20a7fc504b29458}\label{classapplication_1_1_application_a3b37792e871ae0aff20a7fc504b29458}} 
+\index{application\+::\+Application@{application\+::\+Application}!simulation\+\_\+layer@{simulation\+\_\+layer}}
+\index{simulation\+\_\+layer@{simulation\+\_\+layer}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{simulation\+\_\+layer()}{simulation\_layer()}}
+{\footnotesize\ttfamily def simulation\+\_\+layer (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{tag }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}handles all the tasks related to the simulator\end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_a723c0a1022badcd24965be09a1ccad83}\label{classapplication_1_1_application_a723c0a1022badcd24965be09a1ccad83}} 
+\index{application\+::\+Application@{application\+::\+Application}!U\+I\+\_\+management\+\_\+task@{U\+I\+\_\+management\+\_\+task}}
+\index{U\+I\+\_\+management\+\_\+task@{U\+I\+\_\+management\+\_\+task}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{U\+I\+\_\+management\+\_\+task()}{UI\_management\_task()}}
+{\footnotesize\ttfamily def U\+I\+\_\+management\+\_\+task (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{task }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Handles user inputs; refresh rate can be set in parameters\end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_a87078a437ca2d9fb5c7c7e3f3f964d7b}\label{classapplication_1_1_application_a87078a437ca2d9fb5c7c7e3f3f964d7b}} 
+\index{application\+::\+Application@{application\+::\+Application}!update\+\_\+positions\+\_\+task@{update\+\_\+positions\+\_\+task}}
+\index{update\+\_\+positions\+\_\+task@{update\+\_\+positions\+\_\+task}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{update\+\_\+positions\+\_\+task()}{update\_positions\_task()}}
+{\footnotesize\ttfamily def update\+\_\+positions\+\_\+task (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{task }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Updates moving entities positions\end{DoxyVerb}
+ \mbox{\Hypertarget{classapplication_1_1_application_aabeebafd4c55db0de5b62920f912b428}\label{classapplication_1_1_application_aabeebafd4c55db0de5b62920f912b428}} 
+\index{application\+::\+Application@{application\+::\+Application}!update\+\_\+sock\+\_\+task@{update\+\_\+sock\+\_\+task}}
+\index{update\+\_\+sock\+\_\+task@{update\+\_\+sock\+\_\+task}!application\+::\+Application@{application\+::\+Application}}
+\subsubsection{\texorpdfstring{update\+\_\+sock\+\_\+task()}{update\_sock\_task()}}
+{\footnotesize\ttfamily def update\+\_\+sock\+\_\+task (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{task }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Asks server newest positions of entities\end{DoxyVerb}
+\begin{DoxyVerb}In playback mode the socket is bypassed and ranging resultd are obtained directly from the log file\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/application.\+py\end{DoxyCompactItemize}

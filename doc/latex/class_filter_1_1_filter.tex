@@ -1,0 +1,91 @@
+\hypertarget{class_filter_1_1_filter}{}\section{Filter Class Reference}
+\label{class_filter_1_1_filter}\index{Filter@{Filter}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_filter_1_1_filter_a74fa11d293d3411bd3c44013a9a6acf6}\label{class_filter_1_1_filter_a74fa11d293d3411bd3c44013a9a6acf6}} 
+def {\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self, mode=\char`\"{}SW\char`\"{}, param=\mbox{[}$\,$\mbox{]})
+\item 
+def \mbox{\hyperlink{class_filter_1_1_filter_a9849d232d39b301ea2c8b2489e7bae25}{apply}} (self, args=None)
+\item 
+def \mbox{\hyperlink{class_filter_1_1_filter_a556284b0965efd1d347565d76c51a4ee}{sliding\+\_\+window}} (self, ranging\+\_\+list, nb\+\_\+samples, nb\+\_\+eliminations\+\_\+start, nb\+\_\+eliminations\+\_\+end=0)
+\item 
+def \mbox{\hyperlink{class_filter_1_1_filter_ac495c6d2389da8dc58b01a672e6cfd11}{set\+\_\+thold\+\_\+acceleration}} (self, thold\+\_\+acceleration)
+\item 
+def \mbox{\hyperlink{class_filter_1_1_filter_a2c58efe0f4ad2e2b24ca15cfcac279de}{get\+\_\+abs\+\_\+acc}} (self, acceleration)
+\item 
+def \mbox{\hyperlink{class_filter_1_1_filter_aa13f0d1f1966e7f0dc438953a43d7c52}{saturation}} (self, pre\+\_\+pos, pos, speed, current\+\_\+acc, step)
+\item 
+def \mbox{\hyperlink{class_filter_1_1_filter_a48a07f17663fd614b10c091f30ec782d}{correction}} (self, distance, coeff, offset)
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_filter_1_1_filter_a1a6b6fb557d8d37d59700faf4e4c9167}\label{class_filter_1_1_filter_a1a6b6fb557d8d37d59700faf4e4c9167}} 
+{\bfseries mode}
+\item 
+\mbox{\Hypertarget{class_filter_1_1_filter_a51f20d6b1b54a2eee3be0e8adc96a0ae}\label{class_filter_1_1_filter_a51f20d6b1b54a2eee3be0e8adc96a0ae}} 
+{\bfseries param}
+\item 
+\mbox{\Hypertarget{class_filter_1_1_filter_acc0e17141a32daebdc6c3855ff16605e}\label{class_filter_1_1_filter_acc0e17141a32daebdc6c3855ff16605e}} 
+{\bfseries thold\+\_\+acceleration}
+\item 
+\mbox{\Hypertarget{class_filter_1_1_filter_a2b3aab3856fbe5755a12e11bd5d95177}\label{class_filter_1_1_filter_a2b3aab3856fbe5755a12e11bd5d95177}} 
+{\bfseries thold}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}defines the different type of filters that can be applied on the ranging or position data\end{DoxyVerb}
+ 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_filter_1_1_filter_a9849d232d39b301ea2c8b2489e7bae25}\label{class_filter_1_1_filter_a9849d232d39b301ea2c8b2489e7bae25}} 
+\index{Filter\+::\+Filter@{Filter\+::\+Filter}!apply@{apply}}
+\index{apply@{apply}!Filter\+::\+Filter@{Filter\+::\+Filter}}
+\subsubsection{\texorpdfstring{apply()}{apply()}}
+{\footnotesize\ttfamily def apply (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{args = {\ttfamily None} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}computes the filter associated to the chosen mode\end{DoxyVerb}
+ \mbox{\Hypertarget{class_filter_1_1_filter_a48a07f17663fd614b10c091f30ec782d}\label{class_filter_1_1_filter_a48a07f17663fd614b10c091f30ec782d}} 
+\index{Filter\+::\+Filter@{Filter\+::\+Filter}!correction@{correction}}
+\index{correction@{correction}!Filter\+::\+Filter@{Filter\+::\+Filter}}
+\subsubsection{\texorpdfstring{correction()}{correction()}}
+{\footnotesize\ttfamily def correction (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{distance,  }\item[{}]{coeff,  }\item[{}]{offset }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}linear correction for anchor rangings\end{DoxyVerb}
+ \mbox{\Hypertarget{class_filter_1_1_filter_a2c58efe0f4ad2e2b24ca15cfcac279de}\label{class_filter_1_1_filter_a2c58efe0f4ad2e2b24ca15cfcac279de}} 
+\index{Filter\+::\+Filter@{Filter\+::\+Filter}!get\+\_\+abs\+\_\+acc@{get\+\_\+abs\+\_\+acc}}
+\index{get\+\_\+abs\+\_\+acc@{get\+\_\+abs\+\_\+acc}!Filter\+::\+Filter@{Filter\+::\+Filter}}
+\subsubsection{\texorpdfstring{get\+\_\+abs\+\_\+acc()}{get\_abs\_acc()}}
+{\footnotesize\ttfamily def get\+\_\+abs\+\_\+acc (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{acceleration }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}returns absolute acceleration\end{DoxyVerb}
+ \mbox{\Hypertarget{class_filter_1_1_filter_aa13f0d1f1966e7f0dc438953a43d7c52}\label{class_filter_1_1_filter_aa13f0d1f1966e7f0dc438953a43d7c52}} 
+\index{Filter\+::\+Filter@{Filter\+::\+Filter}!saturation@{saturation}}
+\index{saturation@{saturation}!Filter\+::\+Filter@{Filter\+::\+Filter}}
+\subsubsection{\texorpdfstring{saturation()}{saturation()}}
+{\footnotesize\ttfamily def saturation (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{pre\+\_\+pos,  }\item[{}]{pos,  }\item[{}]{speed,  }\item[{}]{current\+\_\+acc,  }\item[{}]{step }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}saturates the position vector if maximum tolerated acceleration is exceeded.
+Returns the new position\end{DoxyVerb}
+ \mbox{\Hypertarget{class_filter_1_1_filter_ac495c6d2389da8dc58b01a672e6cfd11}\label{class_filter_1_1_filter_ac495c6d2389da8dc58b01a672e6cfd11}} 
+\index{Filter\+::\+Filter@{Filter\+::\+Filter}!set\+\_\+thold\+\_\+acceleration@{set\+\_\+thold\+\_\+acceleration}}
+\index{set\+\_\+thold\+\_\+acceleration@{set\+\_\+thold\+\_\+acceleration}!Filter\+::\+Filter@{Filter\+::\+Filter}}
+\subsubsection{\texorpdfstring{set\+\_\+thold\+\_\+acceleration()}{set\_thold\_acceleration()}}
+{\footnotesize\ttfamily def set\+\_\+thold\+\_\+acceleration (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{thold\+\_\+acceleration }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}modifies the threshold for maximum tolerated acceleration\end{DoxyVerb}
+ \mbox{\Hypertarget{class_filter_1_1_filter_a556284b0965efd1d347565d76c51a4ee}\label{class_filter_1_1_filter_a556284b0965efd1d347565d76c51a4ee}} 
+\index{Filter\+::\+Filter@{Filter\+::\+Filter}!sliding\+\_\+window@{sliding\+\_\+window}}
+\index{sliding\+\_\+window@{sliding\+\_\+window}!Filter\+::\+Filter@{Filter\+::\+Filter}}
+\subsubsection{\texorpdfstring{sliding\+\_\+window()}{sliding\_window()}}
+{\footnotesize\ttfamily def sliding\+\_\+window (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{ranging\+\_\+list,  }\item[{}]{nb\+\_\+samples,  }\item[{}]{nb\+\_\+eliminations\+\_\+start,  }\item[{}]{nb\+\_\+eliminations\+\_\+end = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}removes the extremum values of the given list,
+then returns the average of remaining values\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/Filter.\+py\end{DoxyCompactItemize}

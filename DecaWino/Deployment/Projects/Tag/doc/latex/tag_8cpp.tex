@@ -1,0 +1,86 @@
+\hypertarget{tag_8cpp}{}\section{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Tag/src/cpp/tag.cpp File Reference}
+\label{tag_8cpp}\index{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Tag/src/cpp/tag.\+cpp@{C\+:/\+Users/pestourb/\+Documents/\+Git\+Hub/\+Secure\+Loc/\+Deca\+Wino/\+Deployment/\+Projects/\+Tag/src/cpp/tag.\+cpp}}
+
+
+Source file for the cooperative anchor firmware. This firmware is intended for Deca\+Wino chips. Tags are the mobile nodes localized by the anchors.  
+
+
+{\ttfamily \#include \char`\"{}tag.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}anchor\+\_\+c.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{tag_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{tag_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}} 
+int {\bfseries main} ()
+\item 
+void \mbox{\hyperlink{tag_8cpp_a78056916bc3b389f4878ce6cfaab616e}{tag\+\_\+setup}} ()
+\begin{DoxyCompactList}\small\item\em Deca\+Wino setup for Tag mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{tag_8cpp_acac0bb5a09c034814b60e97c4fa5bdf1}{tag\+\_\+\+Rx\+Tx\+Config}} ()
+\begin{DoxyCompactList}\small\item\em R\+X/\+TX setup for D\+W1000 in tag mode. Sets the channel, preamble length, preamble code and P\+RF. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{tag_8cpp_afe461d27b9c48d5921c00d521181f12f}{loop}} ()
+\begin{DoxyCompactList}\small\item\em One iteration of the main F\+SM loop for T\+WR, with default ID parameters in header file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Source file for the cooperative anchor firmware. This firmware is intended for Deca\+Wino chips. Tags are the mobile nodes localized by the anchors. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 December 1st 
+\end{DoxyDate}
+\begin{DoxySeeAlso}{See also}
+\href{https://github.com/Hedwyn/SecureLoc}{\tt https\+://github.\+com/\+Hedwyn/\+Secure\+Loc} 
+\end{DoxySeeAlso}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{tag_8cpp_afe461d27b9c48d5921c00d521181f12f}\label{tag_8cpp_afe461d27b9c48d5921c00d521181f12f}} 
+\index{tag.\+cpp@{tag.\+cpp}!loop@{loop}}
+\index{loop@{loop}!tag.\+cpp@{tag.\+cpp}}
+\subsubsection{\texorpdfstring{loop()}{loop()}}
+{\footnotesize\ttfamily void loop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+One iteration of the main F\+SM loop for T\+WR, with default ID parameters in header file. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 January 1st 
+\end{DoxyDate}
+\mbox{\Hypertarget{tag_8cpp_acac0bb5a09c034814b60e97c4fa5bdf1}\label{tag_8cpp_acac0bb5a09c034814b60e97c4fa5bdf1}} 
+\index{tag.\+cpp@{tag.\+cpp}!tag\+\_\+\+Rx\+Tx\+Config@{tag\+\_\+\+Rx\+Tx\+Config}}
+\index{tag\+\_\+\+Rx\+Tx\+Config@{tag\+\_\+\+Rx\+Tx\+Config}!tag.\+cpp@{tag.\+cpp}}
+\subsubsection{\texorpdfstring{tag\+\_\+\+Rx\+Tx\+Config()}{tag\_RxTxConfig()}}
+{\footnotesize\ttfamily void tag\+\_\+\+Rx\+Tx\+Config (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+R\+X/\+TX setup for D\+W1000 in tag mode. Sets the channel, preamble length, preamble code and P\+RF. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2019 January 1st 
+\end{DoxyDate}
+\mbox{\Hypertarget{tag_8cpp_a78056916bc3b389f4878ce6cfaab616e}\label{tag_8cpp_a78056916bc3b389f4878ce6cfaab616e}} 
+\index{tag.\+cpp@{tag.\+cpp}!tag\+\_\+setup@{tag\+\_\+setup}}
+\index{tag\+\_\+setup@{tag\+\_\+setup}!tag.\+cpp@{tag.\+cpp}}
+\subsubsection{\texorpdfstring{tag\+\_\+setup()}{tag\_setup()}}
+{\footnotesize\ttfamily void tag\+\_\+setup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Deca\+Wino setup for Tag mode. 
+
+\begin{DoxyAuthor}{Author}
+Baptiste Pestourie 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2020 January 1st 
+\end{DoxyDate}

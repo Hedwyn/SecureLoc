@@ -1,7 +1,40 @@
+/****************************************************************************
+* Copyright (C) 2019 LCIS Laboratory - Baptiste Pestourie
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, in version 3.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*
+* This program is part of the SecureLoc Project @https://github.com/Hedwyn/SecureLoc
+ ****************************************************************************/
+
+/**
+ * @file SkewAuthentication.cpp
+ * @author Baptiste Pestourie
+ * @date 2020 February 1st
+ * @brief Source file for the Skew Authentication firmware. This firrmware has 2 modes, prover(P) and verifier(V).
+ * @todo documentation + interfacing with main anchor/tags projects
+ * The prover is authenticated based on its skew signature. Send '0' to both nodes to start the authentication process.
+ * The two nodes will exchange frames at maximum speed such as inducing a fast temperature gradient on P.
+ * V characterizes P's skew throughout the protocol. The signature is sentto the host laptop or RPI on the serial port.
+ * When authentication processes are not running this firmware is similar to Boiler.
+ * See the platform documentation and related papers for details.
+ * @see https://github.com/Hedwyn/SecureLoc
+ */
+
+
 #include "SkewAuthentication.h"
 
 static DecaDuino decaduino;
-static int previous_state, state, next_state, frame_counter = 0, distance_ctr = 0, temperature_ctr = 0, n_total_frames = N_TOTAL_FRAMES;
+static int previous_state, state, next_state, frame_counter = 0, distance_ctr = 0, temperature_ctr = 0, n_total_frames = N_TOTAL_FRAMES, bonus_frames = 0;
 static int signature_length = SIGNATURE_LENGTH;
 static uint8_t txBuffer[BUFFER_LEN], rxBuffer[BUFFER_LEN];
 static uint64_t start_ts, current_time;
@@ -115,6 +148,7 @@ void setup_DB() {
   }
   else {
     state = PONG;
+    bonus_frames = AVERAGE_LENGTH -1;
     decaduino.plmeRxEnableRequest();
     Serial.println("Starting as Prover");
   }
@@ -132,7 +166,7 @@ void send_db_results() {
   Serial.print("$ DB ended succesfully.\n[Frame exchanged]: ");
   Serial.println(frame_counter);
   Serial.print("[Skew]: ");
-  Serial.println(decaduino.getLastRxSkew());
+  Serial.println(decaduino.getLastRxSkewCRI());
 }
 
 
@@ -168,7 +202,7 @@ void loop_DB() {
       // Serial.print("$ Total time: ");
       // Serial.println((long) (decaduino.getLastTxTimestamp() - timestamp));
       if (authentication_running) {
-        if (frame_counter == n_total_frames) {
+        if (frame_counter == n_total_frames + bonus_frames) {
           authentication_running = 0;
           Serial.println("$ Authentication completed");
           Serial.println("$ Sending Signature");
@@ -192,17 +226,7 @@ void loop_DB() {
         }
       }
 
-      /* computing temperature */
-      currentTemp = decaduino.getTemperature();
-      if ( (currentTemp > 0) && (currentTemp < 100)) {
-        temperature_acc += currentTemp;
-        temperature_ctr++;
-      }
-      if (temperature_ctr == AVERAGE_LENGTH) {
-        temperature_ctr = 0;
-        lastTemp = temperature_acc / AVERAGE_LENGTH;
-        temperature_acc = 0;
-      }
+
       if (!authentication_running) {
         serial_command = Serial.read();
         if (serial_command !=  -1) {
@@ -242,9 +266,11 @@ void loop_DB() {
           }
         }
         last_skew = decaduino.getLastRxSkew();
+
+
         if ((last_skew > -25) && (last_skew < 25) ) {
           if ((VERIFIER) && (SKEW_CORRECTION)) {
-            last_skew += (T_REF - lastTemp) * SKEW_CORRECTION_COEFF;
+            last_skew += (lastTemp - T_REF) * SKEW_CORRECTION_COEFF;
           }
           skew_acc += last_skew;
           frame_counter++;
@@ -257,11 +283,23 @@ void loop_DB() {
               signature_idx++;
             }
           }
+
           Serial.print(skew_acc);
           Serial.print("|");
           Serial.println(lastTemp);
           skew_acc = 0;
         }
+      }
+      /* computing temperature */
+      currentTemp = decaduino.getTemperature();
+      if ( (currentTemp > 0) && (currentTemp < 100)) {
+        temperature_acc += currentTemp;
+        temperature_ctr++;
+      }
+      if (temperature_ctr == AVERAGE_LENGTH) {
+        temperature_ctr = 0;
+        lastTemp = temperature_acc / AVERAGE_LENGTH;
+        temperature_acc = 0;
       }
       /* checking for timeouts */
       if (authentication_running && (millis() > timeout)) {

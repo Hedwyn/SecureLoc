@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['jsonlogs',['jsonLogs',['../classjson_logs_1_1json_logs.html',1,'jsonLogs']]]
+  ['gndataset',['GNdataset',['../class_gauss_newton_1_1_g_ndataset.html',1,'GaussNewton']]],
+  ['gui',['GUI',['../class_emulator_1_1_g_u_i.html',1,'Emulator']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['logs',['Logs',['../classlogs_1_1_logs.html',1,'logs.Logs'],['../classlogs__save_1_1_logs.html',1,'logs_save.Logs']]]
+  ['ips',['IPS',['../class_emulator_1_1_i_p_s.html',1,'Emulator']]]
 ];

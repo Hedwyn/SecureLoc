@@ -1,0 +1,40 @@
+U\+WB platform for indoor secure localization platform based on Deca\+Wino nodes.
+
+\subsection*{$\ast$$\ast$\+Hardware$\ast$$\ast$}
+
+Deca\+Wino chips are based on Decawave D\+W\+M1000 module driven by a Teensyduino 3.\+2. More information on Deca\+Wino here\+: \href{https://wino.cc/decawino/}{\tt https\+://wino.\+cc/decawino/}
+
+A pdf documentation is provided with detailed instruction on the hardware required, the setup and how to use this project.
+
+\subsection*{$\ast$$\ast$\+Project Description$\ast$$\ast$}
+
+Deca\+Wino nodes can perform Time-\/of-\/\+Flight U\+WB ranging, with distance estimations reaching an accuracy around 20 cm. The ranging protocols can be controlled though the Deca\+Duino library, which provides a powerful interface for fast and easy protoyping on Deca\+Wino nodes (\href{https://github.com/Hedwyn/DecaDuino}{\tt https\+://github.\+com/\+Hedwyn/\+Deca\+Duino}) The Secure\+Loc platform is based on anchors and mobile tags. The anchors are fixed nodes with known location that estimate their distance to the mobile tags; with at least three distances, the position of the mobile tags can be computed. The positions are displayed in real-\/time with Panda 3D. The data measured (distances, R\+S\+SI..) and calculated (positions) are logged into json files. Deca\+Wino nodes can be programmed indifferently as anchors or nodes. However, anchors should be plugged to a Raspberry Pi, that will send the data to the station running this program through M\+Q\+TT protocol. The M\+Q\+TT broker (mosquitto) can be run of the same station as this program.
+
+Three modes are available for the localization engine\+:
+\begin{DoxyItemize}
+\item Normal\+: the positions are calculated and displayed in real-\/time. The user can quit at anytime by pressing \textquotesingle{}q\textquotesingle{}.
+\item Measurements\+: the user should specify a set of reference points with their coordinates in rp.\+tab prior to using this mode. Once started, the localization engine with perform a fixed number of position estimation for each reference point. After each serie of measurements, an audio signal is played and the user can move the tag to the next reference. Once all the reference points have been evaluated, the global accuracy of the localization engine can be evaluated (as the average euclidean distance to the real coordinates).
+\item Playback\+: allows replaying ranging logs previously recorded. Playback can be used for example to compare different localization algorithm on the same set of data. Playback is supported on both measurements and normal logs, however, using logs from normal mode is more recommanded given that in measurements mode the localization is turned off when the tag is moved from one reference point to another.
+\end{DoxyItemize}
+
+\subsection*{$\ast$$\ast$\+Running this project$\ast$$\ast$}
+
+Follow first all the setup instructions provided in Documentation.\+pdf. Then simply run \char`\"{}python main.\+py\char`\"{} in Secure\+Loc repository.
+
+\subsection*{$\ast$$\ast$\+Firmware$\ast$$\ast$}
+
+The Deca\+Wino nodes can be programmed with the Arduino I\+DE; the Arduino codes for different projects can be found in Deca\+Wino $>$ Arduino. The platform has been switched to a custom compilation tool, so these programs, although functional, are deprecated. The more recent projects for the localization platform are written in cpp and can be found in Deca\+Wino $>$ Deployment $>$ Projects. A compilation menu (Deca\+Wino /\+Deployment/\+Compilation.py), provides features for fast and easy firmware deployment\+:
+\begin{DoxyItemize}
+\item Multiple compilations with unique ID generation
+\item Anchors deployment in a single command. This will generate the binary with a unique ID for every anchor from a single cpp file, send them by ftp to the R\+PI and trigger remote flashing of the Deca\+Wino.\+If more than one Deca\+Wino are plugged to a R\+PI, pressing manually the flashing button of the Deca\+Wino node will be required as the bootloader does unfortunately not handle multiple U\+SB devices.
+\end{DoxyItemize}
+
+{\itshape Keyboard controls}\+:
+\begin{DoxyItemize}
+\item q to quit
+\item Directional arrows for navigation
+\end{DoxyItemize}
+
+\subsection*{$\ast$$\ast$\+Contact$\ast$$\ast$}
+
+\href{mailto:baptiste.pestourie@lcis.grenoble-inp.fr}{\tt baptiste.\+pestourie@lcis.\+grenoble-\/inp.\+fr} 
