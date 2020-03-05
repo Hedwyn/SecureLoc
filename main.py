@@ -4,5 +4,12 @@ if __name__ == "__main__":
     for prc in configfiles:
         load_prc_file(prc)
     from application import Application
-    game_app = Application()
-    game_app.run()
+    from Menu import Menu
+    from parameters import HEADLESS
+    from threading import Thread
+    menu = Menu()
+    menu.setDaemon(True)
+    menu.start()
+    game_app = Application(menu)
+    if not(HEADLESS):
+        game_app.run()

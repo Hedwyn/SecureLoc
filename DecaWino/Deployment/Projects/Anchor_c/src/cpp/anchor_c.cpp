@@ -77,7 +77,7 @@ static int32_t tof; /**< Time-of-flight calculated after TWR protocol */
 static int32_t tof_skew;  /**< Time-of-flight calculated after TWR protocol after skew correction */
 static float distance; /**< Distance calculated after TWR protocol */
 static float distance_skew;/**< Distance calculated after TWR protocol after skew correction */
-
+static int has_position_been_resfreshed = 0;
 
 /* Serial communications */
 static char serial_command; /**< Serial command (on one digit) received on the last serial communication */
@@ -103,7 +103,7 @@ struct control_frame{
   byte sleep_slots; /**< Number of slots that the designated tag should sleep before starting the verification process*/
 };
 static control_frame next_ghost_anchor = {.anchor_id = 0, .target_idx = 0, .next_anchor_id = 0, .sleep_slots = 0}; /**< Ghost anchor request sent to designated tags */
-
+Tag_position tag_positions[NB_ROBOTS];
 
 #ifdef MASTER
 void getNextGhostAnchor() {
@@ -114,6 +114,31 @@ void getNextGhostAnchor() {
   next_ghost_anchor.sleep_slots = NB_TOTAL_ANCHORS;//+ next_ghost_anchor.anchor_id - 2;
 }
 #endif
+
+void serial_process_tag_position() {
+  int idx = 0, found = 0;
+  byte tag_id;
+  tag_id = (byte) Serial.parseInt();
+  while ((idx < NB_ROBOTS) && (!found)) {
+    if (tag_id == targetID[idx][7]) {
+      found = 1;
+    }
+    else {
+      idx++;
+    }
+  }
+  if (!found) {
+    Serial.println("Unknown tag. Dismissing command");
+  }
+  else {
+    tag_positions[idx].tagID = targetID[idx];
+    tag_positions[idx].x = Serial.parseFloat();
+    tag_positions[idx].y = Serial.parseFloat();
+    tag_positions[idx].z = Serial.parseFloat();
+    //TODO: handle improper formatting
+  }
+}
+
 
 
 /** @brief Gets the anchor ID from header file configuration in default mode
@@ -142,6 +167,8 @@ void getID() {
 		DPRINTFLN("ANCHOR id has not been defined during compilation. Default ID : 0 \n");
 	#endif
 }
+
+
 
 
 /** @brief Attributes an ID to the anchor
@@ -210,6 +237,9 @@ void anchor_setup() {
   timeout = millis() + START_TIMEOUT + (NODE_ID - 1) * SLOT_LENGTH * 1E-3;
   DPRINTFLN("Starting");
   #ifdef MASTER
+    for (int i = 0; i < NB_ROBOTS; i++) {
+      tag_positions[i].tagID = targetID[i];
+    }
     state = TWR_ENGINE_STATE_SEND_START;
   #else
     state = TWR_ENGINE_STATE_INIT;
@@ -230,8 +260,8 @@ int anchor_loop() {
 int anchor_loop(byte *myID, byte *myNextAnchorID) {
   int ret = TWR_ON_GOING;
   if (state != previous_state) {
-    Serial.print("$State: ");
-    Serial.println(states[state]);
+    DPRINTF("$State: ");
+    DPRINTFLN(states[state]);
   }
   previous_state = state;
 
@@ -266,7 +296,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 				/* the DATA frame of the previous frame has never been received. Forcing a new cycle */
 				state = TWR_ENGINE_PREPARE_RANGING;
         delayed = 0;
-        DPRINTFLN("$Timeout- Starting new cycle");
+        Serial.println("$Timeout- Starting new cycle");
         decaduino.plmeRxDisableRequest();
 				break;
 			}
@@ -344,15 +374,21 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
               next_target_idx = (int) (NB_ROBOTS + target_id - ASCII_NUMBERS_OFFSET) ;
               is_target_anchor = true;
             }
-
-
             break;
+
           case 1:
-            Serial.println("$ command #2 received"); // command excerpt for future implementations
+            Serial.println("$ Tag position received ");
+            if (NODE_ID == MASTER_ID) {
+              serial_process_tag_position();
+              has_position_been_resfreshed = 1;
+            }
+            else {
+              Serial.println("Only the master anchor deals with tag positions");
+            }
             break;
+
           case 2:
             Serial.println("$ Starting PKCE");
-
             break;
           default:
             Serial.println("$ unknown command received:");
@@ -405,14 +441,40 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
         txData[17+i]=myNextAnchorID[i];
       }
 
-      // control frame
-      txData[25]= next_ghost_anchor.anchor_id;
-      txData[26] = next_ghost_anchor.next_anchor_id;
-      txData[27] = next_ghost_anchor.sleep_slots;
 
-			/* Sending frame */
-      if(!decaduino.pdDataRequest(txData, 28, delayed, slot_start) ){
-        DPRINTFLN("$Could not send the frame");
+      if (NODE_ID == MASTER_ID) {
+        // informing  the tag of its gposition /!\ dirty
+        Serial.print("Sending position to tag ");
+        Serial.println(next_target_idx);
+        Serial.println(tag_positions[next_target_idx].x);
+        Serial.println(tag_positions[next_target_idx].y);
+        Serial.println(tag_positions[next_target_idx].z);
+        if (has_position_been_resfreshed) {
+          txData[25] = 1; //Enabling position
+          has_position_been_resfreshed = 0;
+        }
+        else {
+          txData[25] = 0;
+        }
+        *( (float *) (txData + 26)) = tag_positions[next_target_idx].x ;
+        *( (float *) (txData + 30)) = tag_positions[next_target_idx].y ;
+        *( (float *) (txData + 34)) = tag_positions[next_target_idx].z ;
+
+        // control frame for cooperative approaches
+        txData[38]= next_ghost_anchor.anchor_id;
+        txData[39] = next_ghost_anchor.next_anchor_id;
+        txData[40] = next_ghost_anchor.sleep_slots;
+
+  			/* Sending extended frame */
+        if(!decaduino.pdDataRequest(txData, 41, delayed, slot_start) ){
+          DPRINTFLN("$Could not send the frame");
+        }
+      }
+      else {
+        /* Sending short frame */
+        if(!decaduino.pdDataRequest(txData, 28, delayed, slot_start) ){
+          DPRINTFLN("$Could not send the frame");
+        }
       }
 
 			/* going back to the regular cycle if the target was an anchor */
@@ -551,6 +613,10 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 
       Serial.print("|");
       Serial.print( (int) t4);
+
+      /* skew */
+      Serial.print("|");
+      Serial.print(decaduino.getLastRxSkew());
 
       /* RSSI */
 			Serial.print("|");

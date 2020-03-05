@@ -1,43 +1,100 @@
 from serial import *
+import serial.tools.list_ports
 import paho.mqtt.client as mqtt
 import time
 import sys
 import os
 import threading
 
-#HOST = '169.254.1.1'
+#### network parameters
+HOST = '169.254.1.1'
 HOST = '127.1.1.1'
 PORT = 1883 # default mqtt port
-#SERIALPATH = '/dev/ttyACM0'
-SERIALPATH = 'COM22'
-SERIAL_ROOT = '/dev'
 
+## serial parameters
+# windows
+WIN = 0
+LINUX = not(WIN)
+if WIN:
+    SERIALPATH = 'COM15'
+    SERIAL_ROOT = ''
+    SERIAL_PREFIX = 'COM'
+else:
+    SERIALPATH = '/dev/ttyACM0'
+    SERIAL_ROOT = '/dev/'
+    SERIAL_PREFIX = 'ttyACM'
 
+SLEEP_TIME = 0.2
+WATCHDOG_TIMEOUT = 5
+
+## mqtt field variables init
 distance = 0
 anchor_id = ''
 bot_id = ''
-NB_DATA = 8 # number of datatypes sent by the node
-NB_DATA_EXTENDED = 12 # number of datatypes sent by the node in EXTENDED_MODE
-ROOT = 'SecureLoc/anchors_data/'
-SLEEP_TIME = 0.2
-WATCHDOG_TIMEOUT = 2
-exit_flag = False
 rssi = 0
 
+## mqtt format
+NB_DATA = 9 # number of datatypes sent by the node
+NB_DATA_EXTENDED = 13 # number of datatypes sent by the node in EXTENDED_MODE
+ROOT = 'SecureLoc/anchors_data/'
+TOPIC_SERIAL = 'Serial'
+MQTT_CONFIG_FILE = 'MQTT_topics.txt'
 
 
-# starting mqtt client
-mqttc = mqtt.Client()
-mqttc.connect(HOST, PORT, 60)
-mqttc.loop_start()
+## serial containers & flags
+devices = []
+connected_anchors = {}
+serial_ports = {}
+exit_flag = False
 
+
+class ClientStub(object):
+    def __getattribute__(self,attr):
+        def method(*args, **kwargs):
+            pass
+        return method
+
+    def __setattribute__(self,attr):
+        pass
+
+
+
+
+## starting mqtt client
+# stubing mqtt if no broker is found
+try:
+    mqttc = mqtt.Client()
+    mqttc.connect(HOST, PORT, 60)
+    mqttc.loop_start()
+except:
+    mqttc = ClientStub()
+
+
+
+def on_message(mqttc,obj,msg):
+    """handles data resfreshing when a mqtt message is received"""
+    labels = msg.topic.split("/")
+    serial_message = msg.payload
+    anchorID = labels[-2]
+    print("Sending serial command to anchor " + anchorID + " :" + serial_message.encode())
+    for port_name, ID in connected_anchors.items():
+        if ID == anchorID:
+            serial_ports[port_name].write(serial_message)
+
+
+mqttc.on_message = on_message
 
 def getSerialPorts():
     """returns all the serial devices connect as a list"""
     ports = []
-    files= os.listdir(SERIAL_ROOT)
+    if SERIAL_PREFIX == 'COM':
+        # windows system
+        files = [port.device for port in list(serial.tools.list_ports.comports())]
+    else:
+        # linux
+        files= os.listdir(SERIAL_ROOT)
     for entry in files:
-        if entry.startswith('ttyACM'):
+        if entry.startswith(SERIAL_PREFIX):
             ports.append(entry)
 
     print('found serial devices: ' + str(ports) )
@@ -59,9 +116,10 @@ def openPort(path = SERIALPATH):
     return(port)
 
 
-def processLine(line):
+def processLine(line, port):
     """parses the serial line received. If it is a DATA frame, publishes the data on MQTT.
     DEBUG frames will be ignored"""
+
     if len(line) > 0 and line[0] == '*' and line[-1] == '#':
         data = line.split("|")
         if len(data) < NB_DATA:
@@ -69,12 +127,16 @@ def processLine(line):
         if len(data) >= NB_DATA:
             anchor_id = data[0][15:17]
             bot_id = data[1][14:17]
-
+            port_name = port.name.split("/")[-1]
+            if (port_name in connected_anchors) and not(connected_anchors[port_name]):
+                connected_anchors[port_name] = anchor_id
+                print("subscribing to " + ROOT + anchor_id + "/" + TOPIC_SERIAL )
+                mqttc.subscribe(ROOT + anchor_id + "/" + TOPIC_SERIAL)
             distance = data[2]
             # timestamps
-            [ts1,ts2,ts3,ts4] = [int(data[3]), int(data[4]), int(data[5]), int(data[6]) ]
-
-            rssi = data[7]
+            [ts1,ts2,ts3,ts4] = [data[3], data[4], data[5], data[6] ]
+            skew = data[7]
+            rssi = data[8]
 
             if rssi[-1] == '#':
             # rssi was the last element sent
@@ -82,26 +144,26 @@ def processLine(line):
 
 
             # publishing to MQTT
-            print("publishing data to MQTT...")
             mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/distance", distance )
             mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/rssi", rssi )
+            mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/skew", skew )
             for i,ts in enumerate([ts1,ts2,ts3,ts4]):
                  mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/ts" + str(i+1), ts )
 
         if len(data)== NB_DATA_EXTENDED:
             # EXTENDED MODE has to be enabled on DecaWino
             # EXTENDED MODE provides additional physical data, e.g, temperature
-            fp_power = data[8]
-            fp_ampl2 = data[9]
-            std_noise = data[10]
-            temperature = data[11][:-1] # removing '#' at the end
+            fp_power = data[9]
+            fp_ampl2 = data[10]
+            std_noise = data[11]
+            temperature = data[12][:-1] # removing '#' at the end
 
             # publishing to MQTT
             mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/fp_power",fp_power)
             mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/fp_ampl2",fp_ampl2)
             mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/std_noise",std_noise)
             mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/temperature",temperature)
-            #print(ROOT + str(anchor_id) + "/" + str(bot_id) + "/temperature")
+
 
 
 
@@ -114,7 +176,7 @@ def rebootTeensy():
     Reflashing Teensyduino is required given that no remote soft reset is provided besides the bootloader"""
 
     print("Resetting Teensy...")
-    os.system('/home/pi/Desktop/teensy_loader_cli -mmcu=mk20dx256 -s -v ' + '/home/pi/Desktop/anchor*.hex')
+    os.system('/home/pi/Desktop/teensy_loader_cli -mmcu=mk20dx256 -s -v ' + '/home/pi/Desktop/node*.hex')
 
 
 
@@ -144,7 +206,7 @@ def readSerial(port):
                 line = port.readline().decode('utf-8').strip()
                 print(line)
                 try:
-                    processLine(line)
+                    processLine(line, port)
                 except:
                     print("process line failed")
             else:
@@ -173,6 +235,7 @@ def readSerial(port):
 
             waitSerialDevice(path)
             port = openPort(path)
+            serial_ports[port.name.split("/")[-1]] = port
             print(path)
 
 
@@ -182,6 +245,7 @@ def readSerial(port):
 def handleSerialDevice(path):
     """opens the serial port and starts reading it"""
     port = openPort(path)
+    serial_ports[port.name.split("/")[-1]] = port
     readSerial(port)
 
 
@@ -199,7 +263,8 @@ def serialPool():
     if len(devices) > 0:
         for device in devices:
             # creating a thread reading serial port
-            threads_pool.append(threading.Thread(target = handleSerialDevice, args = (SERIAL_ROOT + '/' + device,) ))
+            threads_pool.append(threading.Thread(target = handleSerialDevice, args = (SERIAL_ROOT + device,) ))
+            connected_anchors[device] = None
     else:
         # waiting for any device to connect;
         waitSerialDevice(SERIALPATH)

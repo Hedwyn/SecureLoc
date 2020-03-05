@@ -26,7 +26,7 @@ class dataset:
 
     def __init__(self,sample = None, protocol = '',anchorID = None, botID= None,
                  rp = None, distance = None,timestamps = {},
-                 rssi = None, fp_power = None, fp_ampl2 = None, std_noise = None, temperature = None):
+                 rssi = None, skew = None, fp_power = None, fp_ampl2 = None, std_noise = None, temperature = None):
         self.sample = sample
         self.protocol = protocol
         self.anchorID = anchorID
@@ -34,6 +34,7 @@ class dataset:
         self.rp = rp # used only in the case of measurement protocol
         self.distance = distance
         self.timestamps = timestamps
+        self.skew = skew
         self.rssi = rssi
         self.fp_power = fp_power
         self.std_noise = std_noise
@@ -51,6 +52,7 @@ class dataset:
                 "reference_point":self.rp,
                 "timestamps":self.timestamps,
                 "rssi":self.rssi,
+                "skew":self.skew,
                 "fp_power":self.fp_power,
                 "fp_ampl2":self.fp_ampl2,
                 "std_noise":self.std_noise,

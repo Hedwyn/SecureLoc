@@ -9,7 +9,7 @@ import time
 from Make import *
 
 SHELL_ON = True
-DEFAULT_NB_ANCHORS = 15
+
 HOSTS_LIST = ['Rasp1','Rasp2','Rasp3','Rasp4']
 USERNAMES = {'Rasp1':'pi','Rasp2':'pi','Rasp3':'pi','Rasp4':'pi'}
 USERS_PWD = {'Rasp1':'raspberry','Rasp2':'raspberry','Rasp3':'raspberry','Rasp4':'raspberry'}
@@ -20,7 +20,7 @@ DEFAULT_CONF = 'config.txt'
 DEFAULT_PROJECT_NAME = 'Anchor'
 hex_name = 'node'
 
-DEFAULT_NB_ANCHORS = 1
+DEFAULT_NB_ANCHORS = 4
 DEFAULT_ID = '1'
 
 

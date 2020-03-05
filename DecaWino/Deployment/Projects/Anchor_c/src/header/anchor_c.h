@@ -37,8 +37,7 @@
 #define ALOHA_COLLISION_DELAY 20  /**< Delayed to wait when detecting collisions in ALOHA mode*/
 #define DMAX 10  /**< Maximum distance considered as realistic - should be adapted to the environment*/
 #ifndef NB_ANCHORS
-  #define NB_ANCHORS 1/**< Default total number of anchors, should be defined during compilation*/
-
+  #define NB_ANCHORS 4/**< Default total number of anchors, should be defined during compilation*/
 #endif
 
 #ifndef NODE_ID
@@ -55,7 +54,7 @@
 #define SLOT_LENGTH_MS (SLOT_LENGTH / 1000) /**< TDMA slot length, in milliseconds*/
 #define IN_US 1E6 /**< Second to microsecond conversion*/
 
-#define _DEBUG_   //comment to disable debug mode
+//#define _DEBUG_   //comment to disable debug mode
 #ifdef _DEBUG_
   #define DPRINTF  Serial.print/**< When defined, enables debug ouput on the serial port*/
 #else
@@ -118,6 +117,21 @@
 #endif
 
 #define NB_TOTAL_ANCHORS (NB_ANCHORS + NB_GHOST_ANCHORS) /**< Total number of anchors inclujding ghost anchors*/
+
+/** The position of a given tag identified by its id, in the (x,y,z)
+ coordinates system */
+typedef struct Tag_position{
+  byte *tagID; /**<pointer to the tag ID in the tag ID list */
+  float x;/**<Coordinates on (anchor1 - anchor2) axis */
+  float y;/**<Coordinates on (anchor1 - anchor4) axis */
+  float z;/**<Altitude */
+}Tag_position;
+
+/** @brief process serial frames containing tag positions
+  * @author Baptiste Pestourie
+  * @date 2020 March 1st
+*/
+void serial_process_tag_position();
 
 /** @brief DecaWino setup for anchor mode
   * @author Baptiste Pestourie

@@ -133,10 +133,14 @@ class taskMgr(Thread):
             time.sleep(task.delayTime)
             # TODO: check thread termination
             # TODO: getting rid of the delay ?
+        # Guard time for thread completion
+        time.sleep(0.01)
 
     @classmethod
     def doMethodLater(self,delayTime,target,name = ''):
         handler = Thread(target = self.wrapper,args = (delayTime,target))
+        handler.setDaemon(True)
         handler.start()
+
 
     # TODO: implement other methods (e.g add)

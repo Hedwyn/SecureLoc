@@ -10,8 +10,8 @@ MEASURING = False
 ## MQTT parameters
 HOST = '169.254.1.1'   # IP address of the MQTT brokerq
 PORT = 80              # Arbitrary non-privileged port
-MQTT_TOPICS = ["/distance","/ts1","/ts2","/ts3","/ts4","/rssi","/fp_power","/fp_ampl2","/std_noise","/temperature"]
-
+MQTT_TOPICS = ["/distance","/ts1","/ts2","/ts3","/ts4","/skew","/rssi","/fp_power","/fp_ampl2","/std_noise","/temperature"]
+TOPIC_SERIAL = 'Serial'
 
 ## Standard mode
 T = 0.1 # sample time (s), should match the sample time of the hardware
@@ -107,8 +107,8 @@ SPEED_BUFFER_LEN = 5 #size of the list storing the last speed measurements
 POSITIONS_BUFFER_LEN = 5 #size of the list storing the last positions measurements
 ACC_BUFFER_LEN = 5
 # SW filter
-SW_SIZE = 20
-SW_ELIMINATIONS = 12
+SW_SIZE = 6
+SW_ELIMINATIONS = 2
 
 DEFAULT_ACC_THOLD = 10 #THold for SAT filter
 STEP = 1 # Steps for SAT filter

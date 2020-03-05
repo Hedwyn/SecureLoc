@@ -48,13 +48,13 @@ static byte sleep_slots; /**< Number of slots to sleep when turning to sleep mod
 
 
 /* timestamps */
-static uint64_t t2, t3,ts_ghost_anchor;  /**< Timestamp for TWR process */
+static uint64_t t2 = 0, t3,ts_ghost_anchor;  /**< Timestamp for TWR process */
 
 /* cooperative methods */
 static byte next_target_id[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00}; /**< ID of the next target when acting as an anchor */
 static byte ghost_anchor_id[8] ={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00}; /**< ID tu claim when acting as an anchor */
 static byte next_anchor_id[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00};/**< ID to call when acting as an anchor */
-
+static Tag_position my_position = {.tagID = myID, .x = 0.0, .y = 0.0, .z = 0.0};
 static const char * states[50]=
 {
 "Init",
@@ -92,32 +92,7 @@ void tag_setup() {
       delay(50);
     }
   }
-  //decaduino.setPreambleLength(256);
 
-  /*decaduino.setRxPrf(2);
-  decaduino.setTxPrf(2);
-  decaduino.setDrxTune(64);
-  decaduino.setRxPcode(9);
-  decaduino.setTxPcode(9);*/
-  /*
-  decaduino.setPreambleLength(256);
-
-  decaduino.setTBR(110);
-  decaduino.setChannel(3);
-  decaduino.setPACSize(16);
-  decaduino.setTxPrf(64);
-  decaduino.setRxPrf(64);
-  decaduino.displayRxTxConfig();
-  */
-  /*decaduino.setPhrPower(3,0);
-  decaduino.setSdPower(3,0);*/
-
-  /*
-  decaduino.setSmartTxPower(0);
-  decaduino.setTxPower(18,15.5);
-  */
-
-  //tag_RxTxConfig();
 	tag_RxTxConfig();
   state = TWR_ENGINE_STATE_INIT;
   previous_state = state;
@@ -161,6 +136,10 @@ void loop() {
 			break;
 
     case TWR_ENGINE_STATE_RX_ON:
+			/* sleeping until next slot */
+			while (decaduino.getSystemTimeCounter() - t2 < (SLOT_LENGTH / (DW1000_TIMEBASE * IN_US))  - GUARD_TIME) {
+				delayMicroseconds(500);
+			}
 			/* Turns on reception and checks if the tag has been designated as ghost anchor in the previous ranging */
       decaduino.plmeRxEnableRequest();
       state = TWR_ENGINE_STATE_WAIT_START;
@@ -189,10 +168,20 @@ void loop() {
             t2 = decaduino.getLastRxTimestamp();
             state = TWR_ENGINE_STATE_SEND_ACK;
 						if (anchorID[7] == MASTER_ID) {
+							// getting position
+							if (rxData[25] == 1) {
+								my_position.x = *( (float *) (rxData + 26));
+								my_position.y = *( (float *) (rxData + 30));
+								my_position.z = *( (float *) (rxData + 34));
+								Serial.println("Current position: ");
+								Serial.println(my_position.x);
+								Serial.println(my_position.y);
+								Serial.println(my_position.z);
+							}
 							DPRINTFLN("Received ghost anchor request from Master");
-							ghost_anchor_id[7] = rxData[25];
-							next_anchor_id[7] = rxData[26];
-							sleep_slots = rxData[27];
+							ghost_anchor_id[7] = rxData[37];
+							next_anchor_id[7] = rxData[38];
+							sleep_slots = rxData[39];
 							ts_ghost_anchor = t2;
 						}
           }
@@ -202,9 +191,6 @@ void loop() {
           }
 
 					/* Control parameters for cooperative methods */
-
-
-
         }
         else {
           DPRINTFLN("Not a START frame");

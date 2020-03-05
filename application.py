@@ -27,6 +27,7 @@ import socket
 import pickle
 import math
 import os
+import sys
 from datetime import datetime
 from parameters import *
 from Menu import Menu
@@ -35,7 +36,8 @@ from Simulation import Simulator
 from anchor import Anchor
 from movingentity import MovingEntity
 from Filter import Filter
-from sound import Melody
+if MEASURING:
+    from sound import Melody
 from jsonLogs import jsonLogs
 from time import gmtime,strftime,localtime
 import paho.mqtt.client as mqtt
@@ -52,7 +54,7 @@ import sympy as sp
 
 class Application(Renderer):
     """Main application class"""
-    def __init__(self):
+    def __init__(self, menu = None):
 
         self.tags = {}
 
@@ -76,7 +78,13 @@ class Application(Renderer):
         self.keep_dataset = True
 
         ## menu configuration
-        self.menu = Menu()
+        if menu:
+            self.menu = menu
+        else:
+            self.menu = Menu()
+            self.menu.setDaemon(True)
+            self.menu.start()
+
         p,q = Pipe()
         self.menu.application_pipe = p
         self.menu_pipe = q
@@ -231,7 +239,29 @@ class Application(Renderer):
                         buffer = self.menu_pipe.recv()
                         print(buffer)
 
+        if self.exit_flag:
+            # quit command
+            # sending termination signal to logging thread
+            print("closing menu...")
+            print("closing logs & pipes...")
+            for key in self.threads_pipe:
+                self.threads_pipe[key].send('stop')
+                self.threads_pipe[key].close()
 
+
+            print('done !')
+            self.threads_pipe = {}
+            if not(PLAYBACK) and not(EMULATE_MQTT):
+                self.mqttc.loop_stop()
+
+
+            print("returning...")
+            if not(HEADLESS):
+                self.destroy()
+                # letting some time to complete...
+                time.sleep(0.2)
+                sys.exit()
+            return(task.done)
 
 
         return(task.again)
@@ -239,6 +269,9 @@ class Application(Renderer):
     def add_anchor(self, anchor_pos):
         """adds an anchor to the current world. Should be used to create a fictive anchor"""
         # ID generation
+        if PLAYBACK:
+            print("Adding anchors is not supported in playback mode")
+            return
         try:
             new_anchor_name = str(int(self.world.anchors[-1].name) + 1) # incrementing the IDof the last anchor by 1
         except:
@@ -422,6 +455,12 @@ class Application(Renderer):
             d_print('rssi received:' + str(rssi))
 
             self.dataset[anchor_id][bot_id].rssi = rssi
+
+        if (data_type == "skew"):
+            skew = float(msg.payload)
+            d_print('skew received:' + str(skew))
+
+            self.dataset[anchor_id][bot_id].skew = skew
 
         if (data_type[:-1] == "ts"):
             # timestamp
@@ -619,6 +658,9 @@ class Application(Renderer):
         # computes the robot speed based on position variation
         robot.compute_speed()
 
+        # # sending position to master anchor
+        # print(ROOT +  '01/' + TOPIC_SERIAL)
+        self.mqttc.publish(ROOT +  '01/' + TOPIC_SERIAL, '1' + robotname[-1] +';' + str(x)[:4] + ';' + str(y)[:4] + ';' + str(z)[:4] + '\n')
         # computes the robot acceleration based on speed variation
         robot.compute_acc()
 
@@ -661,23 +703,7 @@ class Application(Renderer):
             # quitting if measuring protocol is over
             self.exit_flag = True
 
-        if self.exit_flag:
-            # quit command
-            # sending termination signal to logging thread
-            print("closing logs & pipes...")
-            for key in self.threads_pipe:
-                self.threads_pipe[key].send('stop')
-                self.threads_pipe[key].close()
 
-
-            print('done !')
-            self.threads_pipe = {}
-            if not(PLAYBACK) and not(EMULATE_MQTT):
-                self.mqttc.loop_stop()
-
-            self.menu.callback()
-            print("returning...")
-            return(task.done)
 
 
         if not(MEASURING):

@@ -32,12 +32,14 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import sys
 from functools import partial
+from multiprocessing import Process, Queue
 
 
 class Menu(Thread):
     """Interface for the localization engine control - triggers filtering & attack simulation"""
     def __init__(self):
         Thread.__init__(self)
+        #super(Menu, self).__init__()
 
         self.scale = []
         self.var = []
@@ -52,7 +54,7 @@ class Menu(Thread):
 
         self.mse = None
 
-        self.start()
+
         self.hidden = True
         self.frame = None
         self.MSE = []
@@ -91,9 +93,10 @@ class Menu(Thread):
     def run(self):
         """Initializes Tkinter window, scales & buttons"""
         self.root = Tk()
+
         # Window configuration
         self.root.configure(background = "#dcecf5")
-
+        print("root is " + str(self.root))
         # creating display button
         display_button = Button(self.root, text = "Corrections",background = "#dcecf5", command = self.display_corrections)
         display_button.pack()
@@ -161,8 +164,7 @@ class Menu(Thread):
                                     command = lambda value,idx = (2 * len(correction_coeff)) : self.update_param(value,idx) )
             accel_button.set(ACCELERATION)
             accel_button.pack()
-
-
+        
         self.root.mainloop()
 
     def generate_attacks_panel(self):
@@ -275,6 +277,7 @@ class Menu(Thread):
     def simulate_attack(self,target):
         """Simulates the chosen attack in the spinbox on the chosen target"""
         print("target is " + target)
+        print(self.root)
         if self.application_pipe:
             self.application_pipe.send({"Attack": self.attacks.get(), "Target": target, "Offset": self.attack_offset.get()})
 
@@ -289,8 +292,9 @@ class Menu(Thread):
 
     def callback(self):
         """Exit function"""
-        self.root.update_idletasks()
-        sys.exit()
+        #self.root.update_idletasks()
+        self.root.destroy()
+        #sys.exit()
 
 
 
@@ -313,11 +317,10 @@ class Menu(Thread):
 
 
 if __name__ == "__main__":
-
-    menu = Menu()
+    Menu()
     menu.attack_list.append("Test")
     menu.anchors_list.append('A')
     menu.anchors_list.append('B')
     menu.tags_list.append("T1")
     menu.generate_attacks_panel()
-    time.sleep(5)
+    time.sleep(1)

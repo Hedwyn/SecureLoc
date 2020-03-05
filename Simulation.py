@@ -33,7 +33,7 @@ from Attacks import Attack
 DEFAULT_ATTACK_CONFIG_FILE = "attacks_config.json"
 
 class Simulator:
-    """Handles all the simulation operations in the 3D engine - includes attacks simulation, anchor simulation and tag simulation""""
+    """Handles all the simulation operations in the 3D engine - includes attacks simulation, anchor simulation and tag simulation"""
     def __init__(self, mqttc = None):
         self.fictive_anchors = []
         self.fictive_tags = []
