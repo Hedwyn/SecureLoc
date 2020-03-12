@@ -49,6 +49,7 @@ static byte sleep_slots; /**< Number of slots to sleep when turning to sleep mod
 
 /* timestamps */
 static uint64_t t2 = 0, t3,ts_ghost_anchor;  /**< Timestamp for TWR process */
+static int ranging_timer;/**<Timer for the ranging duration*/ 
 
 /* cooperative methods */
 static byte next_target_id[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00}; /**< ID of the next target when acting as an anchor */
@@ -138,7 +139,7 @@ void loop() {
     case TWR_ENGINE_STATE_RX_ON:
 			/* sleeping until next slot */
 			while (decaduino.getSystemTimeCounter() - t2 < (SLOT_LENGTH / (DW1000_TIMEBASE * IN_US))  - GUARD_TIME) {
-				delayMicroseconds(500);
+				delayMicroseconds(30);
 			}
 			/* Turns on reception and checks if the tag has been designated as ghost anchor in the previous ranging */
       decaduino.plmeRxEnableRequest();
@@ -156,6 +157,9 @@ void loop() {
 			/* Polling state for start request from anchors */
       if ( decaduino.rxFrameAvailable() ) {
         /* START format : START | targetID | anchorID */
+    
+        /*timestamping ranging start */
+        ranging_timer = micros();
         if ( rxData[0] == TWR_MSG_TYPE_START ) {
           Serial.println("$Start received");
           for (int i=0; i<8; i++){
@@ -202,7 +206,7 @@ void loop() {
     case TWR_ENGINE_STATE_SEND_ACK:
 			/* After receiving a START, sends an acknowledgment as defined in TWR protocol.
 			Memorizes acknowledgment sending time */
-      txData[0] = TWR_MSG_TYPE_ACK;           //On acquite le message (champs 0 du mesage)
+      txData[0] = TWR_MSG_TYPE_ACK;           
       for( int i =0; i<8 ; i++){
         txData[1+i] = anchorID[i];
         txData[9+i] = targetID[i];
@@ -210,6 +214,9 @@ void loop() {
       decaduino.pdDataRequest(txData, 18,1,t2 + T23);
 			//decaduino.pdDataRequest(txData, 18);
       while (!decaduino.hasTxSucceeded());
+      /* roughly calculating time elasped since time reception */
+      Serial.print("$ Time elapsed bewteen ACK and START:");
+      Serial.println(micros() - ranging_timer);
       t3 = decaduino.getLastTxTimestamp();
       state = TWR_ENGINE_STATE_SEND_DATA_REPLY;
       break;
@@ -224,6 +231,8 @@ void loop() {
 			Serial.print("$Temperature: ");
 			Serial.println(decaduino.getTemperature());
       while (!decaduino.hasTxSucceeded());
+      Serial.print("TWR duration: ");
+      Serial.println(micros() - ranging_timer);
       state = TWR_ENGINE_STATE_INIT;
       break;
 

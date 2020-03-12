@@ -66,8 +66,7 @@
 #define TWR_MSG_TYPE_START 1  /**< START frame header*/
 #define TWR_MSG_TYPE_ACK 2 /**< ACK frame header*/
 #define TWR_MSG_TYPE_DATA_REPLY 3 /**< DATA frame header*/
-
-#define GUARD_TIME 800000 /**< Needs to be superior to the Rx turn on time*/
+#define GUARD_TIME 40000000 /**< Superior to minimum Rx turn-on time*/
 
 
 

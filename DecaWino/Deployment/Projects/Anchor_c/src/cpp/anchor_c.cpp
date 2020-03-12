@@ -56,6 +56,14 @@ static const char * states[50]=
 };/**< States names for the debug output*/
 
 /* RX IDs - when receiving frames from tags or anchors */
+static byte anchorsID[NB_ANCHORS][8];
+static Anchor_position anchorsPositions[4] = {
+  {anchorsID[0], 0 , 0 , 0},
+  {anchorsID[1], 0 , PLATFORM_LENGTH , 0},
+  {anchorsID[2], PLATFORM_WIDTH , PLATFORM_LENGTH , 0},
+  {anchorsID[3], PLATFORM_WIDTH , 0 , 0}
+};
+static Anchor_position myPosition;
 static byte targetID[][8]= { {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x01},
                      {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x02}};/**< Mobile tags IDs*/
 static byte rxID[8];/**< Recipient ID buffer when receving a frame*/
@@ -68,16 +76,20 @@ static byte MYID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, NODE_ID};  /**<
 static byte anchorID[8]; /**< Buffer for the anchor ID field in Rx frames */
 static byte MY_NEXT_ANCHOR_ID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; /**< ID of the following anchor in the TDMA scheduling. Filled bu getID() */
 static byte nextAnchorID[8] ={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; /**< Buffer for the following anchor ID field in Rx frames */
+static byte *verifierID;/**< Points to the identifier of the verifier ID for the current ranging protocol */
 
 /* Two-Way Ranging protocol   */
 static unsigned long timeout; /**< Timeout variable for all the watchdogs (on Acknowledgment/DATA/Start frames) */
-static bool has_timedout; /**< Whether the last ranging process has time out or not */
+static bool has_timedout; /**< Whether the last ranging process has timed out or not */
 static uint64_t t1, t2, t3, t4; /**< Timestamp for Two-Way Ranging */
 static int32_t tof; /**< Time-of-flight calculated after TWR protocol */
 static int32_t tof_skew;  /**< Time-of-flight calculated after TWR protocol after skew correction */
 static float distance; /**< Distance calculated after TWR protocol */
 static float distance_skew;/**< Distance calculated after TWR protocol after skew correction */
 static int has_position_been_resfreshed = 0;
+static int differential_twr = DIFFERENTIAL_TWR;
+static uint64_t tof_to_anchors[NB_ANCHORS];
+static int ranging_timer;/**<Records the duration of a single TWR protocol, in us */
 
 /* Serial communications */
 static char serial_command; /**< Serial command (on one digit) received on the last serial communication */
@@ -147,6 +159,12 @@ void serial_process_tag_position() {
 */
 void getID() {
 	#ifdef NODE_ID
+    /* setting up every anchor ID */
+    for (int i = 0; i < NB_ANCHORS; i++) {
+      memcpy( (void *) &anchorsID[i], (const void *) MYID, 7 );
+      /* changing last byte */
+      anchorsID[i][7] = i + 1;
+    }
 		/* setting up anchor id */
 		MYID[7] = NODE_ID;
 
@@ -214,6 +232,28 @@ int byte_array_cmp(byte b1[8], byte b2[8]) {
 	return(ret);
 }
 
+
+void compute_tof_to_anchors() {
+  long tof;
+  /* getting the position of this anchors */
+  memcpy((void *) &myPosition, (const void *) &anchorsPositions[NODE_ID -1], sizeof(Anchor_position));
+  Serial.println("My position is: ");
+  Serial.println(myPosition.x);
+  Serial.println(myPosition.y);
+
+  /* computing ToF to anchors */
+  for (int i = 0; i < NB_ANCHORS; i ++) {
+    tof_to_anchors[i] = 100;
+  }
+  
+}
+
+double_t compute_elapsed_time_since(uint64_t timestamp) {
+  double elasped_time;
+  elasped_time = DW1000_TIMEBASE_US * (double) (decaduino.getSystemTimeCounter() - timestamp);
+  return(elasped_time);
+}
+
 void anchor_setup() {
   delay(1000);
   pinMode(13, OUTPUT);
@@ -233,9 +273,14 @@ void anchor_setup() {
   /* Setting RX-TX parameters */
   anchor_RxTxConfig();
 
-  decaduino.plmeRxEnableRequest();
+  /* computing ToF to other anchors */
+  compute_tof_to_anchors();
+
+  /* getting the starting timestamp for timeouts */
   timeout = millis() + START_TIMEOUT + (NODE_ID - 1) * SLOT_LENGTH * 1E-3;
   DPRINTFLN("Starting");
+
+  /* The master anchor gets the first target to localize in the targets list */
   #ifdef MASTER
     for (int i = 0; i < NB_ROBOTS; i++) {
       tag_positions[i].tagID = targetID[i];
@@ -243,6 +288,8 @@ void anchor_setup() {
     state = TWR_ENGINE_STATE_SEND_START;
   #else
     state = TWR_ENGINE_STATE_INIT;
+    /* enabling reception */
+    decaduino.plmeRxEnableRequest();
   #endif
   state = TWR_ENGINE_STATE_INIT;
 }
@@ -280,29 +327,30 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
       #else
         timeout = millis() + 2 * START_TIMEOUT + NODE_ID * SLOT_LENGTH * 1E-3;
       #endif
-
-      decaduino.plmeRxEnableRequest();
+    
       state = TWR_ENGINE_STATE_IDLE;
       break;
 
-		case TWR_ENGINE_STATE_IDLE :
+		case TWR_ENGINE_STATE_IDLE:
       /* Scheduling state. In Aloha, goes straight to ranging mode.
       In TDMA, checks for the frame of the previous anchor and calculates the starting timestamp of the next ranging from the slot length */
       if (ALOHA) {
         state = TWR_ENGINE_PREPARE_RANGING;
 				break;
       }
-			if ((millis() > timeout) or (NB_ANCHORS == 1)){
+			if ((millis() > timeout) || (NB_ANCHORS == 1)){
 				/* the DATA frame of the previous frame has never been received. Forcing a new cycle */
 				state = TWR_ENGINE_PREPARE_RANGING;
         delayed = 0;
         Serial.println("$Timeout- Starting new cycle");
+        /* pointing verifier ID to our own ID */
+        verifierID = myID;
+        my_turn = true;
         decaduino.plmeRxDisableRequest();
 				break;
 			}
 
       if ( decaduino.rxFrameAvailable() ) {
-				my_turn = false;
         DPRINTFLN("$ Frame received");
 				/* checking START frames for anchor ranging request */
 				if ( rxData[0] == TWR_MSG_TYPE_START ) {
@@ -310,10 +358,10 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 					/* extracting target ID */
 					for (int i = 0; i < 8; i++) {
 						nextTarget[i] = rxData[i + 1];
+            anchorID[i] = rxData[i + 9];
             nextAnchorID[i] = rxData[i+17];
-
 					}
-          Serial.print("Next Target= ");
+          Serial.print("$ Next Target= ");
           print_byte_array(nextTarget);
           Serial.println();
 
@@ -321,23 +369,46 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 					DPRINTFLN((int) nextAnchorID[7] );
 					DPRINTF("$My ID ");
 					DPRINTFLN((int) myID[7]);
-				}
-				if (byte_array_cmp(nextAnchorID, myID))
-				{
-          last_start_frame = decaduino.getLastRxTimestamp();
+				
+          if (byte_array_cmp(nextAnchorID, myID))
+          {
+            last_start_frame = decaduino.getLastRxTimestamp();
+            Serial.println("$It's my turn");
+            my_turn = true;
+            Serial.print("$ID of the next anchor: ");
+            print_byte_array(myNextAnchorID);
+            Serial.println();
 
-					Serial.println("$It's my turn");
-          Serial.print("$ID of the next anchor: ");
-          print_byte_array(myNextAnchorID);
-          #ifndef MASTER
-            next_target_idx = get_next_target_idx(nextTarget);
-          #endif
-					state = TWR_ENGINE_PREPARE_RANGING;
-          slot_start =  last_start_frame + (SLOT_LENGTH / (DW1000_TIMEBASE * IN_US) );
-          delayed = 1;
-        }
+            /* pointing verifier ID to our own ID */
+            verifierID = myID;
+            #ifndef MASTER
+              next_target_idx = get_next_target_idx(nextTarget);
+            #endif
+            state = TWR_ENGINE_PREPARE_RANGING;
+            slot_start =  last_start_frame + (SLOT_LENGTH / (DW1000_TIMEBASE * IN_US) );
+            delayed = 1;
+          }
+          else if (differential_twr) {
+            /* calculating the starting time for the emitting anchor */
+            t1 =  decaduino.getLastRxTimestamp() - tof_to_anchors[NODE_ID - 1];
+
+            /* pointing the verifier ID to the current verifier */
+            verifierID = anchorID;
+
+            /* enabling reception for the incoming ACK */
+            decaduino.plmeRxEnableRequest();
+            timeout = millis() + ACK_TIMEOUT;
+            state = TWR_ENGINE_STATE_WAIT_ACK;    
+
+            /* going straight to wait Ack state */
+            state = TWR_ENGINE_STATE_WAIT_ACK;
+          }
+
+
+        } 
 
         if (state == TWR_ENGINE_STATE_IDLE) {
+          /* re-enabling reception if we are still waiting for a START */
           decaduino.plmeRxEnableRequest();
         }
       }
@@ -408,6 +479,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 
     case TWR_ENGINE_PREPARE_RANGING:
     /** Checks for serial commands, otherwise proceeds to start the ranging process */
+
   		if (ALOHA) {
   			delay(aloha_delay);
   		}
@@ -478,15 +550,16 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
       }
 
 			/* going back to the regular cycle if the target was an anchor */
-      if(is_target_anchor) {
+      if (is_target_anchor) {
         is_target_anchor = false;
         next_target_idx = 0;
       }
 			/* waiting completion */
 			timeout = millis() + TX_TIMEOUT;
-			has_timedout = false;
-      Serial.println("$ Waiting Frame");
-      while (!decaduino.hasTxSucceeded());
+      while ((millis() < timeout) || !decaduino.hasTxSucceeded() );
+
+      /* starting recording ranging duration */
+      ranging_timer = micros();
 			t1 = decaduino.getLastTxTimestamp();
 			/* enabling reception for the incoming ACK */
 			decaduino.plmeRxEnableRequest();
@@ -494,31 +567,44 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 			state = TWR_ENGINE_STATE_WAIT_ACK;
       break;
 
+
     case TWR_ENGINE_STATE_WAIT_ACK:
     /** Waiting for the reply (Acknowledgment frame) of the target device */
       if ( millis() > timeout ) {
         state = TWR_ENGINE_STATE_INIT;
         DPRINTFLN("$timeout on waiting ACK");
+        has_timedout = true;
+
+        /* re-enabling reception */
+        decaduino.plmeRxDisableRequest();
+        decaduino.plmeRxEnableRequest();
         ret = TWR_COMPLETE;
 				break;
       }
 
       if ( decaduino.rxFrameAvailable() ) {
         if ( rxData[0] == TWR_MSG_TYPE_ACK ) {
+          decaduino.plmeRxEnableRequest();
           for (int i=0; i<8; i++){
 						/* getting dest ID */
               rxID[i]=rxData[i+1];
           }
-          if (byte_array_cmp(rxID,myID)) {
-						t4 = decaduino.getLastRxTimestamp();
-						/* enabling reception for DATA frame */
-						timeout = millis() + DATA_TIMEOUT;
-						decaduino.plmeRxEnableRequest();
-            state = TWR_ENGINE_STATE_WAIT_DATA_REPLY;
+          // Serial.println("$ Received ACK ID: ");
+          // print_byte_array(rxID);
+          // Serial.println();
+          // Serial.println("$ Verifier ID: ");
+          // print_byte_array(verifierID);
+          Serial.println();
+          //if (true) {
+          if (byte_array_cmp(rxID, verifierID)) {
+
+          t4 = decaduino.getLastRxTimestamp();
+          /* enabling reception for DATA frame */
+          timeout = millis() + DATA_TIMEOUT;
+          state = TWR_ENGINE_STATE_WAIT_DATA_REPLY;
           }
 					else{
 						/* previous frame was for another dest - re-enabling reception */
-						decaduino.plmeRxEnableRequest();
 						DPRINTFLN("$ACK was not for me /sadface");
           }
         }
@@ -535,28 +621,32 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
       if ( millis() > timeout ) {
 				DPRINTFLN("$timeout on waiting DATA");
         ret = TWR_COMPLETE;
+        has_timedout = true;
+        /* re-enabling reception */
+        decaduino.plmeRxDisableRequest();
+        decaduino.plmeRxEnableRequest();
         state = TWR_ENGINE_STATE_INIT;
 				break;
       }
+
       if ( decaduino.rxFrameAvailable() ) {
+        decaduino.plmeRxEnableRequest();
         if ( rxData[0] == TWR_MSG_TYPE_DATA_REPLY ) {
           for (int i=0; i<8; i++){
 							/* getting dest ID */
               rxID[i]=rxData[1+i];
           }
 
-					if (byte_array_cmp(rxID, myID) ) {
+					if (byte_array_cmp(rxID, verifierID)) {
               state = TWR_ENGINE_STATE_EXTRACT_T2_T3;
           }
 					else {
-						/* previous frame was for another dest - re-enabling reception */
-						decaduino.plmeRxEnableRequest();
+						/* previous frame was for another dest */
 						DPRINTFLN("$DATA was not for me /sadface");
           }
         }
 				else {
-					/* previous frame was not an ACK - re-enabling reception */
-          decaduino.plmeRxEnableRequest();
+					/* previous frame was not an ACK*/
 					DPRINTFLN("$RX frame is not a DATA");
 				}
       }
@@ -591,6 +681,13 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
     case TWR_ENGINE_STATE_SEND_DATA_PI :
       /** Sends the Ranging results along with PHY data to the host RPI on serial port */
 			/* Frame format *anchorID|tagID|t1|t2|t3|t4|RSSI# */
+      if (my_turn) {
+        Serial.println("Calculated in direct TWR");
+      }
+      else {
+        Serial.println("Calculated in differential TWR");
+      }
+
       Serial.print("*");
       print_byte_array(myID);
 
@@ -640,6 +737,13 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 
       Serial.println("#\n");
 
+      /* recording TWR duration */
+      Serial.print("$ TWR duration: ");
+      Serial.println(micros() - ranging_timer);
+      Serial.print("$ TWR duration according to DW clock: ");
+      Serial.println(compute_elapsed_time_since(t1));
+
+      my_turn = false;   
       state = TWR_ENGINE_STATE_INIT;
       ret = TWR_COMPLETE;
       break;

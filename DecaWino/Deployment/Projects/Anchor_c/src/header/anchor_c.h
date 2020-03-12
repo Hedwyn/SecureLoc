@@ -41,7 +41,7 @@
 #endif
 
 #ifndef NODE_ID
-  #define NODE_ID 0/**< Default tag ID. Should be defined during compilation when deploying*/
+  #define NODE_ID 1/**< Default tag ID. Should be defined during compilation when deploying*/
 #endif
 
 #define MASTER_ID 1 /**< Enables Master anchor mode. The Master anchor is responsible for the cooperative operations and the TDMA watchdog*/
@@ -50,11 +50,11 @@
   #define MASTER /**< Enables Master anchor mode. The Master anchor is responsible for the cooperative operations and the TDMA watchdog*/
 #endif
 
-#define SLOT_LENGTH 100000 /**< TDMA slot length, in microseconds*/
+#define SLOT_LENGTH 200000 /**< TDMA slot length, in microseconds*/
 #define SLOT_LENGTH_MS (SLOT_LENGTH / 1000) /**< TDMA slot length, in milliseconds*/
 #define IN_US 1E6 /**< Second to microsecond conversion*/
 
-//#define _DEBUG_   //comment to disable debug mode
+#define _DEBUG_   //comment to disable debug mode
 #ifdef _DEBUG_
   #define DPRINTF  Serial.print/**< When defined, enables debug ouput on the serial port*/
 #else
@@ -72,7 +72,8 @@
 #define ASCII_NUMBERS_OFFSET 48/**< Char to printable value conversion for serial communications*/
 
 #define AIR_SPEED_OF_LIGHT 299700000.0 /**< Speed of light constant to extract distances from time-of-flight measurements*/
-#define DW1000_TIMEBASE 15.65E-12 /**< Resolution of the system clock - value of 1 bit*/
+#define DW1000_TIMEBASE 15.65E-12 /**< Resolution of the system clock - value of 1 bit in s*/
+#define DW1000_TIMEBASE_US 15.65E-6 /**< Resolution of the system clock - value of 1 bit in us*/
 #define CALIBRATION 0.9 /**< Calibration coefficient to apply to the distance measurements*/
 #define SPEED_COEFF AIR_SPEED_OF_LIGHT*DW1000_TIMEBASE*CALIBRATION /**< Calibrated speed of light constantt*/
 
@@ -98,9 +99,12 @@
 #define TWR_ENGINE_STATE_SEND_DATA_PI 8/**< Sends the distance & other PHY data to host RPI */
 
 
-/* TWR State */
+/* TWR State & parameters */
 #define TWR_ON_GOING 0/**< Ret value for main loop - TWR protocol is still running */
 #define TWR_COMPLETE 1/**< Ret value for main loop - TWR protocol complete */
+#define DIFFERENTIAL_TWR 1/**<If set, all anchors will compute the distance on each start frame using a diffential calculation*/
+#define PLATFORM_LENGTH 3.04/**< Length of the rectangle formed by the anchor (anchor 1 -> anchor 2) */
+#define PLATFORM_WIDTH 3.04/**< Width of the rectangle formed by the anchor (anchor 1 -> anchor 4) */
 
 /* frame types */
 #define TWR_MSG_TYPE_START 1  /**< START frame header*/
@@ -116,7 +120,7 @@
   #define NB_GHOST_ANCHORS 0
 #endif
 
-#define NB_TOTAL_ANCHORS (NB_ANCHORS + NB_GHOST_ANCHORS) /**< Total number of anchors inclujding ghost anchors*/
+#define NB_TOTAL_ANCHORS (NB_ANCHORS + NB_GHOST_ANCHORS) /**< Total number of anchors including ghost anchors*/
 
 /** The position of a given tag identified by its id, in the (x,y,z)
  coordinates system */
@@ -126,6 +130,15 @@ typedef struct Tag_position{
   float y;/**<Coordinates on (anchor1 - anchor4) axis */
   float z;/**<Altitude */
 }Tag_position;
+
+/** The position of a given tag identified by its id, in the (x,y,z)
+ coordinates system */
+typedef struct Anchor_position{
+  byte *anchorID; /**<pointer to the anchor ID in the anchor ID list */
+  float x;/**<Coordinates on (anchor1 - anchor2) axis */
+  float y;/**<Coordinates on (anchor1 - anchor4) axis */
+  float z;/**<Altitude */
+}Anchor_position;
 
 /** @brief process serial frames containing tag positions
   * @author Baptiste Pestourie
@@ -159,6 +172,14 @@ void print_byte_array(byte b[8]);
   * @returns True if all the elements in both arrays are equal
 */
 int byte_array_cmp(byte b1[8], byte b2[8]);
+
+/** @brief Computes the time elasped since the timestamp provided, based on the DWM1000 system clock 
+  * @author Baptiste Pestourie
+  * @date 2020 March 1st
+  * @param timestamp the reference timestamp for the elasped time
+  * @return elapsed time as a double, in microseconds
+*/
+double compute_elapsed_time_since(uint64_t timestamp);
 
 /** @brief Finds the index of a given tag ID in the tag ID list
   * @author Baptiste Pestourie
