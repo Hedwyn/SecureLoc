@@ -9,7 +9,7 @@ from ips_simulator import Node, Particle, IPS
 
 
 class Scheduler:
-    """Global clock for Indoor Positioning Systtem. Provides the refresh frequency, and handles the timing for all IPS-related operations.
+    """Global clock for Indoor Positioning System. Provides the refresh frequency, and handles the timing for all IPS-related operations.
     Parameters need to be chosen appropriately to obtain realistic real-time outputs"""
     def __init__(self):
         self.ips = None

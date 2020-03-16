@@ -31,6 +31,7 @@
 
 #include <SPI.h>
 #include <DecaDuino.h>
+#include <math.h>
 
 #define EXTENDED 1  /**< Enables extended DATA mode- sends an extended set of PHY data to RPI (TODO)*/
 #define ALOHA 0 /**< Enables ALOHA scheduling- check any documentation on ALOHA for further information */
@@ -54,7 +55,7 @@
 #define SLOT_LENGTH_MS (SLOT_LENGTH / 1000) /**< TDMA slot length, in milliseconds*/
 #define IN_US 1E6 /**< Second to microsecond conversion*/
 
-#define _DEBUG_   //comment to disable debug mode
+//#define _DEBUG_   //comment to disable debug mode
 #ifdef _DEBUG_
   #define DPRINTF  Serial.print/**< When defined, enables debug ouput on the serial port*/
 #else
@@ -105,6 +106,8 @@
 #define DIFFERENTIAL_TWR 1/**<If set, all anchors will compute the distance on each start frame using a diffential calculation*/
 #define PLATFORM_LENGTH 3.04/**< Length of the rectangle formed by the anchor (anchor 1 -> anchor 2) */
 #define PLATFORM_WIDTH 3.04/**< Width of the rectangle formed by the anchor (anchor 1 -> anchor 4) */
+#define T23 100000000 /**< When delayed send is enabled, waiting time between ACK and DATA frame*/
+#define SKEW_CORRECTION 1/**< Applies a correction on the ToF calculation based on the clock skew with the target tag*/
 
 /* frame types */
 #define TWR_MSG_TYPE_START 1  /**< START frame header*/
@@ -180,6 +183,20 @@ int byte_array_cmp(byte b1[8], byte b2[8]);
   * @return elapsed time as a double, in microseconds
 */
 double compute_elapsed_time_since(uint64_t timestamp);
+
+/** @brief computes the distance in differential Two-Way Ranging mode
+  * Used when the anchor is listening to the TWR of another anchor.
+  * @author Baptiste Pestourie
+  * @date 2020 March 1st
+*/
+void compute_DTWR();
+
+/** @brief computes the distance in direct Two-Way Ranging mode
+  * Used when the anchor performing the TWR protocol itself.
+  * @author Baptiste Pestourie
+  * @date 2020 March 1st
+*/
+void compute_DWR();
 
 /** @brief Finds the index of a given tag ID in the tag ID list
   * @author Baptiste Pestourie

@@ -658,9 +658,11 @@ class Application(Renderer):
         # computes the robot speed based on position variation
         robot.compute_speed()
 
-        # # sending position to master anchor
-        # print(ROOT +  '01/' + TOPIC_SERIAL)
-        self.mqttc.publish(ROOT +  '01/' + TOPIC_SERIAL, '1' + robotname[-1] +';' + str(x)[:4] + ';' + str(y)[:4] + ';' + str(z)[:4] + '\n')
+
+        if not(PLAYBACK):
+            ## sending position to master anchor
+            self.mqttc.publish(ROOT +  '01/' + TOPIC_SERIAL, '1' + robotname[-1] +';' + str(x)[:4] + ';' + str(y)[:4] + ';' + str(z)[:4] + '\n')
+        
         # computes the robot acceleration based on speed variation
         robot.compute_acc()
 

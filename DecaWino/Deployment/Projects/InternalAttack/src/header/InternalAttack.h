@@ -35,7 +35,7 @@
 
 
 #define INT_MAX 2147483647
-//#define DEBUG
+#define DEBUG
 #ifdef DEBUG
   #define DPRINTF  Serial.print /**< When defined, enables debug ouput on the serial port*/
 #else
@@ -97,8 +97,8 @@
 #define SPEED_COEFF 4.2255E-3/**<DW1000_TIMEBASE*CALIBRATION * AIR_SPEED_OF_LIGHT */
 
 /* Attack parameters */
-#define NOISE_STD 0.75/**<Standard deviation of the random distance shift applied by the attack (uniform law) */
-#define TARGET_REFRESH_TIME 4000/**<Period bewteen two distance shift random generations. SHould be low enough to be realistic. */
+#define NOISE_STD 0.25/**<Standard deviation of the random distance shift applied by the attack (uniform law) */
+#define TARGET_REFRESH_TIME 5000/**<Period bewteen two distance shift random generations. SHould be low enough to be realistic. */
 #define MANUAL 0 /**<In manual mode, the attack is entirely handled though the serial port. The tag does not get its position itself nor does it chose the target */
 
 /** @brief represents a position with its coordinates */

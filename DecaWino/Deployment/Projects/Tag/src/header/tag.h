@@ -48,8 +48,6 @@
 #endif
 
 
-#define T23 100000000 /**< When delayed send is enabled, waiting time between ACK and DATA frame*/
-
 #ifndef NODE_ID
   #define NODE_ID 1/**< Default tag ID. Should be defined during compilation when deploying*/
 #endif

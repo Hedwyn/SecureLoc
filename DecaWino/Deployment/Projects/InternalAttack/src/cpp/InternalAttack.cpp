@@ -313,69 +313,69 @@ void loop() {
 			break;
 
     case TWR_ENGINE_STATE_RX_ON:
-			/* Turns on reception and checks if the tag has been designated as ghost anchor in the previous ranging */
+		/* Turns on reception and checks if the tag has been designated as ghost anchor in the previous ranging */
 
-			decaduino.plmeRxEnableRequest();
-      state = TWR_ENGINE_STATE_WAIT_START;
-			if (COOPERATIVE && (ghost_anchor_id[7] != 0)  && (decaduino.getSystemTimeCounter() > ts_ghost_anchor + sleep_slots * SLOT_LENGTH) ) {
-				//if (ghost_anchor_id[7] != 0) {// && (next_target_id[7] != 0)) {
-					state = TWR_ENGINE_GHOST_ANCHOR;
-				}
-			else {
-				delayMicroseconds(100);
-			}
+		decaduino.plmeRxEnableRequest();
+		state = TWR_ENGINE_STATE_WAIT_START;
+		if (COOPERATIVE && (ghost_anchor_id[7] != 0)  && (decaduino.getSystemTimeCounter() > ts_ghost_anchor + sleep_slots * SLOT_LENGTH) ) {
+			//if (ghost_anchor_id[7] != 0) {// && (next_target_id[7] != 0)) {
+			state = TWR_ENGINE_GHOST_ANCHOR;
+		}
+		else {
+			delayMicroseconds(100);
+		}
       break;
 
     case TWR_ENGINE_STATE_WAIT_START:
-			/* Polling state for start request from anchors */
+		/* Polling state for start request from anchors */
 
       if ( decaduino.rxFrameAvailable() ) {
         /* START format : START | targetID | anchorID */
         if ( rxData[0] == TWR_MSG_TYPE_START ) {
-          VPRINTFLN("$Start received");
-          for (int i=0; i<8; i++){
-           targetID [i] = rxData[i+1];
-           anchorID [i] = rxData[i+9];
-          }
-					VPRINTF("$Anchor ID: ");
-					VPRINTFLN((int)anchorID[7]);
+			VPRINTFLN("$Start received");
+          	for (int i=0; i<8; i++){
+           	targetID [i] = rxData[i+1];
+           	anchorID [i] = rxData[i+9];
+		}
+		VPRINTF("$Anchor ID: ");
+		VPRINTFLN((int)anchorID[7]);
           if ( byte_array_cmp(targetID, myID) ) {
             t2 = decaduino.getLastRxTimestamp();
             state = TWR_ENGINE_STATE_SEND_ACK;
-						if (anchorID[7] == MASTER_ID) {
-							if (!MANUAL) {
-							// in manual mode, getting position
-								if (rxData[25] == 1) {
-									attack_is_on = 1; // turning on the attack
-									Serial.println("Enabling attack");
-									my_position.x = *( (float *) (rxData + 26));
-									my_position.y = *( (float *) (rxData + 30));
-								}
-								Serial.println("Current position: ");
-								Serial.println(my_position.x);
-								Serial.println(my_position.y);
-								compute_timeshifts();
+			if (anchorID[7] == MASTER_ID) {
+				if (!MANUAL) {
+				// in manual mode, getting position
+					if (rxData[29] == 1) {
+						attack_is_on = 1; // turning on the attack
+						Serial.println("Enabling attack");
+						my_position.x = *( (float *) (rxData + 30));
+						my_position.y = *( (float *) (rxData + 34));
+					}
+					Serial.println("Current position: ");
+					Serial.println(my_position.x);
+					Serial.println(my_position.y);
+					compute_timeshifts();
 
-								// generating new target is the generation timer has ended
-								if (millis() - target_generation_timer > TARGET_REFRESH_TIME) {
-									target_generation_timer = millis();
-									Serial.println("generating new target position");
-									generate_target_position();
-								}
-							}
-							DPRINTFLN("Received ghost anchor request from Master");
-							ghost_anchor_id[7] = rxData[25];
-							next_anchor_id[7] = rxData[26];
-							sleep_slots = rxData[27];
-							ts_ghost_anchor = t2;
-						}
+					// generating new target is the generation timer has ended
+					if (millis() - target_generation_timer > TARGET_REFRESH_TIME) {
+						target_generation_timer = millis();
+						Serial.println("generating new target position");
+						generate_target_position();
+					}
+				}
+				DPRINTFLN("Received ghost anchor request from Master");
+				ghost_anchor_id[7] = rxData[25];
+				next_anchor_id[7] = rxData[26];
+				sleep_slots = rxData[27];
+				ts_ghost_anchor = t2;
+			}
           }
           else{
               DPRINTFLN("Not for me" );
               state = TWR_ENGINE_STATE_RX_ON;
           }
 
-					/* Control parameters for cooperative methods */
+		/* Control parameters for cooperative methods */
         }
         else {
           DPRINTFLN("Not a START frame");
@@ -390,41 +390,41 @@ void loop() {
       break;
 
     case TWR_ENGINE_STATE_SEND_ACK:
-			/* After receiving a START, sends an acknowledgment as defined in TWR protocol.
-			Memorizes acknowledgment sending time */
-      txData[0] = TWR_MSG_TYPE_ACK;           //On acquite le message (champs 0 du mesage)
-      for( int i =0; i<8 ; i++){
-        txData[1+i] = anchorID[i];
-        txData[9+i] = targetID[i];
-      }
-      decaduino.pdDataRequest(txData, 18,1,t2 + T23);
-			//decaduino.pdDataRequest(txData, 18);
-      while (!decaduino.hasTxSucceeded());
-      t3 = decaduino.getLastTxTimestamp();
-      state = TWR_ENGINE_STATE_SEND_DATA_REPLY;
-      break;
+		/* After receiving a START, sends an acknowledgment as defined in TWR protocol.
+		Memorizes acknowledgment sending time */
+		txData[0] = TWR_MSG_TYPE_ACK;           //On acquite le message (champs 0 du mesage)
+		for( int i =0; i<8 ; i++) {
+		txData[1+i] = anchorID[i];
+		txData[9+i] = targetID[i];
+		}
+      	decaduino.pdDataRequest(txData, 18,1,t2 + T23);
+		//decaduino.pdDataRequest(txData, 18);
+      	while (!decaduino.hasTxSucceeded());
+      	t3 = decaduino.getLastTxTimestamp();
+      	state = TWR_ENGINE_STATE_SEND_DATA_REPLY;
+     	break;
 
 
     case TWR_ENGINE_STATE_SEND_DATA_REPLY:
-			/* Sending last frame of TWR protocol, with the 2 timestamps measured */
-      txData[0] = TWR_MSG_TYPE_DATA_REPLY;
-      decaduino.encodeUint64(t2, &txData[17]);
+		/* Sending last frame of TWR protocol, with the 2 timestamps measured */
+      	txData[0] = TWR_MSG_TYPE_DATA_REPLY;
+      	decaduino.encodeUint64(t2, &txData[17]);
 
-			if (attack_is_on) {
-				/* modifying t3 for the attack */
-				VPRINTF("$ Timeshift for anchor ");
-				VPRINTF(anchorID[7] - 1);
-				VPRINTF(": ");
-				VPRINTFLN((timeshifts[anchorID[7] - 1]) );
-				t3 = t3 - timeshifts[anchorID[7] - 1];
-			}
-      decaduino.encodeUint64(t3, &txData[25]);
-      decaduino.pdDataRequest(txData, 33);
-			DPRINTF("$Temperature: ");
-			DPRINTFLN(decaduino.getTemperature());
-      while (!decaduino.hasTxSucceeded());
-      state = TWR_ENGINE_STATE_INIT;
-      break;
+		if (attack_is_on) {
+			/* modifying t3 for the attack */
+			VPRINTF("$ Timeshift for anchor ");
+			VPRINTF(anchorID[7] - 1);
+			VPRINTF(": ");
+			VPRINTFLN((timeshifts[anchorID[7] - 1]) );
+			t3 = t3 - timeshifts[anchorID[7] - 1];
+		}
+      	decaduino.encodeUint64(t3, &txData[25]);
+      	decaduino.pdDataRequest(txData, 33);
+		DPRINTF("$Temperature: ");
+		DPRINTFLN(decaduino.getTemperature());
+      	while (!decaduino.hasTxSucceeded());
+      	state = TWR_ENGINE_STATE_INIT;
+      	break;
 
     default:
       state = TWR_ENGINE_STATE_INIT;
