@@ -31,6 +31,7 @@ from GaussNewton import *
 import numpy as np
 import sympy as sp
 from RenderingInterface import RenderedWorld
+from particle_filters import Node, Particle, ParticleFleet
 
 class World(RenderedWorld):
     """World class, represents the room in which the robots will evolve.
@@ -46,6 +47,27 @@ class World(RenderedWorld):
         self.shown = False
         self.create_grid()
         self.create_anchors()
+        self.particle_fleet = None
+        self.localization_algorithm = DEFAULT_LOCALIZATION_ALGORITHM
+        if PARTICLES:
+            self.init_particle_filter()
+
+    def get_localization_algorithm(self):
+        """Returns the localization algorithm being currently employed"""
+        if self.localization_algorithm == GN:
+            algorithm = 'GN'
+        elif self.localization_algorithm == WCN:
+            algorithm = 'WCN'
+        elif self.localization_algorithm == ITERATIVE:
+            algorithm = 'Iterative'
+        elif self.localization_algorithm == PARTICLES:
+            algorithm = 'Particles'
+        return(algorithm)
+
+    def init_particle_filter(self):
+        self.particle_fleet = ParticleFleet()
+        self.particle_fleet.init_anchors(self.anchors)        
+
 
     def create_anchors(self):
         """Displays anchors"""
@@ -164,7 +186,9 @@ class World(RenderedWorld):
             zvals.append(anchor.z)
         #print("xvals: " + str(xvals))
         #print("yvals: " + str(yvals))
-
+        (x,y,z) = start_pos
+        if (MODE_3D):
+            z += 0.01
         # creating the dataset
         rangings_ds = GNdataset(
                name = "Rangings",
@@ -175,7 +199,7 @@ class World(RenderedWorld):
               zvals = np.array(zvals),
               rangingvals = np.array(sq_rangings),
               cvals = None,
-             starts = np.array((start_pos,))
+             starts = np.array(((x,y,z),))
         )
 
         # solving Gauss-Newton
@@ -185,7 +209,29 @@ class World(RenderedWorld):
         sol = tuple(sol)
         mse = self.mse(rangings,sol)
 
+
         return(sol,mse)
+
+    def particle_filter(self, target, rangings, solutions):
+        """ Computes the position with a particle filter"""      
+        self.particle_fleet.register_tag_potential_positions(target, solutions)
+        self.particle_fleet.register_tag_rangings(target, rangings)
+        self.particle_fleet.generate_particles(target)
+        self.particle_fleet.move_particles(target)
+        self.particle_fleet.compute_particles_likelihood
+        # computing solution
+        solution_particle = self.particle_fleet.output_solution_particle(target)
+        solution = solution_particle.get_pos()
+        mse = self.mse(rangings, solution)
+        print(solution_particle.get_depth())
+        solution_particle.show_trajectory()
+
+        # resampling particles
+        self.particle_fleet.particles_resampling(target)
+
+
+
+        return(solution,mse)
 
 
     def iterate(self,rangings,start_pos):
@@ -258,43 +304,56 @@ class World(RenderedWorld):
             mse_sum = 0
         elif len(self.anchors) == 2:
             d_print("Only two anchors for position computation. Assuming that the tag is on the positive part of the y axis")
-            centroid = self.trilateration(target,self.anchors[0], self.anchors[1])[0]
+            centroid = self.trilateration_2D(target,self.anchors[0], self.anchors[1])[0]
             mse_sum = 0
         else:
             solutions = []
             solutions_mse = []
-            for i,anchor in enumerate(self.anchors):
-                j = i + 1
-                while j < len(self.anchors):
-                    # finding which of the two solution is the most likely one
-                    (s,mse) = self.trilateration(target,self.anchors[i], self.anchors[j])
+            if MODE_3D:
+                N = len(self.anchors)
+                for i,anchor in enumerate(self.anchors):                  
+                    (s, mse) = self.trilateration_3D(target, anchor, self.anchors[(i + 1) % N], self.anchors[(i + 2) % N])
                     solutions.append(s)
                     solutions_mse.append(mse)
-                    j += 1
 
-                mse_inv = [1/x for x in solutions_mse]
-                mse_sum = sum(solutions_mse)
-                mse_inv_sum = sum(mse_inv)
+            else: # 2D localization                    
+                for i,anchor in enumerate(self.anchors):
+                    j = i + 1
+                    while j < len(self.anchors):
+                        # finding which of the two solution is the most likely one
+                        (s,mse) = self.trilateration_2D(target,self.anchors[i], self.anchors[j])
+                        solutions.append(s)
+                        solutions_mse.append(mse)
+                        j += 1
 
-                centroid = (0,0,0)
-                weighted_s = (0,0,0)
-                tuple(map(operator.add, centroid, weighted_s))
+            mse_inv = [1/(x + RESOLUTION) for x in solutions_mse]
+            mse_sum = sum(solutions_mse)
+            mse_inv_sum = sum(mse_inv)
 
-                for idx,s in enumerate(solutions):
-                    # mapping the + operation on tuples to a dimension by dimension sum
+            centroid = (0,0,0)
+            weighted_s = (0,0,0)
+            tuple(map(operator.add, centroid, weighted_s))
+
+            for idx,s in enumerate(solutions):
+                # mapping the + operation on tuples to a dimension by dimension sum
 
 
-                    weight = mse_inv[idx] / mse_inv_sum
-                    weighted_s = (weight * coord for coord in s)
-                    centroid = tuple(a + b for a,b in zip(centroid,weighted_s) )
+                weight = mse_inv[idx] / mse_inv_sum
+                weighted_s = (weight * coord for coord in s)
+                centroid = tuple(a + b for a,b in zip(centroid,weighted_s) )
 
 
         # checking which localization method is enabled
-        if (GN):
+        if self.localization_algorithm == GN:
             pos,mse = self.gauss_newton(rangings,centroid)
-        elif (ITERATIVE):
+
+        elif self.localization_algorithm == PARTICLES:
+            pos, mse = self.particle_filter(target, rangings, solutions)
+
+        elif self.localization_algorithm == ITERATIVE:
             pos,mse = self.iterate(rangings,centroid)
-        else:
+
+        elif self.localization_algorithm == WCN:
             # defaulting to weighted centroid
             pos,mse = centroid,mse_sum
 
@@ -309,7 +368,61 @@ class World(RenderedWorld):
 
         return(pos,mse,anchors_mse)
 
-    def trilateration(self,target,anchor1,anchor2, anchor3 = None, mode = '2D'):
+    @staticmethod
+    def compute_orthogonal_vector(vect_a, vect_b):
+        """In 3D, if vect_a and vect_b are orthogonal, calculates vect_c such as (A,B,C) is a cartesian orthonormal system"""
+        (x1, y1, z1) = vect_a
+        (x2, y2, z2) = vect_b
+        (a, b, c) = (0 , 0, 0)
+        ## with vect_c = (a,b,c), we get:
+        # ax1 + by1 + cz1 = 0
+        # ax2 + by2 + cz2 = 0
+
+        # first round: eliminating y
+        # applying L1 - (y1 / y2) L2
+        if y2 != 0:
+            a = x1 - (y1 / y2) * x2
+            c = z1 - (y1 / y2) * z2
+
+            if a == 0:
+                 # choosing arbitrarily c = 1
+                c = 1
+            else:
+                # choosing arbitrarily a = 1
+                a = 1
+            if c != 0:
+                c = -a / c
+            a = 1 
+
+        else:
+            # equivalent to a 2D equation: ax2 = -cz2
+            # choosing arbitrarily a = 1
+            a = 1
+            if z2 == 0:
+                # x2 =0 not possible as we would get a null vector; hence a = 0
+                # we get L1: by1 + cz1 = 0 => b = -cz1 / y1           
+                # # choosing arbitrarily c = 1   
+                if z1 != 0:
+                    c = 1
+            else:
+                c = -x2 / z2
+        
+        # computing b
+        if y1 != 0:
+            b = -(a * x1 + c * z1) / y1
+
+        # normalizing
+        norm = math.sqrt( pow(a, 2) + pow(b, 2) + pow(c, 2) )
+        a /= norm
+        b /= norm
+        c /= norm
+
+        vect_c = (a,b,c)
+        return(vect_c)
+
+
+
+    def trilateration_2D(self,target,anchor1,anchor2):
         """computes the trilateration of target based on the rangings from anchor 1 and 2.
         Two solutions are obtained based on Pythagora's theorem, both are returned"""
         pos1 = (anchor1.x, anchor1.y, anchor1.z)
@@ -347,100 +460,160 @@ class World(RenderedWorld):
         # vect_o denotes the vector from the origin to anchor 1;
         # vect_a denotes the vector from anchor 1 to the tag
 
-        if mode == '2D':
-            # z is assumed to be 0
-            # calculations are exclusively based on x,y
+        # z is assumed to be 0
+        # calculations are exclusively based on x,y
 
-            # calculating vect_base_x and vect_base_y coordinates in the global cartesian system
-            vect_base_x  = [(anchor2.x - anchor1.x) / base,(anchor2.y - anchor1.y) / base ]
-            vect_base_y = [-vect_base_x[1], vect_base_x[0]]
-            vect_o = [anchor1.x, anchor1.y]
+        # calculating vect_base_x and vect_base_y coordinates in the global cartesian system
+        vect_base_x  = [(anchor2.x - anchor1.x) / base,(anchor2.y - anchor1.y) / base ]
+        vect_base_y = [-vect_base_x[1], vect_base_x[0]]
+        vect_o = [anchor1.x, anchor1.y]
 
-            # computing first solution
-            vect_a = [dx, dy]
-            ##print("vect_a" + str(vect_a))
-            s1 = [vect_base_x[0] * vect_a[0] + vect_base_y[0] * vect_a[1]   , vect_base_x[1] * vect_a[0] + vect_base_y[1] * vect_a[1] ]
-            ##print("s1" + str(s1))
-            s1[0]+= vect_o[0]
-            s1[1]+= vect_o[1]
+        # computing first solution
+        vect_a = [dx, dy]
+        ##print("vect_a" + str(vect_a))
+        s1 = [vect_base_x[0] * vect_a[0] + vect_base_y[0] * vect_a[1]   , vect_base_x[1] * vect_a[0] + vect_base_y[1] * vect_a[1] ]
+        ##print("s1" + str(s1))
+        s1[0]+= vect_o[0]
+        s1[1]+= vect_o[1]
 
-            # appending z coordinate
-            s1.append(0)
+        # appending z coordinate
+        s1.append(0)
 
-            # computing second solution
-            vect_a = [dx, -dy]
-            vect_a = [dx, dy]
-            s2 = [vect_base_x[0] * vect_a[0] + vect_base_y[0] * vect_a[1]   , vect_base_x[1] * vect_a[0] + vect_base_y[1] * vect_a[1] ]
-            s2[0]+= vect_o[0]
-            s2[1]+= vect_o[1]
-            # appending z coordinate
-            s2.append(0)
+        # computing second solution
+        vect_a = [dx, -dy]
+        vect_a = [dx, dy]
+        s2 = [vect_base_x[0] * vect_a[0] + vect_base_y[0] * vect_a[1]   , vect_base_x[1] * vect_a[0] + vect_base_y[1] * vect_a[1] ]
+        s2[0]+= vect_o[0]
+        s2[1]+= vect_o[1]
+        # appending z coordinate
+        s2.append(0)
 
-            # determining which one of the two solution is the right one based on MSE of the other rangings
-            rangings = []
-            for anchor in (self.anchors):
-                if anchor.name == anchor1.name or anchor.name == anchor2.name:
-                    continue
-                rangings.append(anchor.get_distance(target))
-            # converting solutions from list to tuple
-            s1 = tuple(s1)
-            s2 = tuple(s2)
+        # determining which one of the two solution is the right one based on MSE of the other rangings
+        rangings = []
+        for anchor in (self.anchors):
+            if anchor.name == anchor1.name or anchor.name == anchor2.name:
+                continue
+            rangings.append(anchor.get_distance(target))
+        # converting solutions from list to tuple
+        s1 = tuple(s1)
+        s2 = tuple(s2)
 
-            #comapring the mean sqaured error for both solution and picking the best one
-            mse1 = self.mse(rangings, s1)
-            mse2 = self.mse(rangings, s2)
-            if mse1 > mse2:
-                return(s2,mse2)
-            else:
-                return(s1,mse1)
-
-        elif mode == '3D':
-            # z is assumed to be 0
-            # calculating vect_base_x and vect_base_y coordinates in the global cartesian system
-            vect_base_x  = [(anchor2.x - anchor1.x) / base,(anchor2.y - anchor1.y) / base ]
-            vect_base_y = [-vect_base_x[1], vect_base_x[0]]
-            vect_o = [anchor1.x, anchor1.y]
-
-            # computing first solution
-            vect_a = [dx, dy]
-            ##print("vect_a" + str(vect_a))
-            s1 = [vect_base_x[0] * vect_a[0] + vect_base_y[0] * vect_a[1]   , vect_base_x[1] * vect_a[0] + vect_base_y[1] * vect_a[1] ]
-            ##print("s1" + str(s1))
-            s1[0]+= vect_o[0]
-            s1[1]+= vect_o[1]
-
-            # appending z coordinate
-            s1.append(0)
-
-            # computing second solution
-            vect_a = [dx, -dy]
-            vect_a = [dx, dy]
-            s2 = [vect_base_x[0] * vect_a[0] + vect_base_y[0] * vect_a[1]   , vect_base_x[1] * vect_a[0] + vect_base_y[1] * vect_a[1] ]
-            s2[0]+= vect_o[0]
-            s2[1]+= vect_o[1]
-            # appending z coordinate
-            s2.append(0)
-
-            # determining which one of the two solution is the right one based on MSE of the other rangings
-            rangings = []
-            for anchor in (self.anchors):
-                if anchor.name == anchor1.name or anchor.name == anchor2.name:
-                    continue
-                rangings.append(anchor.get_distance(target))
-            # converting solutions from list to tuple
-            s1 = tuple(s1)
-            s2 = tuple(s2)
-
-            #comapring the mean sqaured error for both solution and picking the best one
-            mse1 = self.mse(rangings, s1)
-            mse2 = self.mse(rangings, s2)
-            if mse1 > mse2:
-                return(s2,mse2)
-            else:
-                return(s1,mse1)
-            raise NotImplementedError
+        #comapring the mean sqaured error for both solution and picking the best one
+        mse1 = self.mse(rangings, s1)
+        mse2 = self.mse(rangings, s2)
+        if mse1 > mse2:
+            return(s2,mse2)
         else:
-            raise ValueError("The specifed mode does not exist")
+            return(s1,mse1)
+
+    def trilateration_3D(self,target,anchor1,anchor2, anchor3):
+        """computes the 3D trilateration of target based on the rangings from anchor 1, 2, and 3.
+        Anchors are assumed to be on the same plan.
+        Two solutions are obtained based on Pythagora's theorem, the one with the lowest mse is returned"""
+        pos1 = [anchor1.x, anchor1.y, anchor1.z]
+        pos2 = [anchor2.x, anchor2.y, anchor2.z]
+        pos3 = [anchor3.x, anchor3.y, anchor3.z]
+
+        ## coordinates system
+        # Anchor 3
+        #    |  
+        #    | base_y
+        #    |
+        #    |          base_x
+        # Anchor 2 ----------------Anchor 1
+
+        # getting the distance between both anchors
+        base_x = self.get_distance(pos1, pos2)
+        base_y = self.get_distance(pos2,pos3)
+
+        # checking that anchors do not share the same coordinates
+        if (base_x == 0) or (base_y == 0):
+            return
+
+        # applying Pythagora on the triangles  (anchor1, anchor 2, target) and (anchor2, anchor 3, target)
+        # considering the cartesian system of {anchor 1 (0,0);anchor 2 (0, base) }
+        # calculating dx = x and dy = |y| with (x,y) the tag's coordinates in the cartesian system of (anchor1, anchor 2)
+        r1 = anchor1.get_distance(target)
+        r2 = anchor2.get_distance(target)
+        r3 = anchor3.get_distance(target)
+
+        # d_print("rangings: ")
+        # d_print(anchor1.name, anchor2.name, anchor3.name)
+        # d_print(r1,r2,r3)
+
+        dx = ( pow(r2,2) - pow(r1,2) + pow(base_x,2) ) / ( 2 * base_x)
+        dy = ( pow(r2,2) - pow(r3,2) + pow(base_y, 2) ) / ( 2 * base_y)
+
+        # computing dz
+        dz_square = pow(r2, 2) - (pow(dx, 2) + pow(dy, 2))
+        if dz_square > 0:
+            dz = math.sqrt(dz_square)
+        else:
+            dz =  0
+
+        # d_print("dx / dy / dz")
+        # d_print(dx, dy, dz)
+        # coordinate changes -> calculating the coordiantes in the global cartesian system
+        # vect_o denotes the vector from the origin to anchor 1;
+        # vect_a denotes the vector from anchor 1 to the tag
+
+        # z is assumed to be 0
+        # calculations are exclusively based on x,y
+
+        # calculating vect_base_x and vect_base_y coordinates in the global cartesian system
+        # vectors A2->A1 and A2-> A3 are orthognal
+        vect_base_x  = [(anchor1.x - anchor2.x) / base_x,(anchor1.y - anchor2.y) / base_x, (anchor1.z - anchor2.z) / base_x ]
+        vect_base_y = [(anchor3.x - anchor2.x) / base_y,(anchor3.y - anchor2.y) / base_y, (anchor3.z - anchor2.z) / base_y ]
+
+        # computing third vector required for cartesian orthonormal system
+
+        # cross-product
+        vect_base_z = np.cross(vect_base_x, vect_base_y)
+       
+        # normalization
+        base_z_norm = math.sqrt(pow(vect_base_z[0], 2) + pow(vect_base_z[1], 2) + pow(vect_base_z[2], 2))
+        vect_base_z /= base_z_norm
+
+        # getting origin
+        vect_o = [anchor2.x, anchor2.y, anchor2.z]
+
+        # d_print(vect_base_x, vect_base_y, vect_base_z, vect_o)
+
+        # preparing solutions 
+        s1 = vect_o
+        s2 = s1.copy()
+
+        # computing first solution- 
+        s1 = [vect_base_x[0] * dx + vect_base_y[0] * dy + vect_base_z[0] * dz,
+         vect_base_x[1] * dx + vect_base_y[1] * dy + vect_base_z[1] * dz,
+         vect_base_x[2] * dx + vect_base_y[2] * dy + vect_base_z[2] * dz ]
+
+        # computing second solution
+        # s2 symmetric to s1 about (x,y) plan -> dz = -dz
+        s2 = [vect_base_x[0] * dx + vect_base_y[0] * dy - vect_base_z[0] * dz,
+         vect_base_x[1] * dx + vect_base_y[1] * dy - vect_base_z[1] * dz,
+         vect_base_x[2] * dx + vect_base_y[2] * dy - vect_base_z[2] * dz ]
+
+
+        # determining which one of the two solution is the right one based on MSE of the other rangings
+        rangings = []
+        for anchor in (self.anchors):
+            # skipping anchors 1,2,3 as they will have a mse of 0
+            if anchor.name == anchor1.name or anchor.name == anchor2.name or anchor.name == anchor3.name:
+                continue
+            rangings.append(anchor.get_distance(target))
+        # converting solutions from list to tuple
+        s1 = tuple(s1)
+        s2 = tuple(s2)
+
+        # comparing the mean squared error for both solution and picking the best one
+        mse1 = self.mse(rangings, s1)
+        mse2 = self.mse(rangings, s2)
+
+        if mse1 > mse2:
+            return(s2,mse2)
+        else:
+            return(s1,mse1)
 
 
     def update_correction(self,rangings,solution):
@@ -484,3 +657,11 @@ class World(RenderedWorld):
                 min_distance = distance
 
         return(solutions_list[min_idx])
+
+
+if __name__ == "__main__":
+    vect_a = (7,5,2)
+    vect_b = (3, -5, 2)
+    vect_c = World.compute_orthogonal_vector(vect_a, vect_b)
+    print(vect_c)
+    

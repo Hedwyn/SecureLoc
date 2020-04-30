@@ -144,7 +144,7 @@ class GNdataset:
         return np.column_stack(vals)
 
 
-    def solve(self,x0, start_ratio = 1, dynamic_ratio = 0.8, tol = 1e-10, maxits = 5):
+    def solve(self,x0, start_ratio = 0.5, dynamic_ratio = 0.95, tol = 1e-10, maxits = 8):
         """Gauss-Newton algorithm for solving nonlinear least squares problems.
         Parameters
         ----------
@@ -179,10 +179,9 @@ class GNdataset:
 
         i = 0
         ratio = start_ratio
-        while (i < maxits): #and (dx[dx > tol].size > 0):
+        while (i < maxits):# and (dx[dx > tol].size > 0):
             # correction = pinv(jacobian) . residual vector
             dx  = ratio * np.dot(np.linalg.pinv(self.jacobian(xn)), -self.residuals(xn))
-
 
             d_print("xn:" + str(xn))
             xn += dx            # x_{n + 1} = x_n + dx_n
@@ -210,16 +209,27 @@ def GN_test():
 
 
 # Example dataset for rangings
+# Test = GNdataset(
+#        name = "Test",
+#        expr = "sqrt((x-b1)**2 + (y-b2)**2 + (z-b3)**2)",
+#     symbols = sp.symbols("x y z b1:4"),
+#       xvals = np.array(( 0., 0.9, 1.8)),
+#       yvals = np.array(( 0., 4.8, 0.)),
+#       zvals = np.array(( 0., 0., 0.)),
+#       rangingvals = np.array((1.8,4.8,0.)),
+#       cvals = None,
+#      starts = np.array(((0.0, 0.4,0.), ))
+# )
 Test = GNdataset(
        name = "Test",
-       expr = "sqrt((x-b1)**2 + (y-b2)**2 + (z-b3)**2)",
+       expr = "(x-b1)**2 + (y-b2)**2 + (z-b3)**2",
     symbols = sp.symbols("x y z b1:4"),
-      xvals = np.array(( 0., 0.9, 1.8)),
-      yvals = np.array(( 0., 4.8, 0.)),
-      zvals = np.array(( 0., 0., 0.)),
-      rangingvals = np.array((1.8,4.8,0.)),
+      xvals = np.array(( 0., 3.0, 0.)),
+      yvals = np.array(( 0., 0.0, 3.0)),
+      zvals = np.array(( 0.0, 0., 0.)),
+      rangingvals = np.array((3.5,3.5,3.5)),
       cvals = None,
-     starts = np.array(((0.0, 0.4,0.), ))
+     starts = np.array(((0.0, 0.4,0.1), ))
 )
 
 

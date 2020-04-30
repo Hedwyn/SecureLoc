@@ -66,10 +66,11 @@ static Anchor_position anchorsPositions[4] = {
 static Anchor_position myPosition;
 static byte targetID[][8]= { {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x01},
                      {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x02}};/**< Mobile tags IDs*/
-static float distance_to_tags[NB_ROBOTS];                     
+float distance_to_tags[NB_ROBOTS];  
+Data_sample tag_samples[NB_ROBOTS];                   
 static byte rxID[8];/**< Recipient ID buffer when receving a frame*/
 static byte nextTarget[8]; /**< Buffer for the ID of the next tag to localize*/
-static int next_target_idx = 0;  /**< Index of the next tag to localize ID in the tag's ID list targetID[]*/
+static int target_idx = 0;  /**< Index of the next tag to localize ID in the tag's ID list targetID[]*/
 
 
 /* Anchor ID's */
@@ -84,11 +85,14 @@ static unsigned long timeout; /**< Timeout variable for all the watchdogs (on Ac
 static bool has_timedout; /**< Whether the last ranging process has timed out or not */
 static uint64_t t1, t2, t3, t4; /**< Timestamp for Two-Way Ranging */
 static int64_t tof; /**< Time-of-flight calculated after TWR protocol */
+static int start_length; /**<Length, in bytes, of the START frime; depends on the parameters chosen (cooperative, etc.) */
+static int is_collision = 0; /**< Whether the last TWR has collisioned or not */
+static float twr_distance; /**<Distance calculated after twr protocol */
 
-static float distance; /**< Distance calculated after TWR protocol */
 static int has_position_been_resfreshed = 0;
 static int differential_twr = DIFFERENTIAL_TWR;
 static float distance_to_anchors[NB_ANCHORS];
+Data_sample *twr_data, *twr_data_cooperative;
 
 
 /* Serial communications */
@@ -110,22 +114,25 @@ static int delayed; /**< Boolean, true if delayed transmissions are enabled */
   */
 struct control_frame{
   byte anchor_id; /**< ID that the designated tag is going to use to its anchor turn */
-  int target_idx; /**<  ID of the target that the designated tag should localize*/
+  int ghost_tag_idx; /**<  ID of the designated tag*/
+  byte target_idx;/**<  ID of the target that the designated tag should localize*/
   byte next_anchor_id; /**< ID of the next anchor to call during the designated tag verification process*/
   byte sleep_slots; /**< Number of slots that the designated tag should sleep before starting the verification process*/
 };
-static control_frame next_ghost_anchor = {.anchor_id = 0, .target_idx = 0, .next_anchor_id = 0, .sleep_slots = 0}; /**< Ghost anchor request sent to designated tags */
+static control_frame next_ghost_anchor = {.anchor_id = 0, .ghost_tag_idx = 0, .target_idx = 1, .next_anchor_id = 0, .sleep_slots = 0}; /**< Ghost anchor request sent to designated tags */
 Tag_position tag_positions[NB_ROBOTS];
+int verifier_id_map[NB_ROBOTS];/**<List of the last id each tag verified */
 
-#ifdef MASTER
-void getNextGhostAnchor() {
+
+void getNextGhostAnchor(int next_target_idx) {
   Serial.println("I'm Master, sending control frame");
   next_ghost_anchor.anchor_id = NB_TOTAL_ANCHORS;
-  next_ghost_anchor.target_idx = next_target_idx;
+  next_ghost_anchor.ghost_tag_idx = next_target_idx;
+  next_ghost_anchor.target_idx = (next_target_idx + 1) % NB_ROBOTS;
   next_ghost_anchor.next_anchor_id = 1;
   next_ghost_anchor.sleep_slots = NB_TOTAL_ANCHORS;//+ next_ghost_anchor.anchor_id - 2;
 }
-#endif
+
 
 void serial_process_tag_position() {
   int idx = 0, found = 0;
@@ -248,35 +255,43 @@ void compute_distances_to_anchors() {
   
 }
 
-void compute_DTWR() {
+float compute_DTWR(int current_target_idx) {
   float differential_distance, total_distance;
-  uint64_t total_tof = ((t4 - t1) - (1 + 1.0E-6*decaduino.getLastRxSkew())*(t3 - t2));
-  total_distance = total_tof * SPEED_COEFF;
 
-  // Serial.println("Compute DTWR");
-  // Serial.println(total_distance);
-  // Serial.println(distance_to_tags[next_target_idx]);
-  // Serial.println(distance_to_anchors[verifierID[7] - 1]);
+  tof = ((t4 - t1) - (1 + 1.0E-6*decaduino.getLastRxSkew())*(t3 - t2));
+  total_distance = tof * SPEED_COEFF;
+
+
+  Serial.println("Compute DTWR");
+  Serial.println(total_distance);
+  Serial.println(distance_to_tags[current_target_idx]);
+  Serial.println(distance_to_anchors[verifierID[7] - 1]);
   
-  differential_distance = total_distance - distance_to_tags[next_target_idx] + distance_to_anchors[verifierID[7] - 1];  
-  distance = differential_distance;
+  differential_distance = total_distance - distance_to_tags[current_target_idx] + distance_to_anchors[verifierID[7] - 1];  
+  return(differential_distance);
 }
 
-void compute_TWR() {
-    /* computing ToF and applying skew correction */
+float compute_TWR() {
+   /* computing ToF and applying skew correction */
+  float distance;
   Serial.println("computing TWR");
   if (!SKEW_CORRECTION) {
-    tof = ((t4 - t1) - (t3 - t2))/2;
+    tof = (t4 - t1 - (t3 - t2))/2;
+
   }
   else {
-    tof = ((t4 - t1) - (1 + 1.0E-6*decaduino.getLastRxSkew())*(t3 - t2))/2;
+    tof = ((t4 - t1) - (1 + 1.0E-6*decaduino.getLastRxSkew()) *(t3 - t2))/2;
   }
+
+  Serial.print("ToF");
+  Serial.println((long)tof);
 
   /* computing distance */
   distance = tof * SPEED_COEFF;
-
+  Serial.print("distance");
+  Serial.println(distance);
   /* recording distance */
-  distance_to_tags[next_target_idx] = distance;
+  return(distance);
 }
 
 double_t compute_elapsed_time_since(uint64_t timestamp) {
@@ -285,8 +300,9 @@ double_t compute_elapsed_time_since(uint64_t timestamp) {
   return(elasped_time);
 }
 
-void anchor_setup() {
-  delay(1000);
+
+void anchor_setup(byte *myID, byte *myNextAnchorID, int is_differential) {
+  
   pinMode(13, OUTPUT);
   SPI.setSCK(14);
 
@@ -303,39 +319,48 @@ void anchor_setup() {
 
   /* Setting RX-TX parameters */
   anchor_RxTxConfig();
+  differential_twr = is_differential;
 
   /* computing ToF to other anchors */
   compute_distances_to_anchors();
 
   /* getting the starting timestamp for timeouts */
-  timeout = millis() + START_TIMEOUT + (NODE_ID - 1) * SLOT_LENGTH * 1E-3;
+  timeout = millis() + START_TIMEOUT + (myID[7] - 1) * SLOT_LENGTH * 1E-3;
   DPRINTFLN("Starting");
 
   /* The master anchor gets the first target to localize in the targets list */
-  #ifdef MASTER
+  if (myID[7] == MASTER_ID) {
     for (int i = 0; i < NB_ROBOTS; i++) {
       tag_positions[i].tagID = targetID[i];
     }
     state = TWR_ENGINE_STATE_SEND_START;
-  #else
+  }
+  else {
     state = TWR_ENGINE_STATE_INIT;
     /* enabling reception */
     decaduino.plmeRxEnableRequest();
-  #endif
+    Serial.println("Starting- Enabling reception");
+  }
   state = TWR_ENGINE_STATE_INIT;
+}
+
+void anchor_setup() {
+  anchor_setup(MYID, MY_NEXT_ANCHOR_ID, DIFFERENTIAL_TWR );
 }
 
 void anchor_RxTxConfig() {
 	decaduino.setRxBuffer(rxData, &rxLen);
+  decaduino.setChannel(2);
+  decaduino.setPreambleLength(PLENGTH);
 }
 
 
 int anchor_loop() {
   /* using default parameters */
-  return(anchor_loop(MYID, MY_NEXT_ANCHOR_ID));
+  return(anchor_loop(MYID, MY_NEXT_ANCHOR_ID, target_idx));
 }
 
-int anchor_loop(byte *myID, byte *myNextAnchorID) {
+int anchor_loop(byte *myID, byte *myNextAnchorID, int next_target_idx) {
   int ret = TWR_ON_GOING;
   if (state != previous_state) {
     DPRINTF("$State: ");
@@ -347,17 +372,17 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
     case TWR_ENGINE_STATE_INIT:
       /** Starting state of the FSM. CHecks for timeouts and restart a TWR cycle for the Master anchor.
       * For the others, skip directly to IDLE state */
-      #ifdef MASTER
+      
       if (myID[7] == MASTER_ID) {
-        timeout = millis() + START_TIMEOUT + SLOT_LENGTH * 1E-3;
-        Serial.println("$ Master Timeout Set");
+        timeout = millis() + START_TIMEOUT;
+        DPRINTFLN("$ Master Timeout Set");
       }
       else {
-        timeout = millis() + 2 * START_TIMEOUT + NODE_ID * SLOT_LENGTH * 1E-3;
+        //timeout = millis() + 3 * START_TIMEOUT + myID[7] * SLOT_LENGTH * 1E-3;
+        timeout = millis() + START_TIMEOUT + SLOT_LENGTH_MS * myID[7];
+        DPRINTFLN("Timeout set:");     
       }
-      #else
-        timeout = millis() + 2 * START_TIMEOUT + NODE_ID * SLOT_LENGTH * 1E-3;
-      #endif
+    
     
       state = TWR_ENGINE_STATE_IDLE;
       break;
@@ -369,14 +394,22 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
         state = TWR_ENGINE_PREPARE_RANGING;
 				break;
       }
+
 			if ((millis() > timeout) || (NB_ANCHORS == 1)){
 				/* the DATA frame of the previous frame has never been received. Forcing a new cycle */
 				state = TWR_ENGINE_PREPARE_RANGING;
         delayed = 0;
-        Serial.println("$Timeout- Starting new cycle");
+        Serial.println("$Timeout- Starting a new cycle");
+        Serial.print("Timeout value:");
+        Serial.println(timeout);
         /* pointing verifier ID to our own ID */
         verifierID = myID;
         my_turn = true;
+
+        /* changing target*/
+        if (COOPERATIVE) {
+          target_idx = (target_idx + 1) % NB_ROBOTS;
+        }
         decaduino.plmeRxDisableRequest();
 				break;
 			}
@@ -386,13 +419,14 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 				/* checking START frames for anchor ranging request */
 				if ( rxData[0] == TWR_MSG_TYPE_START ) {
           DPRINTFLN("$ Start received");
+          DPRINTFLN(millis());
 					/* extracting target ID */
 					for (int i = 0; i < 8; i++) {
 						nextTarget[i] = rxData[i + 1];
             anchorID[i] = rxData[i + 9];
             nextAnchorID[i] = rxData[i+17];
 					}
-          Serial.print("$ Next Target= ");
+          Serial.print("$ Last Target= ");
           print_byte_array(nextTarget);
           Serial.println();
 
@@ -413,16 +447,20 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
             /* pointing verifier ID to our own ID */
             verifierID = myID;
             #ifndef MASTER
-              next_target_idx = get_next_target_idx(nextTarget);
+              target_idx = get_next_target_idx(nextTarget);
+              next_target_idx = target_idx;
+            #else
+              target_idx = (target_idx + 1) % NB_ROBOTS;
             #endif
+
             state = TWR_ENGINE_PREPARE_RANGING;
             slot_start =  last_start_frame + (SLOT_LENGTH / (DW1000_TIMEBASE * IN_US) );
             delayed = 1;
           }
-          else if (differential_twr) {
+          else if ((differential_twr) && (anchorID[7] <= NB_ANCHORS)) {
             /* pointing the verifier ID to the current verifier */
             verifierID = anchorID;
-
+            my_turn = false;
             /* recording START timestamp */
             t1 = decaduino.getLastRxTimestamp();
 
@@ -521,33 +559,32 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
       else {
       	state = TWR_ENGINE_STATE_SEND_START;
       }
-      // getting the index of the next robot to localize
-      #ifdef MASTER
-        next_target_idx = (next_target_idx + 1) % NB_ROBOTS;
-      #endif
       break;
 
     case TWR_ENGINE_STATE_SEND_START:
     /** Sending a ranging request (START frame) to the target tag */
 			/* Frame format : tagID | anchorID | nextAnchorID  */
-      #ifdef MASTER
-        if (myID[7] == MASTER_ID) {
-          getNextGhostAnchor();
-          DPRINTFLN("$ [Master Anchor] Getting next ghost anchor ID");
-          DPRINTF("");
-        }
-      #endif
+      
+      if (myID[7] == MASTER_ID) {
+        getNextGhostAnchor(next_target_idx);
+        DPRINTFLN("$ [Master Anchor] Getting next ghost anchor ID");
+        DPRINTF("");
+        verifier_id_map[next_target_idx] = next_ghost_anchor.target_idx;
+      }
+    
 			txData[0] = TWR_MSG_TYPE_START;
       for(int i=0; i<8; i++){
         txData[1+i]=targetID[next_target_idx][i];
         txData[9+i]=myID[i];
         txData[17+i]=myNextAnchorID[i];
         *( (float *) (txData + 25)) = distance_to_tags[next_target_idx];
+        start_length = HEADER_LENGTH;
       }
+      
 
 
-      if (NODE_ID == MASTER_ID) {
-        // informing  the tag of its gposition /!\ dirty
+      if (myID[7] == MASTER_ID) {
+        // informing  the tag of its position /!\ dirty
         Serial.print("Sending position to tag ");
         Serial.println(next_target_idx);
         Serial.println(tag_positions[next_target_idx].x);
@@ -564,23 +601,25 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
         *( (float *) (txData + 30)) = tag_positions[next_target_idx].x ;
         *( (float *) (txData + 34)) = tag_positions[next_target_idx].y ;
         *( (float *) (txData + 38)) = tag_positions[next_target_idx].z ;
+        start_length += POSITION_LENGTH;
 
         // control frame for cooperative approaches
-        txData[42]= next_ghost_anchor.anchor_id;
-        txData[43] = next_ghost_anchor.next_anchor_id;
-        txData[44] = next_ghost_anchor.sleep_slots;
+        if (COOPERATIVE && (next_target_idx == next_ghost_anchor.ghost_tag_idx) ) {
+          txData[42]= next_ghost_anchor.anchor_id;
+          txData[43] = next_ghost_anchor.next_anchor_id;
+          txData[44] = next_ghost_anchor.sleep_slots;
+          txData[45] = next_ghost_anchor.target_idx;
+          start_length += COOPERATIVE_CTRL_FRAME_LENGTH;
+        }		
+      }
 
-  			/* Sending extended frame */
-        if(!decaduino.pdDataRequest(txData, 45, delayed, slot_start) ){
-          DPRINTFLN("$Could not send the frame");
-        }
+      /* Sending START frame */
+      if(!decaduino.pdDataRequest(txData, start_length, delayed, slot_start) ){
+        DPRINTFLN("$Could not send the frame");
       }
-      else {
-        /* Sending short frame */
-        if(!decaduino.pdDataRequest(txData, 29, delayed, slot_start) ){
-          DPRINTFLN("$Could not send the frame");
-        }
-      }
+      print_byte_array(txData);
+      print_byte_array(txData + 8);
+      print_byte_array(txData + 16);
 
 			/* going back to the regular cycle if the target was an anchor */
       if (is_target_anchor) {
@@ -594,6 +633,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 			t1 = decaduino.getLastTxTimestamp();
 			/* enabling reception for the incoming ACK */
 			decaduino.plmeRxEnableRequest();
+      DPRINTFLN(compute_elapsed_time_since(t1));
 			timeout = millis() + ACK_TIMEOUT;
 			state = TWR_ENGINE_STATE_WAIT_ACK;
       break;
@@ -620,19 +660,12 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 						/* getting dest ID */
               rxID[i]=rxData[i+1];
           }
-          // Serial.println("$ Received ACK ID: ");
-          // print_byte_array(rxID);
-          // Serial.println();
-          // Serial.println("$ Verifier ID: ");
-          // print_byte_array(verifierID);
           Serial.println();
-          //if (true) {
           if (byte_array_cmp(rxID, verifierID)) {
-
-          t4 = decaduino.getLastRxTimestamp();
-          /* enabling reception for DATA frame */
-          timeout = millis() + DATA_TIMEOUT;
-          state = TWR_ENGINE_STATE_WAIT_DATA_REPLY;
+            t4 = decaduino.getLastRxTimestamp();
+            /* enabling reception for DATA frame */
+            timeout = millis() + DATA_TIMEOUT;
+            state = TWR_ENGINE_STATE_WAIT_DATA_REPLY;
           }
 					else{
 						/* previous frame was for another dest - re-enabling reception */
@@ -688,25 +721,62 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 			/* extracting timestamps */
       t2 = decaduino.decodeUint64(&rxData[17]);
       t3 = decaduino.decodeUint64(&rxData[25]);
+      Serial.print("RxLen: ");
+      Serial.println((int) rxLen);
+      Serial.println((int) DATA_LENGTH_COOPERATIVE);
 
       if (my_turn) {
-        compute_TWR();
+        twr_distance = compute_TWR();
+        Serial.println("TWR distance");
+        Serial.print(twr_distance);
       }
       else {
-        compute_DTWR();
+        twr_distance = compute_DTWR(next_target_idx);
+      }
+      Serial.println("TWR distance");
+      Serial.print(twr_distance);
+
+
+
+      /* checking for collisions */
+      if (twr_distance < 0) {
+        twr_distance = 0;
+      }
+      if (twr_distance  > DMAX)  {
+        is_collision = 1;
+        twr_distance = distance_to_tags[next_target_idx];
+      }
+      else {
+        if (my_turn) {
+          distance_to_tags[next_target_idx] = twr_distance;
+        }
+        is_collision = 0;
       }
 
+      if (ALOHA) {
+        if (is_collision) {
+          aloha_delay = SLOT_LENGTH + NODE_ID * ALOHA_COLLISION_DELAY;
+        }
+        else {
+          aloha_delay = SLOT_LENGTH;
+        }
+      }
+			
 
-			if (ALOHA) {
-				/* checking for collisions */
-				if ( (distance < 0) || (distance > DMAX) ) {
-					aloha_delay = SLOT_LENGTH + NODE_ID * ALOHA_COLLISION_DELAY;
-				}
-				else {
-					aloha_delay = SLOT_LENGTH;
-				}
-			}
-      state = TWR_ENGINE_STATE_SEND_DATA_PI;
+      if( (my_turn) && (rxLen == DATA_LENGTH_COOPERATIVE) ) {
+        twr_data_cooperative = (Data_sample *) (rxData + 33);
+        Serial.print("Distance for tag: ");
+        Serial.print(next_target_idx);
+        Serial.print(" verifying: ");
+        Serial.print(verifier_id_map[next_target_idx]);
+        Serial.print(" : ");
+        Serial.println(twr_data_cooperative->distance);
+        state = TWR_ENGINE_STATE_SEND_COOPERATIVE_RESULTS;        
+      }
+      else {
+        state = TWR_ENGINE_STATE_SEND_DATA_PI;
+      }     
+
       break;
 
     case TWR_ENGINE_STATE_SEND_DATA_PI :
@@ -721,14 +791,31 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
         Serial.print("^");// indicates to the RPI that the result has been comptued in differential TWR
       }
 
+      /* copying data */
+      
+      twr_data = &(tag_samples[next_target_idx]);
+      twr_data->t1 = t1;
+      twr_data->t2 = t2;
+      twr_data->t3 = t3;
+      twr_data->t4 = t4;
+      twr_data->distance = twr_distance;
+      twr_data->skew = decaduino.getLastRxSkew();
+      twr_data->rssi = decaduino.getRSSI();
+      twr_data->fp_power = decaduino.getFpPower();
+      twr_data->fp_ampl2 = (int) decaduino.getFpAmpl2();
+      twr_data->snr = decaduino.getSNR();
+      twr_data->temperature = decaduino.getTemperature();
+
+      
+      
+
 
       print_byte_array(verifierID);
-
       Serial.print("|");
       print_byte_array(targetID[next_target_idx]);
 
       Serial.print("|");
-      Serial.print(distance);
+      Serial.print(twr_data->distance);
 
 
       /* timestamps */
@@ -746,27 +833,27 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
 
       /* skew */
       Serial.print("|");
-      Serial.print(decaduino.getLastRxSkew());
+      Serial.print(twr_data->skew);
 
       /* RSSI */
 			Serial.print("|");
-      Serial.print(decaduino.getRSSI() );
+      Serial.print(twr_data->rssi);
 
       /* First path power */
       Serial.print("|");
-      Serial.print(decaduino.getFpPower());
+      Serial.print(twr_data->fp_power);
 
       /* FpAmpl2 */
       Serial.print("|");
-      Serial.print((int) decaduino.getFpAmpl2());
+      Serial.print(twr_data->fp_ampl2);
 
       /* Std noise */
       Serial.print("|");
-      Serial.print(decaduino.getSNR());
+      Serial.print(twr_data->snr);
 
       /* Temperature */
       Serial.print("|");
-      Serial.print(decaduino.getTemperature());
+      Serial.print(twr_data->temperature);
 
       Serial.println("#\n");
 
@@ -778,6 +865,58 @@ int anchor_loop(byte *myID, byte *myNextAnchorID) {
       state = TWR_ENGINE_STATE_INIT;
       ret = TWR_COMPLETE;
       break;
+
+    case TWR_ENGINE_STATE_SEND_COOPERATIVE_RESULTS:
+      Serial.print("°");
+      print_byte_array(targetID[next_target_idx]);
+      Serial.print("|");
+      print_byte_array(targetID[verifier_id_map[next_target_idx]]);
+
+      Serial.print("|");
+      Serial.print(twr_data_cooperative->distance);
+
+
+      /* timestamps */
+			Serial.print("|");
+      Serial.print((int) twr_data_cooperative->t1);
+
+			Serial.print("|");
+      Serial.print((int) twr_data_cooperative->t2);
+
+      Serial.print("|");
+      Serial.print( (int) twr_data_cooperative->t1);
+
+      Serial.print("|");
+      Serial.print( (int) twr_data_cooperative->t4);
+
+      /* skew */
+      Serial.print("|");
+      Serial.print(twr_data_cooperative->skew);
+
+      /* RSSI */
+			Serial.print("|");
+      Serial.print(twr_data_cooperative->rssi);
+
+      /* First path power */
+      Serial.print("|");
+      Serial.print(twr_data_cooperative->fp_power);
+
+      /* FpAmpl2 */
+      Serial.print("|");
+      Serial.print(twr_data_cooperative->fp_ampl2);
+
+      /* Std noise */
+      Serial.print("|");
+      Serial.print(twr_data_cooperative->snr);
+
+      /* Temperature */
+      Serial.print("|");
+      Serial.print(twr_data_cooperative->temperature);
+
+      Serial.println("#\n");
+      state = TWR_ENGINE_STATE_SEND_DATA_PI;
+      break;
+
 
     default:
       state = TWR_ENGINE_STATE_INIT;

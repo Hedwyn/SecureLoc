@@ -26,7 +26,8 @@ class dataset:
 
     def __init__(self,sample = None, protocol = '',anchorID = None, botID= None,
                  rp = None, distance = None,timestamps = {},
-                 rssi = None, skew = None, fp_power = None, fp_ampl2 = None, std_noise = None, temperature = None):
+                 rssi = None, skew = None, fp_power = None, fp_ampl2 = None, std_noise = None, temperature = None, 
+                 differential_rmse = None, position = None,  localization_algorithm = None):
         self.sample = sample
         self.protocol = protocol
         self.anchorID = anchorID
@@ -40,6 +41,9 @@ class dataset:
         self.std_noise = std_noise
         self.temperature = temperature
         self.fp_ampl2 = fp_ampl2
+        self.differential_rmse = differential_rmse
+        self.position = position # position tuple
+        self.localization_algorithm = localization_algorithm 
 
     def export(self):
         """returns the dataset as a dictionary"""
@@ -56,7 +60,10 @@ class dataset:
                 "fp_power":self.fp_power,
                 "fp_ampl2":self.fp_ampl2,
                 "std_noise":self.std_noise,
-                "temperature":self.temperature})
+                "temperature":self.temperature,
+                "differential_rmse":self.differential_rmse,
+                "position":self.position,
+                "localization_algorithm":self.localization_algorithm})
 
 
 class position:

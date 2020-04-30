@@ -32,6 +32,7 @@
 #include <DecaDuino.h>
 #include "anchor_c.h"
 #include <math.h>
+#include "Multilateration.h"
 
 
 #define INT_MAX 2147483647
@@ -68,6 +69,10 @@
   #define NODE_ID 1/**< Default tag ID. Should be defined during compilation when deploying*/
 #endif
 
+/* Rx-TX parameters */
+#define CHANNEL 2 
+#define PLENGTH 256
+
 /* FSM states */
 #define TWR_ENGINE_STATE_INIT 0 /**< Default starting state*/
 #define TWR_ENGINE_GHOST_ANCHOR 1 /**< State for ghost anchor operations when designated as such*/
@@ -83,8 +88,8 @@
 
 /* platform parameters */
 #define NB_ANCHORS 4/**< Total number of anchors on the platform */
-#define PLATFORM_LENGTH 3./**<Length of the rectangle formed by the anchors (y coord) */
-#define PLATFORM_WIDTH 3./**<Width of the rectangle formed by the anchors (x coord) */
+#define PLATFORM_LENGTH 2./**<Length of the rectangle formed by the anchors (y coord) */
+#define PLATFORM_WIDTH 1./**<Width of the rectangle formed by the anchors (x coord) */
 #define DEFAULT_ANCHOR_1_POSITION {.x = 0., .y = 0.}
 #define DEFAULT_ANCHOR_2_POSITION {.x = 0., .y = PLATFORM_LENGTH}
 #define DEFAULT_ANCHOR_3_POSITION {.x = PLATFORM_WIDTH, .y = PLATFORM_LENGTH}
@@ -97,15 +102,15 @@
 #define SPEED_COEFF 4.2255E-3/**<DW1000_TIMEBASE*CALIBRATION * AIR_SPEED_OF_LIGHT */
 
 /* Attack parameters */
-#define NOISE_STD 0.25/**<Standard deviation of the random distance shift applied by the attack (uniform law) */
-#define TARGET_REFRESH_TIME 5000/**<Period bewteen two distance shift random generations. SHould be low enough to be realistic. */
+#define NOISE_STD 0.5/**<Standard deviation of the random distance shift applied by the attack (uniform law) */
+#define TARGET_REFRESH_TIME 0/**<Period bewteen two distance shift random generations. SHould be low enough to be realistic. */
 #define MANUAL 0 /**<In manual mode, the attack is entirely handled though the serial port. The tag does not get its position itself nor does it chose the target */
+#define COMPUTE_POSITION 1 /**<If enabled, the attacker computes itself its position based on the distances received. If not, the position used is the (biased) position computed by the 3d engine */
 
-/** @brief represents a position with its coordinates */
-typedef struct Position{
-  float x;/**<x coordinate */
-  float y;/**<y coordinate */
-}Position;
+/* Sliding Window parameters */
+#define DMIN 0
+#define DMAX 5
+#define SW_LENGTH 10
 
 /** @brief DecaWino setup for Tag mode
   * @author Baptiste Pestourie

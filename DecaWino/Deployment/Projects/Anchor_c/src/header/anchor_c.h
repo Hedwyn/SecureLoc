@@ -55,7 +55,7 @@
 #define SLOT_LENGTH_MS (SLOT_LENGTH / 1000) /**< TDMA slot length, in milliseconds*/
 #define IN_US 1E6 /**< Second to microsecond conversion*/
 
-//#define _DEBUG_   //comment to disable debug mode
+#define _DEBUG_   //comment to disable debug mode
 #ifdef _DEBUG_
   #define DPRINTF  Serial.print/**< When defined, enables debug ouput on the serial port*/
 #else
@@ -70,20 +70,25 @@
 
 
 
+
 #define ASCII_NUMBERS_OFFSET 48/**< Char to printable value conversion for serial communications*/
 
 #define AIR_SPEED_OF_LIGHT 299700000.0 /**< Speed of light constant to extract distances from time-of-flight measurements*/
 #define DW1000_TIMEBASE 15.65E-12 /**< Resolution of the system clock - value of 1 bit in s*/
 #define DW1000_TIMEBASE_US 15.65E-6 /**< Resolution of the system clock - value of 1 bit in us*/
-#define CALIBRATION 0.9 /**< Calibration coefficient to apply to the distance measurements*/
+#define CALIBRATION 0.7 /**< Calibration coefficient to apply to the distance measurements*/
 #define SPEED_COEFF AIR_SPEED_OF_LIGHT*DW1000_TIMEBASE*CALIBRATION /**< Calibrated speed of light constantt*/
+
+/* RX-TX parameters */
+#define CHANNEL 2
+#define PLENGTH 128
 
 /* watchdogs */
 
-#define TX_TIMEOUT 10 /**< Watchdog for failed transmission that never complete*/
-#define ACK_TIMEOUT SLOT_LENGTH_MS /**< Acknowledgment watchdog in TWR protocol*/
-#define DATA_TIMEOUT SLOT_LENGTH_MS /**< DATA watchdog in TWR protocol*/
-#define START_TIMEOUT (NB_ANCHORS * SLOT_LENGTH_MS) /**< START watchdog for TDMA scheduling - triggered when previous anchor stayed quiet*/
+#define TX_TIMEOUT 100 /**< Watchdog for failed transmission that never complete*/
+#define ACK_TIMEOUT (SLOT_LENGTH_MS / 2) /**< Acknowledgment watchdog in TWR protocol*/
+#define DATA_TIMEOUT (SLOT_LENGTH_MS / 2) /**< DATA watchdog in TWR protocol*/
+#define START_TIMEOUT (NB_TOTAL_ANCHORS * SLOT_LENGTH_MS) /**< START watchdog for TDMA scheduling - triggered when previous anchor stayed quiet*/
 
 
 
@@ -98,14 +103,15 @@
 #define TWR_ENGINE_STATE_WAIT_DATA_REPLY 6/**< DATA polling - back to INIT if timeout */
 #define TWR_ENGINE_STATE_EXTRACT_T2_T3 7/**< Computes time-of-flight & distance */
 #define TWR_ENGINE_STATE_SEND_DATA_PI 8/**< Sends the distance & other PHY data to host RPI */
+#define TWR_ENGINE_STATE_SEND_COOPERATIVE_RESULTS 9/**< Sends the result distance of an itnertag verification to host RPI */
 
 
 /* TWR State & parameters */
 #define TWR_ON_GOING 0/**< Ret value for main loop - TWR protocol is still running */
 #define TWR_COMPLETE 1/**< Ret value for main loop - TWR protocol complete */
 #define DIFFERENTIAL_TWR 1/**<If set, all anchors will compute the distance on each start frame using a diffential calculation*/
-#define PLATFORM_LENGTH 3.04/**< Length of the rectangle formed by the anchor (anchor 1 -> anchor 2) */
-#define PLATFORM_WIDTH 3.04/**< Width of the rectangle formed by the anchor (anchor 1 -> anchor 4) */
+#define PLATFORM_LENGTH 2/**< Length of the rectangle formed by the anchor (anchor 1 -> anchor 2) */
+#define PLATFORM_WIDTH 1/**< Width of the rectangle formed by the anchor (anchor 1 -> anchor 4) */
 #define T23 100000000 /**< When delayed send is enabled, waiting time between ACK and DATA frame*/
 #define SKEW_CORRECTION 1/**< Applies a correction on the ToF calculation based on the clock skew with the target tag*/
 
@@ -113,10 +119,16 @@
 #define TWR_MSG_TYPE_START 1  /**< START frame header*/
 #define TWR_MSG_TYPE_ACK 2 /**< ACK frame header*/
 #define TWR_MSG_TYPE_DATA_REPLY 3 /**< DATA frame header*/
-#define NB_ROBOTS 1/**< Total number of mobile tags*/
+#define NB_ROBOTS 2/**< Total number of mobile tags*/
 
+/* MAC layer */
+#define HEADER_LENGTH 29
+#define POSITION_LENGTH 13
+#define COOPERATIVE_CTRL_FRAME_LENGTH 4
+#define DATA_LENGTH 33
+#define DATA_LENGTH_COOPERATIVE (DATA_LENGTH + sizeof(Data_sample))
 /* Cooperative */
-#define COOPERATIVE 0 /**< Enables cooperative mode - see documentation for further details*/
+#define COOPERATIVE 1 /**< Enables cooperative mode - see documentation for further details*/
 #if (COOPERATIVE)
   #define NB_GHOST_ANCHORS 1 /**< Total number of ghost anchors in cooperative mode*/
 #else
@@ -124,6 +136,7 @@
 #endif
 
 #define NB_TOTAL_ANCHORS (NB_ANCHORS + NB_GHOST_ANCHORS) /**< Total number of anchors including ghost anchors*/
+extern float distance_to_tags[NB_ROBOTS]; 
 
 /** The position of a given tag identified by its id, in the (x,y,z)
  coordinates system */
@@ -143,6 +156,23 @@ typedef struct Anchor_position{
   float z;/**<Altitude */
 }Anchor_position;
 
+/** A sample of the data measured during a TWR protocol */
+typedef struct Data_sample{
+  uint64_t t1;/**<TWR timestamp*/
+  uint64_t t2;/**<TWR timestamp*/
+  uint64_t t3;/**<TWR timestamp*/
+  uint64_t t4;/**<TWR timestamp*/
+  float distance;/**<TWR distance estimated*/
+  float skew;/**<Skew estimated between the prover & verifier clocks*/
+  float rssi;/**<reception signal strength indicator*/
+  float fp_power;/**<First path power*/
+  int fp_ampl2;/**< fp amplitude 2 - used for rssi/fp power estimation -> see DWM1000 user manual*/
+  float snr;/**< signal to noise ratio */
+  float temperature;/**<estimated internal temperature*/
+}Data_sample;
+extern Data_sample tag_samples[NB_ROBOTS]; 
+
+
 /** @brief process serial frames containing tag positions
   * @author Baptiste Pestourie
   * @date 2020 March 1st
@@ -154,6 +184,13 @@ void serial_process_tag_position();
   * @date 2019 December 1st
 */
 void anchor_setup();
+
+
+/** @brief DecaWino setup for anchor mode
+  * @author Baptiste Pestourie
+  * @date 2019 December 1st
+*/
+void anchor_setup(byte *myID, byte *myNextAnchorID, int is_differential);
 
 /** @brief RX/TX setup for DW1000 in anchor mode.
   * Sets the channel, preamble length, preamble code and PRF.
@@ -188,15 +225,17 @@ double compute_elapsed_time_since(uint64_t timestamp);
   * Used when the anchor is listening to the TWR of another anchor.
   * @author Baptiste Pestourie
   * @date 2020 March 1st
+  * @return the computed distance
 */
-void compute_DTWR();
+float compute_DTWR(int current_target_idx);
 
 /** @brief computes the distance in direct Two-Way Ranging mode
   * Used when the anchor performing the TWR protocol itself.
   * @author Baptiste Pestourie
   * @date 2020 March 1st
+  * @return the computed distance
 */
-void compute_DWR();
+float compute_DWR();
 
 /** @brief Finds the index of a given tag ID in the tag ID list
   * @author Baptiste Pestourie
@@ -221,7 +260,7 @@ int anchor_loop();
   * @param myNextAnchorID ID of the following anchor
   * @returns TWR state (/!\ different from the FSM state))
 */
-int anchor_loop(byte *myID, byte *myNextAnchorID);
+int anchor_loop(byte *myID, byte *myNextAnchorID, int next_target_idx);
 
 
 #endif

@@ -45,12 +45,16 @@ static byte myID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, NODE_ID};/**< N
 static byte targetID [8]; /**< Buffer for the target ID field in RX frames */
 static byte anchorID [8];  /**< Buffer for the anchor ID field in RX frames */
 static byte sleep_slots; /**< Number of slots to sleep when turning to sleep mode */
+static int target_idx; /**< Index of the next tag to localize ID in the tag's ID list targetID[]*/
 
 
-/* timestamps */
+/* TWR */
 static uint64_t t2, t3,ts_ghost_anchor;  /**< Timestamp for TWR process */
+static float distances[NB_ANCHORS]; /**< Distances to the anchor calculated in TWR. Transmitted in the START frame */
 
 /* cooperative methods */
+static int switch_to_anchor = 0;
+static int cooperative_distance_pending = 0;
 static byte next_target_id[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00}; /**< ID of the next target when acting as an anchor */
 static byte ghost_anchor_id[8] ={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00}; /**< ID tu claim when acting as an anchor */
 static byte next_anchor_id[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00};/**< ID to call when acting as an anchor */
@@ -61,7 +65,10 @@ static char serial_command; /**<The serial command received from the host, on 1 
 static int anchor_idx; /**< index of a given anchor ID in the anchor positions array */
 
 /* attack parameters */
+static float distance;/**<contains the last distance measured, sent by the anchor**/
 static long timeshifts[NB_ANCHORS] = {0};
+static float real_distances[NB_ANCHORS];
+static float distance_shifts[NB_ANCHORS] = {0};
 static Position target_position = {.x = 0, .y = 0.}; /**<Position targeted by the attack */
 static Position my_position = {.x = 0, .y = 3.};/**<Current position */
 static int attack_is_on = 0;/**<Whether the attack is enabled or not */
@@ -97,6 +104,10 @@ int main() {
 void compute_timeshifts() {
 	int i;
 	double legit_distance, malicious_distance, distance_shift;
+	//float real_distances[NB_ANCHORS];
+	Serial.println("Target position ");
+	Serial.println(target_position.x);
+	Serial.println(target_position.y);
 	for (i = 0; i < NB_ANCHORS; i++) {
 		/* calculating Euclidean distance to anchor */
 		legit_distance = sqrt( pow(my_position.x - anchor_positions[i].x, 2) + pow(my_position.y - anchor_positions[i].y, 2));
@@ -104,6 +115,7 @@ void compute_timeshifts() {
 		malicious_distance = sqrt( pow(target_position.x - anchor_positions[i].x, 2) + pow(target_position.y - anchor_positions[i].y, 2));
 		/* calcualting distance shift */
 		distance_shift = malicious_distance - legit_distance;
+		distance_shifts[i] = distance_shift;
 		/* computing time-of-flight */
 		timeshifts[i] = 2*  (distance_shift / SPEED_COEFF); // Factor 2 required because it's a two-way trip
 		Serial.print("distance shift:");
@@ -115,32 +127,31 @@ void compute_timeshifts() {
 
 void generate_target_position() {
 	int ran_x, ran_y;
-	float normalized_ran_x, normalized_ran_y, sum_ran;
+	float normalized_ran_x, normalized_ran_y, norm;
+
+	// sampling norm
+	norm = (float) random(100) / 100 * (2 * NOISE_STD);// mean = 2 * std for uniform probability law
 	// picking two random coordinates
 	ran_x = random(100); //picking a %. Random lib does only allow picking integers. The coordinate shift is normalized later on.
-	ran_y = random(100);
+	ran_y = 100 - ran_x;
 
 	// normalization
-	sum_ran = (float) (ran_x + ran_y);
-	normalized_ran_x = (float) ran_x / sum_ran;
-	normalized_ran_y = (float) ran_y / sum_ran;
-
-	Serial.println("Random shift:");
-	Serial.println(normalized_ran_x);
-	Serial.println(normalized_ran_y);
-
-	// multiplying by noise mean
-	normalized_ran_x *= NOISE_STD * 2; // mean = 2 * std for uniform probability law
-	normalized_ran_y *= NOISE_STD * 2;
-
-	// debug check
-	Serial.println("Calculated coordinates shift:");
-	Serial.println(ran_x);
-	Serial.println(ran_y);
+	normalized_ran_x =( (float) ran_x / 100) * norm;
+	normalized_ran_y = ( (float) ran_y / 100) * norm;
 
 	// adding the random shift to the current_position to obtain target position
 	target_position.x = my_position.x + normalized_ran_x;
 	target_position.y = my_position.y + normalized_ran_y;
+	// debug check
+
+	Serial.println("My position:");
+	Serial.println(my_position.x);
+	Serial.println(my_position.y);
+
+
+	Serial.println("Calculated target coordinates :");
+	Serial.println(target_position.x);
+	Serial.println(target_position.y);
 
 }
 
@@ -172,6 +183,8 @@ void internal_attack_setup() {
 
 void tag_RxTxConfig() {
 	decaduino.setRxBuffer(rxData, &rxLen);
+	decaduino.setPreambleLength(PLENGTH);
+	decaduino.setChannel(CHANNEL);
 }
 
 void loop() {
@@ -272,6 +285,10 @@ void loop() {
 					}
 					compute_timeshifts();
 					break;
+
+				case 4:
+					generate_target_position();
+					break;
 				default:
 					Serial.println("$ unknown command received:");
 					Serial.println(serial_command);
@@ -296,35 +313,47 @@ void loop() {
 
       break;
 
-		case TWR_ENGINE_GHOST_ANCHOR:
-			/* in Cooperative mode, state for ghost anchor operations.
-			The tag will switch to this state when designated by an anchor */
-			state = TWR_ENGINE_STATE_INIT;
-			Serial.println("Switching to ghost anchor mode");
-			Serial.print("Ghost Anchor ID: ");
-			Serial.println(ghost_anchor_id[7]);
-			Serial.print("Number of sleep slots:");
-			Serial.println((int) sleep_slots);
-			anchor_setup();
-			while (anchor_loop(ghost_anchor_id, next_anchor_id) != TWR_COMPLETE );
-			internal_attack_setup();
-			Serial.println("Ghost Anchor Job Complete");
-			ghost_anchor_id[7] = 0;
-			break;
+
+	case TWR_ENGINE_GHOST_ANCHOR:
+		/* in Cooperative mode, state for ghost anchor operations.
+		The tag will switch to this state when designated by an anchor */
+		state = TWR_ENGINE_STATE_INIT;
+      	digitalWrite(13, HIGH);
+		Serial.println("Switching to ghost anchor mode");
+		Serial.print("Ghost Anchor ID: ");
+		Serial.println(ghost_anchor_id[7]);
+		Serial.print("Number of sleep slots:");
+		Serial.println((int) sleep_slots);
+      	decaduino.plmeRxDisableRequest();
+		anchor_setup(ghost_anchor_id, next_anchor_id, 0);
+		while (anchor_loop(ghost_anchor_id, next_anchor_id, target_idx) != TWR_COMPLETE );
+		internal_attack_setup();
+		Serial.print("Distance calculated:");
+		Serial.println(distance_to_tags[target_idx]);
+		Serial.println("Ghost Anchor Job Complete");
+		switch_to_anchor = 0;
+		cooperative_distance_pending = 1;
+		digitalWrite(13, LOW);
+		break;
+
 
     case TWR_ENGINE_STATE_RX_ON:
-		/* Turns on reception and checks if the tag has been designated as ghost anchor in the previous ranging */
-
-		decaduino.plmeRxEnableRequest();
+		/* sleeping until next slot */
+		while (decaduino.getSystemTimeCounter() - t2 < (SLOT_LENGTH / (DW1000_TIMEBASE * IN_US))  - GUARD_TIME) {
+			delayMicroseconds(30);
+		}
+				
 		state = TWR_ENGINE_STATE_WAIT_START;
-		if (COOPERATIVE && (ghost_anchor_id[7] != 0)  && (decaduino.getSystemTimeCounter() > ts_ghost_anchor + sleep_slots * SLOT_LENGTH) ) {
-			//if (ghost_anchor_id[7] != 0) {// && (next_target_id[7] != 0)) {
-			state = TWR_ENGINE_GHOST_ANCHOR;
+		//unsigned long waited_time = (decaduino.getSystemTimeCounter()>>4) % 0x0FFFFFFFFFFFFFFF - ts_ghost_anchor>>4;
+		if (COOPERATIVE && switch_to_anchor  && (decaduino.getSystemTimeCounter() - ts_ghost_anchor  > sleep_slots * (SLOT_LENGTH / (DW1000_TIMEBASE * IN_US) )) ) {
+				state = TWR_ENGINE_GHOST_ANCHOR;
 		}
 		else {
 			delayMicroseconds(100);
+		/* Turns on reception */
+		decaduino.plmeRxEnableRequest();
 		}
-      break;
+		break;
 
     case TWR_ENGINE_STATE_WAIT_START:
 		/* Polling state for start request from anchors */
@@ -341,33 +370,36 @@ void loop() {
 		VPRINTFLN((int)anchorID[7]);
           if ( byte_array_cmp(targetID, myID) ) {
             t2 = decaduino.getLastRxTimestamp();
-            state = TWR_ENGINE_STATE_SEND_ACK;
-			if (anchorID[7] == MASTER_ID) {
-				if (!MANUAL) {
-				// in manual mode, getting position
-					if (rxData[29] == 1) {
-						attack_is_on = 1; // turning on the attack
-						Serial.println("Enabling attack");
-						my_position.x = *( (float *) (rxData + 30));
-						my_position.y = *( (float *) (rxData + 34));
-					}
-					Serial.println("Current position: ");
-					Serial.println(my_position.x);
-					Serial.println(my_position.y);
-					compute_timeshifts();
 
-					// generating new target is the generation timer has ended
-					if (millis() - target_generation_timer > TARGET_REFRESH_TIME) {
-						target_generation_timer = millis();
-						Serial.println("generating new target position");
-						generate_target_position();
-					}
+			/* getting distance */
+			distance = *( (float *) &rxData[25]);
+			if ((distance > DMIN) && (distance < DMAX)) {
+				int anchor_idx = anchorID[7] - 1;
+				distances[anchor_idx] = distance;
+				if (attack_is_on) {
+					real_distances[anchor_idx] += (distance - distance_shifts[anchor_idx]  - real_distances[anchor_idx]) / SW_LENGTH;
 				}
-				DPRINTFLN("Received ghost anchor request from Master");
-				ghost_anchor_id[7] = rxData[25];
-				next_anchor_id[7] = rxData[26];
-				sleep_slots = rxData[27];
-				ts_ghost_anchor = t2;
+				else {
+					real_distances[anchor_idx] += (distance  - real_distances[anchor_idx]) / SW_LENGTH;
+				}
+				Serial.print("Distance for anchor ");
+				Serial.print(anchor_idx);
+				Serial.print(" :");
+				Serial.println(real_distances[anchor_idx]);				
+			}
+			distances[anchorID[7] - 1] = *( (float *) &rxData[25]);
+            state = TWR_ENGINE_STATE_SEND_ACK;
+			if ((int) rxLen == HEADER_LENGTH + POSITION_LENGTH + COOPERATIVE_CTRL_FRAME_LENGTH) {
+			DPRINTFLN("Received ghost anchor request from Master");
+			switch_to_anchor = 1;
+			ghost_anchor_id[7] = rxData[42];
+			next_anchor_id[7] = rxData[43];
+			sleep_slots = rxData[44];
+			//sleep_slots = 4;
+			ts_ghost_anchor = t2;
+			target_idx = (int) rxData[45];
+			Serial.print("target idx:");
+			Serial.println(target_idx);
 			}
           }
           else{
@@ -423,6 +455,38 @@ void loop() {
 		DPRINTF("$Temperature: ");
 		DPRINTFLN(decaduino.getTemperature());
       	while (!decaduino.hasTxSucceeded());
+		if (!MANUAL && (anchorID[7] == MASTER_ID)) {
+		// in automatic mode, getting position
+			if ((rxData[29] == 1) && !COMPUTE_POSITION) {
+				attack_is_on = 1; // turning on the attack
+				Serial.println("Enabling attack");
+				my_position.x = *( (float *) (rxData + 30));
+				my_position.y = *( (float *) (rxData + 34));
+			}
+			Serial.println("Current position: ");
+			Serial.println(my_position.x);
+			Serial.println(my_position.y);
+			if (COMPUTE_POSITION) {
+				Serial.println("My position before: ");
+				Serial.println(my_position.x);
+				Serial.println(my_position.y);
+				Serial.println(micros());
+				multilateration(&my_position, anchor_positions, real_distances, NB_ANCHORS);
+				Serial.println("My position after: ");
+				Serial.println(my_position.x);
+				Serial.println(my_position.y);
+			}
+			if (attack_is_on) {
+				compute_timeshifts();
+			}
+
+			// generating new target is the generation timer has ended
+			if ((TARGET_REFRESH_TIME != 0) && (millis() - target_generation_timer > TARGET_REFRESH_TIME)) {
+				target_generation_timer = millis();
+				Serial.println("generating new target position");
+				generate_target_position();
+			}
+		}
       	state = TWR_ENGINE_STATE_INIT;
       	break;
 

@@ -6,9 +6,14 @@ import sys
 import os
 import threading
 
-#### network parameters
+## network parameters
+
+# remote
 HOST = '169.254.1.1'
-HOST = '127.1.1.1'
+
+# local
+#HOST = '127.1.1.1'
+
 PORT = 1883 # default mqtt port
 
 ## serial parameters
@@ -37,6 +42,7 @@ rssi = 0
 NB_DATA = 9 # number of datatypes sent by the node
 NB_DATA_EXTENDED = 13 # number of datatypes sent by the node in EXTENDED_MODE
 ROOT = 'SecureLoc/anchors_data/'
+COOPERATIVE_ROOT = 'SecureLoc/cooperative_data/'
 TOPIC_SERIAL = 'Serial'
 MQTT_CONFIG_FILE = 'MQTT_topics.txt'
 
@@ -163,7 +169,41 @@ def processLine(line, port):
             mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/fp_ampl2",fp_ampl2)
             mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/std_noise",std_noise)
             mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/temperature",temperature)
+    elif len(line) > 0 and line[0] == '^' and line[-1] == '#':
+        # received the results of a differential TWR
+        data = line.split("|")
+        if len(data) < NB_DATA:
+            print('received frame is not compliant with the expected data format')
+        if len(data) >= NB_DATA:
+            anchor_id = data[0][15:17]
+            bot_id = data[1][14:17]
+            differential_distance = data[2]
+            differential_skew = data[7]
+            differential_rssi = data[8]
 
+            # publishing to MQTT
+            mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/differential_distance", differential_distance)
+            mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/differential_rssi", differential_rssi )
+            mqttc.publish(ROOT + str(anchor_id) + "/" + str(bot_id) + "/differential_skew", differential_skew )
+
+    elif len(line) > 0 and line[0] == '°' and line[-1] == '#':
+        # received the results of a cooperative TWR -> a tag has been verifying another one
+        print("Cooperative results received")
+        data = line.split("|")
+        if len(data) < NB_DATA:
+            print('received frame is not compliant with the expected data format')
+        if len(data) >= NB_DATA:
+            verifier_id = data[0][15:17]
+            bot_id = data[1][14:17]
+            cooperative_distance = data[2]
+            cooperative_skew = data[7]
+            cooperative_rssi = data[8]
+
+            # publishing to MQTT
+            mqttc.publish(COOPERATIVE_ROOT + str(verifier_id) + "/" + str(bot_id) + "/distance", cooperative_distance)
+            mqttc.publish(COOPERATIVE_ROOT + str(verifier_id) + "/" + str(bot_id) + "/rssi", cooperative_rssi )
+            mqttc.publish(COOPERATIVE_ROOT + str(verifier_id) + "/" + str(bot_id) + "/skew", cooperative_skew )
+            
 
 
 

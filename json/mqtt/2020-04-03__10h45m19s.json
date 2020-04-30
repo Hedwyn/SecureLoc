@@ -1,0 +1,2 @@
+{"metadata": true, "anchors_positions": "0    0    0   1   blue | 0   2    0   2   blue | 1   2     0   3   blue | 1  0 0 4 blue | "}
+{"sample": null, "protocol": "differential", "anchorID": null, "botID": null, "distance": 2.73, "reference_point": null, "timestamps": {}, "rssi": null, "skew": null, "fp_power": null, "fp_ampl2": null, "std_noise": null, "temperature": null, "position": null, "localization_algorithm": null}

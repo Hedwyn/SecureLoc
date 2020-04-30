@@ -29,6 +29,7 @@
 #include "anchor_c.h"
 
 int main(){
+	delay(1000);
 	anchor_setup();
 	while (1) {
 		anchor_loop();

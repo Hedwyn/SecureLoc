@@ -41,14 +41,14 @@ class Renderer(ABC,ShowBase):
         self.win_props = WindowProperties.get_default()
         self.win_props.set_fullscreen(False)
         self.win_props.set_fixed_size(True)
-        self.win_props.set_size(640, 480)
+        self.win_props.set_size(WINDOW_HEIGHT, WINDOW_WIDTH)
         self.win_props.set_title("SecureLoC")
         base.win.request_properties(self.win_props)
 
         render.set_shader_auto()
         render.set_antialias(AntialiasAttrib.MAuto)
         """Set the overview parameters"""
-        base.cam.set_pos(4, 10, 3)
+        base.cam.set_pos(BASE_CAM_POS)
         base.cam.look_at(0, 0, 0)
 
 
@@ -87,14 +87,6 @@ class RenderedNode(ABC):
         """returns all the distances measured by the node"""
         raise NotImplementedError
 
-    def change_color(self,color = 'red'):
-        """Changes the node color in the 3D engine. Default color is red"""
-        self.color = color
-        self.model.set_color(utils.colors[self.color])
-        # refreshing node color
-        self.hide()
-        self.show()
-
     def displays_node_at(self,x,y,z):
         """Displays the node at the given coordinates.
         Note that this only affects the representation of the node in the 3D engine, not the actual coordinates.
@@ -122,7 +114,7 @@ class RenderedNode(ABC):
         (x,y,z) = self.get_coordinates()
         self.model = loader.load_model("smiley")
         self.model.set_color(utils.colors[self.color])
-        self.model.set_scale(0.1)
+        self.model.set_scale(SCALE)
         self.model.set_pos(x, y, z)
         self.shown = False
         self.is_Anchor = not(is_bot_id(self.get_ID()))
@@ -139,11 +131,12 @@ class RenderedNode(ABC):
             self.model.detach_node()
             self.shown = False
 
-    def change_color(self,color):
-        """chanegs the color of the node rendition in the 3D engine"""
-        self.model.set_color(utils.colors[self.color])
+    def change_color(self,color =  'red'):
+        """changes the color of the node rendition in the 3D engine"""
+        self.model.set_color(utils.colors[color])
         # changing text color
-        self.label.set_text_color(utils.colors[self.color])
+        self.label.set_text_color(utils.colors[color])
+
 
     def get_distances_as_str(self):
         """converts the distances measured by the node into a string.
@@ -162,7 +155,7 @@ class RenderedNode(ABC):
         while (distances_list):
             # define printing the first 4 digits each time
                 self.text += str(distances_list.pop())[:4]
-                # checing if it's the last one of the list
+                # checking if it's the last one of the list
                 if (distances_list):
                     self.text += '/ '
 
@@ -172,7 +165,23 @@ class RenderedNode(ABC):
         # printing only the first 4 digits
         self.text = ("(" + str(x)[:4] + "," + str(y)[:4] + "," +str(z)[:4] + str(")") )
 
-
+    def get_rmse_as_str(self):
+        """For a tag, converts differential rmse to a string"""
+        try:
+            rmse = self.get_average_rmse()
+            self.text += '\n'
+            self.text += str(self.trust_indicator)[:4]
+            # self.text += ' / '
+            # self.text += str(rmse)[:4]
+            if self.switch_attacked_state:
+                self.switch_attacked_state = False
+                if self.is_attacked:
+                    self.change_color('red')
+                else:
+                    self.change_color('green')
+        except:
+            print("Failed to display RMSE on tag " + self.name)
+        
 
     def create_text(self):
         """Displays distance above the node representation.
@@ -194,12 +203,12 @@ class RenderedNode(ABC):
 
         # shifting the text above the node representation
         self.label_np.set_pos(x, y, z + 0.2)
-        self.label_np.set_scale(0.2)
+        self.label_np.set_scale(TEXT_SCALE )
         self.label_np.look_at(-base.cam.get_x(), -base.cam.get_y(), -base.cam.get_z())
         taskMgr.add(self.update_text_task, 'update text {}'.format(name))
 
     def update_text_task(self, task):
-        """Updates the text angle for it to always face the camera"""
+        """Updates the text angle so it always face the camera"""
         name = self.get_ID()
         (x,y,z) = self.get_coordinates()
         self.label_np.look_at(-base.cam.get_x(), -base.cam.get_y(), -base.cam.get_z())
@@ -211,6 +220,7 @@ class RenderedNode(ABC):
             # for a tag, displaying only the positions
             # TODO: tags can also display distances in cooperative approaches
             self.get_position_as_str()
+            self.get_rmse_as_str()
         # truncating node ID
         if (len(name) > 2):
             # keeping only the last 2 digits

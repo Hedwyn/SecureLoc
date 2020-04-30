@@ -174,8 +174,8 @@ class Application(Renderer):
 
         if not(PLAYBACK) or (EMULATE_MQTT):
             self.init_mqtt()
-            if not (EMULATE_MQTT):
-                taskMgr.doMethodLater(0,self.update_positions_task,'update sock')
+            if not (EMULATE_MQTT) and not(MEASURING):
+                taskMgr.doMethodLater(REFRESH_PERIOD,self.update_positions_task,'update sock')
 
         # in playback mode, prepares the iteration through the ranging lists
         if (PLAYBACK):
@@ -194,12 +194,19 @@ class Application(Renderer):
             time.sleep(START_DELAY)
 
         ## User inputs task
-        taskMgr.doMethodLater(0,self.UI_management_task,'User Inputs Management')
+        taskMgr.doMethodLater(UI_REFRESH_TIME,self.UI_management_task,'User Inputs Management')
+
+        # Security task
+        taskMgr.doMethodLater(SECURITY_CHECK_PERIOD,self.Security_management_task,'Security Management')
 
     def UI_management_task(self, task):
         """Handles user inputs; refresh rate can be set in parameters"""
         task.delay = UI_REFRESH_TIME
         self.checkInputs()
+        for verifier in self.tags:
+            for tag in self.tags[verifier].cooperative_distances:
+                distance = self.tags[verifier].get_cooperative_distance(tag)
+                #print("[Cooperative verification] Distance verified by tag " + str(verifier) + " for tag"  + str(tag) + ": " + str(distance))
 
         ## handling menu pipe
         if self.menu_pipe.poll():
@@ -266,6 +273,43 @@ class Application(Renderer):
 
         return(task.again)
 
+
+    def Security_management_task(self, task):
+        """Handles user inputs; refresh rate can be set in parameters"""
+        task.delay= SECURITY_CHECK_PERIOD
+        
+        for tag in [self.tags[id] for id in self.tags]:
+            # checking differential TWR results
+            rmse = tag.get_average_rmse()
+            if rmse > RMSE_MALICIOUS:
+                tag.decrease_trust_indicator(rmse - RMSE_MALICIOUS)
+                tag.last_suspicious_event = 0
+                print("differential alarm")
+            else:
+                tag.increase_trust_indicator()
+                tag.last_suspicious_event += 1
+        
+            # checking cooperative results
+            cooperative_deviation = tag.get_cooperative_deviation()
+            if cooperative_deviation > COOPERATIVE_DEVIATION_THOLD:
+                tag.decrease_trust_indicator(cooperative_deviation - COOPERATIVE_DEVIATION_THOLD)
+                print("cooperative alarm: " + str(cooperative_deviation))
+                tag.last_suspicious_event = 0 
+            else:
+                tag.increase_trust_indicator()
+                tag.last_suspicious_event += 1
+
+            # deciding if the tag is being attacked
+            attack_detected =  (tag.trust_indicator < TI_THRESHOLD)                          
+            if tag.is_attacked != attack_detected:
+                tag.switch_attacked_state = True
+                tag.is_attacked = attack_detected
+
+
+
+        return(task.again)
+
+
     def add_anchor(self, anchor_pos):
         """adds an anchor to the current world. Should be used to create a fictive anchor"""
         # ID generation
@@ -285,7 +329,7 @@ class Application(Renderer):
             return
 
         # generating a new Anchor
-        new_anchor = Anchor(x, y, z, new_anchor_name, 'blue')
+        new_anchor = Anchor(x, y, z, new_anchor_name, ANCHOR_COLOR)
 
         # appending anchors to the global anchors
         self.world.anchors.append(new_anchor)
@@ -364,13 +408,19 @@ class Application(Renderer):
        # creating the graphic world in the 3D engine. First 2 args define the size
         self.world = World(20, 20, self.anchors)
 
+    def get_anchor_from_id(self, anchor_id):
+        """Returns the reference to the anchor associated to the given id"""
+        for anchor in self.anchors:
+            if anchor.name == anchor_id[-1]:
+                return(anchor)
+        return(None)
+
     def create_moving_entities(self):
         """Create moving entities"""
         v_print("creating moving entities \n:")
         #bots_id = self.world.gen_bots_id(NB_BOTS)
-        for i in range(NB_BOTS):
-            colors = ['orange','blue']
-            self.tags[ bots_id[i] ]  = MovingEntity( bots_id[i], colors[i] )
+        for i in range(NB_BOTS):           
+            self.tags[ bots_id[i] ]  = MovingEntity( bots_id[i], TAG_COLOR)
         self.processed_robot = bots_id[0]
 
 
@@ -391,6 +441,13 @@ class Application(Renderer):
                 for topic in MQTT_TOPICS:
                     self.mqttc.subscribe(ROOT + label_a + "/"  + label_b + topic)
 
+        if (ENABLE_COOPERATIVE):
+            for label_b1 in bots_labels:
+                for label_b2 in [tag for tag in bots_labels if tag != label_b1]:
+                    for topic in MQTT_TOPICS:
+                        self.mqttc.subscribe(COOPERATIVE_ROOT + label_b1 + "/"  + label_b2 + topic)
+                        print(COOPERATIVE_ROOT + label_b1 + "/"  + label_b2 + topic)
+
         self.mqttc.loop_start()
         print("MQTT loop succesfully started !")
 
@@ -406,6 +463,15 @@ class Application(Renderer):
         anchor_name = anchor_id_to_name(anchor_id)
         data_type = labels[4]
 
+        #print(labels[1])
+        if (labels[1] == COOPERATIVE_STREAM):
+            # appending B to indicate that the verifier was a tag
+            anchor_id = 'B' + anchor_id
+            cooperative = True
+        else:
+            cooperative = False
+
+
         # one dataset for each anchor/bot combination
 
         if not (anchor_id in self.dataset):
@@ -415,19 +481,50 @@ class Application(Renderer):
             # creating an empty dataset
             self.dataset[anchor_id][bot_id] = dataset()
 
+        # indicating cooperative verification in the logs
+
+        if cooperative:
+              self.dataset[anchor_id][bot_id].protocol = 'cooperative' 
 
 
         if (data_type == "distance"):
-            # publishing the dataset
-            distance = float(msg.payload)
+            try:
+                distance = float(msg.payload)
+               
+            except:
+                distance = 0
             self.keep_dataset = True
             self.dataset[anchor_id][bot_id].distance = distance
+
+            # simulating the attack if attack simulation is on
             for attack in self.simulator.attacks:
                 if (anchor_id_to_name(anchor_id) in self.simulator.attacks[attack].targets) or (bot_id in self.simulator.attacks[attack].targets):
                     print("Anchor " + anchor_id + " targeted by the attack" + attack)
                     self.keep_dataset = self.simulator.attacks[attack].apply(self.dataset[anchor_id][bot_id])
                     print("distance after attack: " + str(self.dataset[anchor_id][bot_id].distance))
-            self.world.update_anchor(anchor_name, self.dataset[anchor_id][bot_id].distance,bot_id,'SW')
+
+            # updating distance
+            if not(cooperative):
+                self.world.update_anchor(anchor_name, self.dataset[anchor_id][bot_id].distance,bot_id,'SW')
+            else:
+                verifier_id = tag_name_to_id(anchor_id[1:])
+                self.tags[bot_id].add_cooperative_distance_sample(distance, verifier_id)
+
+                # calculating deviation of the cooperative distance
+                pos_verifier = self.tags[verifier_id].get_current_pos()
+                pos_prover = self.tags[bot_id].get_current_pos()
+                cooperative_deviation = self.world.get_distance(pos_verifier, pos_prover) - distance
+                self.tags[bot_id].add_cooperative_deviation_sample(cooperative_deviation)
+                
+
+            # adding rmse           
+            self.dataset[anchor_id][bot_id].differential_rmse = self.tags[bot_id].get_rmse(anchor_id) 
+
+            # adding the position
+            self.dataset[anchor_id][bot_id].localization_algorithm = self.world.get_localization_algorithm()
+            self.dataset[anchor_id][bot_id].position = self.tags[bot_id].get_current_pos()
+
+            # logging the dataset
             if self.log_flag and self.keep_dataset:
                 self.log_dataset(self.dataset[anchor_id][bot_id])
 
@@ -449,6 +546,33 @@ class Application(Renderer):
             #task = taskMgr.doMethodLater(0,self.update_positions_task,'Log Reading')
             if not(PLAYBACK):
                 taskMgr.doMethodLater(0,self.update_sock_task,'update sock')
+  
+        if (data_type == "differential_distance"):           
+            try:
+                differential_distance = float(msg.payload)
+                #print("differential distance for anchor" + anchor_id[-1] + " and tag " + bot_id[-1] + " : " +  str(differential_distance))
+                self.dataset[anchor_id][bot_id].distance = differential_distance
+                self.dataset[anchor_id][bot_id].protocol = 'differential'
+
+            
+
+                # calculating rmse
+                anchor = self.get_anchor_from_id(anchor_id)
+                if anchor:
+                    distance = anchor.get_distance(bot_id)
+                    tag = self.tags[bot_id]
+                    rmse = tag.compute_rmse(distance, differential_distance)
+                    tag.add_rmse_sample(rmse, anchor_id)
+                    # print("rmse for anchor " + anchor_id[-1] + " and tag " + bot_id[-1] + " : " +  str(tag.get_rmse(anchor_id)))
+                    # print("average rmse" + str(tag.get_average_rmse()))
+                    # logging rmse
+                    self.dataset[anchor_id][bot_id].differential_rmse = tag.get_rmse(anchor_id) 
+
+            except:
+                pass
+            self.log_dataset(self.dataset[anchor_id][bot_id])
+
+
 
         if (data_type == "rssi"):
             rssi = float(msg.payload)
@@ -590,7 +714,7 @@ class Application(Renderer):
             base.cam.setPos(base.cam.getX() , base.cam.getY() + 0.1, base.cam.getZ() - 0.1)
 
 
-    def update_positions_task(self,task):
+    def update_positions_task(self, task):
         """Updates moving entities positions"""
         # increments positions updates counter
         # is triggered by update_sock_task when new data is sent into the socket
@@ -608,7 +732,10 @@ class Application(Renderer):
             return(0)
 
         # computes multilateration to localize the robot
-        self.world.get_target(self.tags[robotname])
+        try:
+            self.world.get_target(self.tags[robotname])
+        except:
+            pass
 
         if (PLAYBACK):
             # reading  data for playback
@@ -621,21 +748,22 @@ class Application(Renderer):
                     self.done = True
                     return(task.done)
                 data = self.playback_rangings[self.playback_counter]
-                if not(EMULATE_MQTT):
-                    self.world.update_anchor(anchor_id_to_name(data['anchorID']),
-                                             data['distance'],
-                                             data['botID'],
-                                             'SAT')
-                else: # emulating MQTT frames
-                    self.simulator.send_log_as_MQTT_frame(data)
-                    # last_physical_anchor_name = self.world.anchors[-(len(self.simulator.fictive_anchors) + 1)].name
-                    # if (anchor_id_to_name(data['anchorID']) == last_physical_anchor_name) and (data['botID'] in self.tags):
-                    #     self.simulation_layer(self.tags[data['botID']])
+                if data['protocol'] != 'differential':
+                    if not(EMULATE_MQTT):
+                        self.world.update_anchor(anchor_id_to_name(data['anchorID']),
+                                                data['distance'],
+                                                data['botID'],
+                                                'SAT')
+                    else: # emulating MQTT frames
+                        self.simulator.send_log_as_MQTT_frame(data)
+                        # last_physical_anchor_name = self.world.anchors[-(len(self.simulator.fictive_anchors) + 1)].name
+                        # if (anchor_id_to_name(data['anchorID']) == last_physical_anchor_name) and (data['botID'] in self.tags):
+                        #     self.simulation_layer(self.tags[data['botID']])
 
 
 
 
-                self.processed_robot = data['botID']
+                    self.processed_robot = data['botID']
                 self.playback_counter += 1
 
 
@@ -659,7 +787,7 @@ class Application(Renderer):
         robot.compute_speed()
 
 
-        if not(PLAYBACK):
+        if not(PLAYBACK) and (TRANSMIT_POSITION):
             ## sending position to master anchor
             self.mqttc.publish(ROOT +  '01/' + TOPIC_SERIAL, '1' + robotname[-1] +';' + str(x)[:4] + ';' + str(y)[:4] + ';' + str(z)[:4] + '\n')
         

@@ -39,6 +39,14 @@ class MovingEntity(DirectObject,RenderedNode):
         self.speed_vector = []
         self.acc_vector = []
         self.color = color
+        self.rmse = {}  # root mean-squared error during differential TWR
+        self.cooperative_distances = {} # in cooperative mode, distances to other tags
+        self.cooperative_deviation = []
+        self.is_attacked = False
+        self.switch_attacked_state = False
+
+        self.trust_indicator = 1 # level of trust in the tag on a scale of 0 to 1; decreases with suscpicious behaviors
+        self.last_suspicious_event = 0
 
         # POSITIONS_BUFFER_LENt needs POSITIONS_BUFFER_LENT_SIZE elements to avoid reading conflicts
         # initializing to 0
@@ -140,12 +148,149 @@ class MovingEntity(DirectObject,RenderedNode):
         self.set_coordinates(x,y,z)
 
 
+    def add_rmse_sample(self,sample, anchor_id):
+        """Add the most recent root mean-square error samples to the accumulator"""
+        if not(anchor_id in self.rmse):
+            self.rmse[anchor_id] = []
+
+        if len(self.rmse[anchor_id] ) == RMSE_SW_LEN:
+            del self.rmse[anchor_id][RMSE_SW_LEN // 2]
+        idx = 0
+
+        while idx < len(self.rmse[anchor_id]) and sample < self.rmse[anchor_id][idx]:
+            idx += 1
+
+        self.rmse[anchor_id].insert(idx, sample)
+
+
+    def add_cooperative_distance_sample(self,sample, tag_id):
+        """Add the most recent root mean-square error samples to the accumulator"""
+
+        if not(tag_id in self.cooperative_distances):
+            self.cooperative_distances[tag_id] = []
+
+        if len(self.cooperative_distances[tag_id] ) == COOP_DIST_SW_LEN:
+            del self.cooperative_distances[tag_id][COOP_DIST_SW_LEN // 2]
+        idx = 0
+
+        while idx < len(self.cooperative_distances[tag_id]) and sample < self.cooperative_distances[tag_id][idx]:
+            idx += 1
+
+        self.cooperative_distances[tag_id].insert(idx, sample)
+
+    def add_cooperative_deviation_sample(self,sample):
+        """Add the most recent root mean-square error samples to the accumulator"""
+
+        if len(self.cooperative_deviation) == COOP_DIST_SW_LEN:
+            del self.cooperative_deviation[COOP_DIST_SW_LEN // 2]
+        idx = 0
+
+        while idx < len(self.cooperative_deviation) and sample < self.cooperative_deviation[idx]:
+            idx += 1
+
+        self.cooperative_deviation.insert(idx, sample)
+
+    def get_cooperative_deviation(self):
+        # checking if the sliding window if full (will need a few seconds at the beginning)
+        if len(self.cooperative_deviation) != COOP_DIST_SW_LEN:
+            return(0)
+
+        # returning  median
+        return(self.cooperative_deviation[COOP_DIST_SW_LEN // 2])
+
+    def get_rmse(self, anchor_id):
+        """returns the current differential rmse with the given anchor"""
+        
+        # checking if the rmse has been written
+        if not(anchor_id in self.rmse):
+            return
+
+        # checking if the sliding window if full (will need a few seconds at the beginning)
+        if len(self.rmse[anchor_id]) != RMSE_SW_LEN:
+            return(0)
+
+        # returning  median
+        return(self.rmse[anchor_id][RMSE_SW_LEN // 2])
+
+        # averaging with decile elimination - uncomment to enable
+        # decile_idx = len(self.rmse[anchor_id]) / 10
+        # idx = 0
+        # sum = 0
+        # while idx < len(self.rmse[anchor_id]) - decile_idx:
+        #     sum += self.rmse[anchor_id][idx]
+        #     idx += 1
+        
+        # return(sum / idx )
+
+    def get_cooperative_distance(self, tag_id):
+        """returns the current differential rmse with the given anchor"""
+        
+        # checking if the rmse has been written
+        if not(tag_id in self.cooperative_distances):
+            return
+
+        # checking if the sliding window if full (will need a few seconds at the beginning)
+        if len(self.cooperative_distances[tag_id]) != COOP_DIST_SW_LEN:
+            return(0)
+
+        # returning  median
+        return(self.cooperative_distances[tag_id][COOP_DIST_SW_LEN // 2])
+
+    def get_average_rmse(self):
+        """Returns the average of the differential rmse with all the anchors"""
+        nb_anchors = 0
+        total_rmse = 0
+        for anchor in self.rmse:
+            nb_anchors += 1 
+            total_rmse += self.get_rmse(anchor)
+    
+        if (nb_anchors != 0):
+            total_rmse /= nb_anchors
+        else:
+            total_rmse = 0
+
+
+        # # checking for attacks
+        # attack_detected =  (total_rmse > RMSE_MALICIOUS)  
+             
+        # if self.is_attacked != attack_detected:
+        #     self.switch_attacked_state = True
+        #     self.is_attacked = attack_detected
+
+
+        return(total_rmse)
+
+    def compute_rmse(self, current_distance, differential_distance):
+        """calculates the root mean-squared error between the distances measured in normal and differential TWR"""
+        rmse = math.sqrt(pow(current_distance - differential_distance, 2))
+        return(rmse)
+
     def get_abs_speed(self):
         """computes the absolute speed from the speed vector"""
 
         speed_vector = self.get_speed_vector()
         abs_speed = math.sqrt(pow(speed_vector[0], 2) + pow(speed_vector[1], 2) + pow(speed_vector[2], 2))  # m/s
         return(abs_speed)
+
+    def decrease_trust_indicator(self,factor = 1):
+        """Decreases the trust indicator when a suspicious event is detected"""
+        # suscpicious event detected, resetting counter
+        p = TI_PARAMETERS
+        self.last_suspicious_event = 0
+        self.trust_indicator += factor * p["slew"] - p["offset"]
+        if self.trust_indicator < 0:
+            self.trust_indicator = 0
+
+    def increase_trust_indicator(self):
+        """Increases the trust indicator when a suspicious event is detected"""
+        p = TI_PARAMETERS
+        self.last_suspicious_event += 1
+        if self.last_suspicious_event > p["threshold"]:
+            self.trust_indicator += p["offset"]
+            if self.trust_indicator >1:
+                self.trust_indicator = 1
+
+
 
     def get_abs_acc(self):
         """computes the absolute acceleration from the acceleration vector"""
