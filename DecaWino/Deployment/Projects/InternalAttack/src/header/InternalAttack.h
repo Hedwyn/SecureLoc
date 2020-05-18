@@ -85,6 +85,7 @@
 #define TWR_MSG_TYPE_START 1  /**< START frame header*/
 #define TWR_MSG_TYPE_ACK 2 /**< ACK frame header*/
 #define TWR_MSG_TYPE_DATA_REPLY 3 /**< DATA frame header*/
+#define GUARD_TIME 40000000 /**< Superior to minimum Rx turn-on time*/
 
 /* platform parameters */
 #define NB_ANCHORS 4/**< Total number of anchors on the platform */
@@ -94,6 +95,7 @@
 #define DEFAULT_ANCHOR_2_POSITION {.x = 0., .y = PLATFORM_LENGTH}
 #define DEFAULT_ANCHOR_3_POSITION {.x = PLATFORM_WIDTH, .y = PLATFORM_LENGTH}
 #define DEFAULT_ANCHOR_4_POSITION {.x = PLATFORM_WIDTH, .y = 0.}
+#define DEFAULT_GHOST_ANCHOR {.x = PLATFORM_WIDTH / 2, .y = PLATFORM_LENGTH / 2}
 
 /* DWM1000 Time-of-flight parameters */
 #define AIR_SPEED_OF_LIGHT 299700000.0 /**< Speed of light constant to extract distances from time-of-flight measurements*/
@@ -104,7 +106,7 @@
 /* Attack parameters */
 #define NOISE_STD 0.5/**<Standard deviation of the random distance shift applied by the attack (uniform law) */
 #define TARGET_REFRESH_TIME 0/**<Period bewteen two distance shift random generations. SHould be low enough to be realistic. */
-#define MANUAL 0 /**<In manual mode, the attack is entirely handled though the serial port. The tag does not get its position itself nor does it chose the target */
+#define MANUAL 1 /**<In manual mode, the attack is entirely handled though the serial port. The tag does not get its position itself nor does it chose the target */
 #define COMPUTE_POSITION 1 /**<If enabled, the attacker computes itself its position based on the distances received. If not, the position used is the (biased) position computed by the 3d engine */
 
 /* Sliding Window parameters */

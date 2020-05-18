@@ -39,6 +39,7 @@ static int next_state; /**< Next state variable for the FSM - state to go after 
 static uint8_t txData[128];/**< Emission buffer */
 static uint8_t rxData[128];/**< Reception buffer */
 static uint16_t rxLen;/**< Reception buffer length*/
+static int data_length;
 
 /* IDs */
 static byte myID[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, NODE_ID};/**< Node's tag ID */
@@ -73,12 +74,13 @@ static Position target_position = {.x = 0, .y = 0.}; /**<Position targeted by th
 static Position my_position = {.x = 0, .y = 3.};/**<Current position */
 static int attack_is_on = 0;/**<Whether the attack is enabled or not */
 static int target_generation_timer = INT_MAX;
-static Position anchor_positions[NB_ANCHORS] =
+static Position anchor_positions[NB_TOTAL_ANCHORS] =
 {
 DEFAULT_ANCHOR_1_POSITION,/* anchor 1*/
 DEFAULT_ANCHOR_2_POSITION,/* anchor 2*/
 DEFAULT_ANCHOR_3_POSITION,/* anchor 3*/
-DEFAULT_ANCHOR_4_POSITION /* anchor 4*/
+DEFAULT_ANCHOR_4_POSITION, /* anchor 4*/
+DEFAULT_GHOST_ANCHOR /*mobile ghoost anchor */
 };
 static const char * states[50]=
 {
@@ -108,7 +110,7 @@ void compute_timeshifts() {
 	Serial.println("Target position ");
 	Serial.println(target_position.x);
 	Serial.println(target_position.y);
-	for (i = 0; i < NB_ANCHORS; i++) {
+	for (i = 0; i < NB_TOTAL_ANCHORS; i++) {
 		/* calculating Euclidean distance to anchor */
 		legit_distance = sqrt( pow(my_position.x - anchor_positions[i].x, 2) + pow(my_position.y - anchor_positions[i].y, 2));
 		/* calculating Euclidean distance from anchor to target position */
@@ -156,26 +158,26 @@ void generate_target_position() {
 }
 
 void internal_attack_setup() {
-  delay(1000);
-  pinMode(13, OUTPUT);
-  pinMode(14, OUTPUT);
-  //SPI.setSCK(13);
-  SPI.setSCK(14);
-  //set for anchors C and D
-  //use pin 14 for A and B by uncommenting code lines above
-  if ( !decaduino.init() ) {
-    while(1) {
-      digitalWrite(13, HIGH);
-      delay(50);
-      digitalWrite(13, LOW);
-      delay(50);
-    }
-  }
+	delay(1000);
+	pinMode(13, OUTPUT);
+	pinMode(14, OUTPUT);
+	//SPI.setSCK(13);
+	SPI.setSCK(14);
+	//set for anchors C and D
+	//use pin 14 for A and B by uncommenting code lines above
+	if ( !decaduino.init() ) {
+	while(1) {
+		digitalWrite(13, HIGH);
+		delay(50);
+		digitalWrite(13, LOW);
+		delay(50);
+	}
+	}
 
 	tag_RxTxConfig();
-  state = TWR_ENGINE_STATE_INIT;
-  previous_state = state;
-	compute_timeshifts();
+	state = TWR_ENGINE_STATE_INIT;
+	previous_state = state;
+	//compute_timeshifts();
 	randomSeed(analogRead(0));
 }
 
@@ -346,7 +348,7 @@ void loop() {
 		state = TWR_ENGINE_STATE_WAIT_START;
 		//unsigned long waited_time = (decaduino.getSystemTimeCounter()>>4) % 0x0FFFFFFFFFFFFFFF - ts_ghost_anchor>>4;
 		if (COOPERATIVE && switch_to_anchor  && (decaduino.getSystemTimeCounter() - ts_ghost_anchor  > sleep_slots * (SLOT_LENGTH / (DW1000_TIMEBASE * IN_US) )) ) {
-				state = TWR_ENGINE_GHOST_ANCHOR;
+			state = TWR_ENGINE_GHOST_ANCHOR;
 		}
 		else {
 			delayMicroseconds(100);
@@ -439,9 +441,7 @@ void loop() {
 
     case TWR_ENGINE_STATE_SEND_DATA_REPLY:
 		/* Sending last frame of TWR protocol, with the 2 timestamps measured */
-      	txData[0] = TWR_MSG_TYPE_DATA_REPLY;
-      	decaduino.encodeUint64(t2, &txData[17]);
-
+		data_length = DATA_LENGTH;
 		if (attack_is_on) {
 			/* modifying t3 for the attack */
 			VPRINTF("$ Timeshift for anchor ");
@@ -450,8 +450,19 @@ void loop() {
 			VPRINTFLN((timeshifts[anchorID[7] - 1]) );
 			t3 = t3 - timeshifts[anchorID[7] - 1];
 		}
+      	txData[0] = TWR_MSG_TYPE_DATA_REPLY;
+      	decaduino.encodeUint64(t2, &txData[17]);
       	decaduino.encodeUint64(t3, &txData[25]);
-      	decaduino.pdDataRequest(txData, 33);
+      if (cooperative_distance_pending) {
+        //*( (float *) (txData + 33)) = distance_to_tags[target_idx];
+        memcpy((void *) (txData + 33)  ,(const void *) &(tag_samples[target_idx]), sizeof(Data_sample));
+
+        Serial.print("Distance sent: ");
+        Serial.println(distance_to_tags[target_idx]);
+        cooperative_distance_pending = 0;
+        data_length = DATA_LENGTH_COOPERATIVE;
+      }
+      decaduino.pdDataRequest(txData, data_length);
 		DPRINTF("$Temperature: ");
 		DPRINTFLN(decaduino.getTemperature());
       	while (!decaduino.hasTxSucceeded());

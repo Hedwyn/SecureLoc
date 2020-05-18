@@ -51,7 +51,7 @@ static int target_idx; /**< Index of the next tag to localize ID in the tag's ID
 
 /* timestamps */
 static uint64_t t2 = 0, t3,ts_ghost_anchor;  /**< Timestamp for TWR process */
-static int ranging_timer;/**<Timer for the ranging duration*/ 
+static int ranging_timer;/**<Timer for the ranging duration*/
 
 /* cooperative methods */
 static int switch_to_anchor = 0;
@@ -82,7 +82,7 @@ int main() {
 
 
 void tag_setup() {
-  
+
   pinMode(13, OUTPUT);
   pinMode(14, OUTPUT);
   //SPI.setSCK(13);
@@ -124,7 +124,7 @@ void loop() {
 		/* Default starting state */
 
       state = TWR_ENGINE_STATE_RX_ON;
-      
+
       break;
 
 		case TWR_ENGINE_GHOST_ANCHOR:
@@ -139,7 +139,7 @@ void loop() {
 			Serial.println((int) sleep_slots);
       decaduino.plmeRxDisableRequest();
 			anchor_setup(ghost_anchor_id, next_anchor_id, 0);
-      
+
 			while (anchor_loop(ghost_anchor_id, next_anchor_id, target_idx) != TWR_COMPLETE );
 			tag_setup();
       Serial.print("Distance calculated:");
@@ -155,7 +155,7 @@ void loop() {
 			while (decaduino.getSystemTimeCounter() - t2 < (SLOT_LENGTH / (DW1000_TIMEBASE * IN_US))  - GUARD_TIME) {
 				delayMicroseconds(30);
 			}
-			     
+
       state = TWR_ENGINE_STATE_WAIT_START;
       //unsigned long waited_time = (decaduino.getSystemTimeCounter()>>4) % 0x0FFFFFFFFFFFFFFF - ts_ghost_anchor>>4;
 			if (COOPERATIVE && switch_to_anchor  && (decaduino.getSystemTimeCounter() - ts_ghost_anchor  > sleep_slots * (SLOT_LENGTH / (DW1000_TIMEBASE * IN_US) )) ) {
@@ -172,7 +172,7 @@ void loop() {
 			/* Polling state for start request from anchors */
       if ( decaduino.rxFrameAvailable() ) {
         /* START format : START | targetID | anchorID */
-    
+
         /*timestamping ranging start */
         ranging_timer = micros();
         if ( rxData[0] == TWR_MSG_TYPE_START ) {
@@ -228,7 +228,7 @@ void loop() {
     case TWR_ENGINE_STATE_SEND_ACK:
 			/* After receiving a START, sends an acknowledgment as defined in TWR protocol.
 			Memorizes acknowledgment sending time */
-      txData[0] = TWR_MSG_TYPE_ACK;           
+      txData[0] = TWR_MSG_TYPE_ACK;
       for( int i =0; i<8 ; i++){
         txData[1+i] = anchorID[i];
         txData[9+i] = targetID[i];
@@ -246,7 +246,7 @@ void loop() {
 
     case TWR_ENGINE_STATE_SEND_DATA_REPLY:
 			/* Sending last frame of TWR protocol, with the 2 timestamps measured */
-      txData[0] = TWR_MSG_TYPE_DATA_REPLY;     
+      txData[0] = TWR_MSG_TYPE_DATA_REPLY;
       data_length = DATA_LENGTH;
       decaduino.encodeUint64(t2, &txData[17]);
       decaduino.encodeUint64(t3, &txData[25]);

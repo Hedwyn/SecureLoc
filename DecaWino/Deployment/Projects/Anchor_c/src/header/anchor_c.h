@@ -109,7 +109,7 @@
 /* TWR State & parameters */
 #define TWR_ON_GOING 0/**< Ret value for main loop - TWR protocol is still running */
 #define TWR_COMPLETE 1/**< Ret value for main loop - TWR protocol complete */
-#define DIFFERENTIAL_TWR 1/**<If set, all anchors will compute the distance on each start frame using a diffential calculation*/
+#define DIFFERENTIAL_TWR 0/**<If set, all anchors will compute the distance on each start frame using a diffential calculation*/
 #define PLATFORM_LENGTH 2/**< Length of the rectangle formed by the anchor (anchor 1 -> anchor 2) */
 #define PLATFORM_WIDTH 1/**< Width of the rectangle formed by the anchor (anchor 1 -> anchor 4) */
 #define T23 100000000 /**< When delayed send is enabled, waiting time between ACK and DATA frame*/
@@ -119,7 +119,7 @@
 #define TWR_MSG_TYPE_START 1  /**< START frame header*/
 #define TWR_MSG_TYPE_ACK 2 /**< ACK frame header*/
 #define TWR_MSG_TYPE_DATA_REPLY 3 /**< DATA frame header*/
-#define NB_ROBOTS 2/**< Total number of mobile tags*/
+#define NB_ROBOTS 3/**< Total number of mobile tags*/
 
 /* MAC layer */
 #define HEADER_LENGTH 29

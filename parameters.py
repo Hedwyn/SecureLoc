@@ -68,7 +68,7 @@ def is_bot_id(ID):
     """checks if the id provided refers to a bot"""
     return( (len(ID) > 2) and (ID[-3] == 'b') )
 
-NB_BOTS = 2
+NB_BOTS = 3
 anchors_labels = ['01',
                   '02',
                   '03',
@@ -79,14 +79,17 @@ anchors_labels = ['01',
                   '08'
                   '09']
 
-bots_labels = ['01','02']
+bots_labels = ['01','02','03','04','05']
 bots_id = ["0000000000000b01",
-           "0000000000000b02"]
+           "0000000000000b02",
+           "0000000000000b03",
+           "0000000000000b04",
+           "0000000000000b05"]
 
 # bots_labels = ['01']
 # bots_id = ["0000000000000b01"]      
 
-colorList = ['orange', 'orange'] # used for the robots representation
+colorList = ['orange', 'orange','orange','orange','orange'] # used for the robots representation
 
 
 ## directories and files
@@ -199,7 +202,5 @@ def anchor_id_to_name(id):
 
 
 def tag_name_to_id(name):
-    dic = {"01":"0000000000000b01",
-           "02":"0000000000000b02"
-           }
-    return(dic[name])
+    return("0000000000000b" + name)
+   
