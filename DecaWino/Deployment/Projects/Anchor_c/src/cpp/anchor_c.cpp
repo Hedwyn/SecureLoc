@@ -116,6 +116,8 @@ static int delayed; /**< Boolean, true if delayed transmissions are enabled */
   * The tag receiving this will have to localize another tag at a given time
   * The designated tag usesa specific anchor ID for that purpose
   */
+static int is_next_cycle_cooperative = 0;
+static int is_current_cycle_cooperative = 0;
 struct control_frame{
   byte anchor_id; /**< ID that the designated tag is going to use to its anchor turn */
   int ghost_tag_idx; /**<  ID of the designated tag*/
@@ -126,13 +128,20 @@ struct control_frame{
 static control_frame next_ghost_anchor = {.anchor_id = 0, .ghost_tag_idx = 0, .target_idx = 1, .next_anchor_id = 0, .sleep_slots = 0}; /**< Ghost anchor request sent to designated tags */
 Tag_position tag_positions[NB_ROBOTS];
 int verifier_id_map[NB_ROBOTS];/**<List of the last id each tag verified */
+//int cooperative_table[NB_GHOST_ANCHORS][NB_ROBOTS] = {0};/* indicates the pair ghost anchor target - refreshed at each cycle*/
 
 
 void getNextGhostAnchor(int next_target_idx) {
+  static int target = 0;
   Serial.println("I'm Master, sending control frame");
   next_ghost_anchor.anchor_id = NB_TOTAL_ANCHORS;
   next_ghost_anchor.ghost_tag_idx = next_target_idx;
+  //next_ghost_anchor.ghost_tag_idx = 0;
   next_ghost_anchor.target_idx = (next_target_idx + 1) % NB_ROBOTS;
+  //next_ghost_anchor.target_idx = (target % 2) + 1;
+  target++;
+  Serial.print("Target = ");
+  Serial.println(next_ghost_anchor.target_idx);
   next_ghost_anchor.next_anchor_id = 1;
   next_ghost_anchor.sleep_slots = NB_TOTAL_ANCHORS;//+ next_ghost_anchor.anchor_id - 2;
 }
@@ -430,6 +439,19 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int next_target_idx) {
             anchorID[i] = rxData[i + 9];
             nextAnchorID[i] = rxData[i+17];
 					}
+ 
+          /* checking for cooperative calls */
+          if (anchorID[16] == MASTER_ID) {
+            if (is_next_cycle_cooperative) {
+              is_current_cycle_cooperative = 1;
+              is_next_cycle_cooperative = 0;
+            }
+            if (rxLen == DATA_LENGTH_COOPERATIVE) {
+              Serial.println("$Cooperative call from master");
+              is_next_cycle_cooperative = 1;
+            }
+          }
+
           Serial.print("$ Last Target= ");
           print_byte_array(nextTarget);
           Serial.println();
@@ -581,9 +603,16 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int next_target_idx) {
         txData[1+i]=targetID[next_target_idx][i];
         txData[9+i]=myID[i];
         txData[17+i]=myNextAnchorID[i];
+
         *( (float *) (txData + 25)) = distance_to_tags[next_target_idx];
         start_length = HEADER_LENGTH;
       }
+      if ((myID[16] == NB_ANCHORS) && !is_current_cycle_cooperative) {  
+        // no cooperative verification for this cycle, calling master
+        txData[24]= MASTER_ID;
+        is_current_cycle_cooperative = 0;
+      }
+
       
 
 
@@ -621,9 +650,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int next_target_idx) {
       if(!decaduino.pdDataRequest(txData, start_length, delayed, slot_start) ){
         DPRINTFLN("$Could not send the frame");
       }
-      print_byte_array(txData);
-      print_byte_array(txData + 8);
-      print_byte_array(txData + 16);
+
 
 			/* going back to the regular cycle if the target was an anchor */
       if (is_target_anchor) {
@@ -632,14 +659,16 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int next_target_idx) {
       }
 			/* waiting completion */
 			timeout = millis() + TX_TIMEOUT;
-      while ((millis() < timeout) || !decaduino.hasTxSucceeded() );
-
+      while ((millis() < timeout) && !decaduino.hasTxSucceeded() );
+      //while (!decaduino.hasTxSucceeded());
+      //delay(1);
 			t1 = decaduino.getLastTxTimestamp();
 			/* enabling reception for the incoming ACK */
-			decaduino.plmeRxEnableRequest();
+			
       DPRINTFLN(compute_elapsed_time_since(t1));
 			timeout = millis() + ACK_TIMEOUT;
 			state = TWR_ENGINE_STATE_WAIT_ACK;
+      decaduino.plmeRxEnableRequest();
       break;
 
 

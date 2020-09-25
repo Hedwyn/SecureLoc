@@ -32,6 +32,7 @@
 #include <SPI.h>
 #include <DecaDuino.h>
 #include <math.h>
+ 
 
 #define EXTENDED 1  /**< Enables extended DATA mode- sends an extended set of PHY data to RPI (TODO)*/
 #define ALOHA 0 /**< Enables ALOHA scheduling- check any documentation on ALOHA for further information */
@@ -51,11 +52,11 @@
   #define MASTER /**< Enables Master anchor mode. The Master anchor is responsible for the cooperative operations and the TDMA watchdog*/
 #endif
 
-#define SLOT_LENGTH 200000 /**< TDMA slot length, in microseconds*/
+#define SLOT_LENGTH 54000/**< TDMA slot length, in microseconds*/
 #define SLOT_LENGTH_MS (SLOT_LENGTH / 1000) /**< TDMA slot length, in milliseconds*/
 #define IN_US 1E6 /**< Second to microsecond conversion*/
 
-#define _DEBUG_   //comment to disable debug mode
+//#define _DEBUG_   //comment to disable debug mode
 #ifdef _DEBUG_
   #define DPRINTF  Serial.print/**< When defined, enables debug ouput on the serial port*/
 #else
@@ -76,7 +77,7 @@
 #define AIR_SPEED_OF_LIGHT 299700000.0 /**< Speed of light constant to extract distances from time-of-flight measurements*/
 #define DW1000_TIMEBASE 15.65E-12 /**< Resolution of the system clock - value of 1 bit in s*/
 #define DW1000_TIMEBASE_US 15.65E-6 /**< Resolution of the system clock - value of 1 bit in us*/
-#define CALIBRATION 0.7 /**< Calibration coefficient to apply to the distance measurements*/
+#define CALIBRATION 0.9 /**< Calibration coefficient to apply to the distance measurements*/
 #define SPEED_COEFF AIR_SPEED_OF_LIGHT*DW1000_TIMEBASE*CALIBRATION /**< Calibrated speed of light constantt*/
 
 /* RX-TX parameters */
@@ -85,8 +86,8 @@
 
 /* watchdogs */
 
-#define TX_TIMEOUT 100 /**< Watchdog for failed transmission that never complete*/
-#define ACK_TIMEOUT (SLOT_LENGTH_MS / 2) /**< Acknowledgment watchdog in TWR protocol*/
+#define TX_TIMEOUT 1 /**< Watchdog for failed transmission that never complete*/
+#define ACK_TIMEOUT 500//(SLOT_LENGTH_MS / 2) /**< Acknowledgment watchdog in TWR protocol*/
 #define DATA_TIMEOUT (SLOT_LENGTH_MS / 2) /**< DATA watchdog in TWR protocol*/
 #define START_TIMEOUT (NB_TOTAL_ANCHORS * SLOT_LENGTH_MS) /**< START watchdog for TDMA scheduling - triggered when previous anchor stayed quiet*/
 
@@ -110,8 +111,8 @@
 #define TWR_ON_GOING 0/**< Ret value for main loop - TWR protocol is still running */
 #define TWR_COMPLETE 1/**< Ret value for main loop - TWR protocol complete */
 #define DIFFERENTIAL_TWR 0/**<If set, all anchors will compute the distance on each start frame using a diffential calculation*/
-#define PLATFORM_LENGTH 2/**< Length of the rectangle formed by the anchor (anchor 1 -> anchor 2) */
-#define PLATFORM_WIDTH 1/**< Width of the rectangle formed by the anchor (anchor 1 -> anchor 4) */
+#define PLATFORM_LENGTH 2.5/**< Length of the rectangle formed by the anchor (anchor 1 -> anchor 2) */
+#define PLATFORM_WIDTH 2.5/**< Width of the rectangle formed by the anchor (anchor 1 -> anchor 4) */
 #define T23 100000000 /**< When delayed send is enabled, waiting time between ACK and DATA frame*/
 #define SKEW_CORRECTION 1/**< Applies a correction on the ToF calculation based on the clock skew with the target tag*/
 
@@ -128,7 +129,7 @@
 #define DATA_LENGTH 33
 #define DATA_LENGTH_COOPERATIVE (DATA_LENGTH + sizeof(Data_sample))
 /* Cooperative */
-#define COOPERATIVE 1 /**< Enables cooperative mode - see documentation for further details*/
+#define COOPERATIVE 0 /**< Enables cooperative mode - see documentation for further details*/
 #if (COOPERATIVE)
   #define NB_GHOST_ANCHORS 1 /**< Total number of ghost anchors in cooperative mode*/
 #else

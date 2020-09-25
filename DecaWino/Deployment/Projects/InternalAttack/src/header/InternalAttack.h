@@ -36,7 +36,7 @@
 
 
 #define INT_MAX 2147483647
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
   #define DPRINTF  Serial.print /**< When defined, enables debug ouput on the serial port*/
 #else
@@ -49,7 +49,7 @@
   #define DPRINTFLN(format, args...) ((void)0)
 #endif
 
-#define VERBOSE
+//#define VERBOSE
 #ifdef VERBOSE
   #define VPRINTF  Serial.print /**< When defined, enables debug ouput on the serial port*/
 #else
@@ -71,7 +71,7 @@
 
 /* Rx-TX parameters */
 #define CHANNEL 2 
-#define PLENGTH 256
+#define PLENGTH 128
 
 /* FSM states */
 #define TWR_ENGINE_STATE_INIT 0 /**< Default starting state*/
@@ -89,8 +89,8 @@
 
 /* platform parameters */
 #define NB_ANCHORS 4/**< Total number of anchors on the platform */
-#define PLATFORM_LENGTH 2./**<Length of the rectangle formed by the anchors (y coord) */
-#define PLATFORM_WIDTH 1./**<Width of the rectangle formed by the anchors (x coord) */
+#define PLATFORM_LENGTH 2.5/**<Length of the rectangle formed by the anchors (y coord) */
+#define PLATFORM_WIDTH 2.5/**<Width of the rectangle formed by the anchors (x coord) */
 #define DEFAULT_ANCHOR_1_POSITION {.x = 0., .y = 0.}
 #define DEFAULT_ANCHOR_2_POSITION {.x = 0., .y = PLATFORM_LENGTH}
 #define DEFAULT_ANCHOR_3_POSITION {.x = PLATFORM_WIDTH, .y = PLATFORM_LENGTH}
@@ -100,13 +100,13 @@
 /* DWM1000 Time-of-flight parameters */
 #define AIR_SPEED_OF_LIGHT 299700000.0 /**< Speed of light constant to extract distances from time-of-flight measurements*/
 #define DW1000_TIMEBASE 15.65E-12 /**< Resolution of the system clock - value of 1 bit*/
-#define CALIBRATION 0.9 /**< Calibration coefficient to apply to the distance measurements*/
-#define SPEED_COEFF 4.2255E-3/**<DW1000_TIMEBASE*CALIBRATION * AIR_SPEED_OF_LIGHT */
+#define CALIBRATION 0.7 /**< Calibration coefficient to apply to the distance measurements*/
+#define SPEED_COEFF 42.22E-4/**<DW1000_TIMEBASE*CALIBRATION * AIR_SPEED_OF_LIGHT */
 
 /* Attack parameters */
 #define NOISE_STD 0.5/**<Standard deviation of the random distance shift applied by the attack (uniform law) */
-#define TARGET_REFRESH_TIME 0/**<Period bewteen two distance shift random generations. SHould be low enough to be realistic. */
-#define MANUAL 1 /**<In manual mode, the attack is entirely handled though the serial port. The tag does not get its position itself nor does it chose the target */
+#define TARGET_REFRESH_TIME 10000/**<Period bewteen two distance shift random generations. SHould be low enough to be realistic. */
+#define MANUAL 0 /**<In manual mode, the attack is entirely handled though the serial port. The tag does not get its position itself nor does it chose the target */
 #define COMPUTE_POSITION 1 /**<If enabled, the attacker computes itself its position based on the distances received. If not, the position used is the (biased) position computed by the 3d engine */
 
 /* Sliding Window parameters */

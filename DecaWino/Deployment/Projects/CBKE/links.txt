@@ -1,0 +1,14 @@
+http://sfb649.wiwi.hu-berlin.de/fedc_homepage/xplore/tutorials/xegbohtmlnode39.html
+https://stats.stackexchange.com/questions/307861/how-is-confidence-interval-computed-for-autocorrelation
+https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/autoband.html
+https://stats.stackexchange.com/questions/185425/how-to-determine-the-critical-values-of-acf
+
+
+TO DO:
+calculer seuils de confiance à 95% avec les liens du nist
+tests autocorrelation avec delay entre les trames -> OK
+tests avec f1/f2f/f3 -> OK
+tests avecjamming d'un 3e noeud sur un autre pcode
+tests avec deuxième noeud en écoute -> calcul intercorrélation
+
+

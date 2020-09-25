@@ -722,7 +722,7 @@ void DecaDuino::readSpi(uint8_t address, uint8_t* buf, uint16_t len) {
 
 void DecaDuino::readSpiSubAddress(uint8_t address, uint16_t subAddress, uint8_t* buf, uint16_t len) {
 
-	uint8_t addr, sub_addr;
+	uint8_t addr, sub_addr, sub_addr_lo, sub_addr_ho;
 
 	addr = 0 | (address & 0x3F) | 0x40; // Mask register address (6bits), preserve MSb at low (Read) and set subaddress present bit (0x40)
 
@@ -745,7 +745,24 @@ void DecaDuino::readSpiSubAddress(uint8_t address, uint16_t subAddress, uint8_t*
 	} else {
 
 		// This is a 3-bytes header SPI transaction
-		/** @todo implement readSpiSubAddress in case of a 3-bytes header SPI transaction */
+
+		sub_addr_lo = (uint8_t) (subAddress | 0x0080);  // Mask register address (6bits)
+		sub_addr_ho = (uint8_t) (subAddress>>7);
+		// Serial.print("3-bytes header, sub address high:");
+		// Serial.println((int) sub_addr_ho);
+		// Serial.print("3-bytes header, low address high:");
+		// Serial.println((int)sub_addr_lo);
+
+		ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+			SPI.beginTransaction(currentSPISettings);
+			digitalWrite(_slaveSelectPin, LOW);
+			spi_send(addr);
+			spi_send(sub_addr_lo);
+			spi_send(sub_addr_ho);
+			spi_receive(buf,len);
+			digitalWrite(_slaveSelectPin, HIGH);
+			SPI.endTransaction();
+		}
 	}
 }
 
@@ -1152,24 +1169,55 @@ uint16_t DecaDuino::getFpIndex(void) {
 
 	uint8_t buf[2];
 
-	readSpiSubAddress(DW1000_REGISTER_RX_TIME, DW1000_REGISTER_OFFSET_FPAMPL1, buf, 2);
+	readSpiSubAddress(DW1000_REGISTER_RX_TIME, DW1000_REGISTER_OFFSET_FPINDEX, buf, 2);
 
 
 	return (decodeUint16(buf));
 }
 
 
-uint8_t DecaDuino::getFpAmpl1(void) {
+uint16_t DecaDuino::getFpAmpl1(void) {
+	uint8_t buf[4];
+	uint16_t ret;
+	readSpiSubAddress(DW1000_REGISTER_RX_TIME, DW1000_REGISTER_OFFSET_FPINDEX, buf, 4);
+	ret = decodeUint16(buf + 2);
+	return(ret);
+}
 
 
-	uint8_t u8t;
+void DecaDuino::getAccumulatedCIR(int idx_start, int idx_end, int16_t *re, int16_t *im) {
+	uint8_t buf[DWM1000_ACCUMULATOR_LENGTH];
+	uint8_t val[2];
+	int i, length = idx_end - idx_start, idx;
+	uint32_t ui32t;
 
-	readSpiSubAddress(DW1000_REGISTER_RX_TIME, DW1000_REGISTER_OFFSET_FPAMPL1, &u8t, 1);
+	/* setting AMCE and FACE */
+	ui32t = readSpiUint32(DW1000_REGISTER_PMSC_CTRL0);
+	ui32t |= DW1000_REGISTER_FACE_MASK;
+	ui32t |= DW1000_REGISTER_AMCE_MASK;
+	//ui32t |= DW1000_REGISTER_TXCLKS_XTI_MASK;
+	writeSpiUint32(DW1000_REGISTER_PMSC_CTRL0, ui32t);
 
+	/* according to user manual, first octet is always dummy and should be discarded, hence an extra byte is read */
+	readSpiSubAddress(DWM1000_REGISTER_ACC_MEM, idx_start * 4, buf, 1 + length * 4);
+	//readSpi(DWM1000_REGISTER_ACC_MEM, buf, length);
+	// Serial.println("Buffered values:");
+	// for (int j = 0; j < length * 4 + 1; j++) {
+	// 	Serial.println((int) buf[j]);
+	// }
+	// Serial.println("End of buffer");
 
+	for (i = 0 ; i < length; i++) {
+		idx = 4 * i + 1;
+		/* first two bytes are the real part */
+		val[0] = buf[idx];
+		val[1] = buf[idx + 1];
+		re[i] = (int16_t) decodeUint16(val);
 
-
-	return u8t;
+		val[0] = buf[idx + 2];
+		val[1] = buf[idx + 3];
+		im[i] =  (int16_t) decodeUint16(val);
+	}
 }
 
 
@@ -1216,10 +1264,14 @@ double DecaDuino::getFpPower(void) {
 	float F2 = (float) getFpAmpl2();
 	float F3 = (float) getFpAmpl3();
 	float N = (float) getRxPacc();
+	
 	int prf = getRxPrf();
 	float A;
 
-	if (prf == 1) {
+
+
+
+	if (prf == 16) {
 		// prf set to 16 MHz
 		A = DWM1000_PRF_16MHZ_CIRE_CONSTANT;
 	}
@@ -1235,12 +1287,11 @@ double DecaDuino::getFpPower(void) {
 
 
 uint16_t DecaDuino::getCirp(void) {
-	uint8_t buffer[2];
+	uint8_t buf[2];
 	uint16_t ui16t;
-	readSpiSubAddress(DW1000_REGISTER_RX_RFQUAL, DW1000_REGISTER_OFFSET_CIRP, buffer, 2);
-	ui16t = *((uint16_t *)buffer);
+	readSpiSubAddress(DW1000_REGISTER_RX_RFQUAL, DW1000_REGISTER_OFFSET_CIRP, buf, 2);
+	ui16t = decodeUint16(buf);
 	return ui16t;
-
 }
 
 float DecaDuino::getSNR(void) {
@@ -1254,22 +1305,22 @@ float DecaDuino::getSNR(void) {
 }
 
 uint16_t DecaDuino::getCire(void) {
-	uint32_t ui32t;
-	ui32t = readSpiUint32(DW1000_REGISTER_RX_RFQUAL);
-	ui32t = ( ui32t & DW1000_REGISTER_RX_RFQUAL_CIRE_MASK );
-
-	return (uint16_t) ui32t;
-
+	uint8_t buf[2];
+	uint32_t ui16t;
+	readSpiSubAddress(DW1000_REGISTER_RX_RFQUAL, DW1000_REGISTER_OFFSET_CIRE, buf, 2);
+	ui16t = decodeUint16(buf);
+	return(ui16t);
 }
 
 
 double DecaDuino::getRSSI(void) {
 
 	double rss;
-	float C = (float) getCire();
+	float C = (float) getCirp();
 	float N = (float) getRxPacc();
 	int prf = getRxPrf();
 	float A;
+
 
 	if (prf == 16) {
 		// prf set to 16 MHz
@@ -1279,6 +1330,7 @@ double DecaDuino::getRSSI(void) {
 		// prf set to 64 MHz
 		A = DWM1000_PRF_64MHZ_CIRE_CONSTANT;
 	}
+
 
 	rss = 10 * ( log10( (C * pow(2,17)) / (N * N) ) )  - A; // from DWM1000 user manual, page 46
 

@@ -72,9 +72,9 @@ static float real_distances[NB_ANCHORS];
 static float distance_shifts[NB_ANCHORS] = {0};
 static Position target_position = {.x = 0, .y = 0.}; /**<Position targeted by the attack */
 static Position my_position = {.x = 0, .y = 3.};/**<Current position */
-static int attack_is_on = 0;/**<Whether the attack is enabled or not */
+static int attack_is_on = 1;/**<Whether the attack is enabled or not */
 static int target_generation_timer = INT_MAX;
-static Position anchor_positions[NB_TOTAL_ANCHORS] =
+static Position anchor_positions[5] =
 {
 DEFAULT_ANCHOR_1_POSITION,/* anchor 1*/
 DEFAULT_ANCHOR_2_POSITION,/* anchor 2*/
@@ -384,10 +384,10 @@ void loop() {
 				else {
 					real_distances[anchor_idx] += (distance  - real_distances[anchor_idx]) / SW_LENGTH;
 				}
-				Serial.print("Distance for anchor ");
-				Serial.print(anchor_idx);
-				Serial.print(" :");
-				Serial.println(real_distances[anchor_idx]);				
+				VPRINTF("Distance for anchor ");
+				VPRINTF(anchor_idx);
+				VPRINTF(" :");
+				VPRINTFLN(real_distances[anchor_idx]);				
 			}
 			distances[anchorID[7] - 1] = *( (float *) &rxData[25]);
             state = TWR_ENGINE_STATE_SEND_ACK;
@@ -447,7 +447,7 @@ void loop() {
 			VPRINTF("$ Timeshift for anchor ");
 			VPRINTF(anchorID[7] - 1);
 			VPRINTF(": ");
-			VPRINTFLN((timeshifts[anchorID[7] - 1]) );
+			Serial.println((timeshifts[anchorID[7] - 1]) );
 			t3 = t3 - timeshifts[anchorID[7] - 1];
 		}
       	txData[0] = TWR_MSG_TYPE_DATA_REPLY;
@@ -477,27 +477,25 @@ void loop() {
 			Serial.println("Current position: ");
 			Serial.println(my_position.x);
 			Serial.println(my_position.y);
-			if (COMPUTE_POSITION) {
-				Serial.println("My position before: ");
-				Serial.println(my_position.x);
-				Serial.println(my_position.y);
-				Serial.println(micros());
-				multilateration(&my_position, anchor_positions, real_distances, NB_ANCHORS);
-				Serial.println("My position after: ");
-				Serial.println(my_position.x);
-				Serial.println(my_position.y);
-			}
-			if (attack_is_on) {
-				compute_timeshifts();
-			}
-
-			// generating new target is the generation timer has ended
-			if ((TARGET_REFRESH_TIME != 0) && (millis() - target_generation_timer > TARGET_REFRESH_TIME)) {
-				target_generation_timer = millis();
-				Serial.println("generating new target position");
-				generate_target_position();
-			}
 		}
+		if (COMPUTE_POSITION) {
+			Serial.println("My position : ");
+			Serial.println(my_position.x);
+			Serial.println(my_position.y);
+			// Serial.println(micros());
+			multilateration(&my_position, anchor_positions, real_distances, NB_ANCHORS);
+		}
+		if (attack_is_on) {
+			compute_timeshifts();
+		}
+
+		// generating new target is the generation timer has ended
+		if (!MANUAL && (millis() - target_generation_timer > TARGET_REFRESH_TIME)) {
+			target_generation_timer = millis();
+			Serial.println("generating new target position");
+			generate_target_position();
+		}
+		
       	state = TWR_ENGINE_STATE_INIT;
       	break;
 

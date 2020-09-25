@@ -200,10 +200,11 @@
 #define DW1000_REGISTER_RX_RFQUAL					0x12
 #define DW1000_REGISTER_RX_RFQUAL_FPAMPL2_MASK 		0XFFFF0000
 #define DW1000_REGISTER_RX_RFQUAL_CIRE_MASK 		0X0000FFFF
-#define DW1000_REGISTER_OFFSET_FPINDEX 				0x00
+#define DW1000_REGISTER_OFFSET_FPINDEX				0x05
 #define DW1000_REGISTER_OFFSET_FPAMPL1 				0x07
+#define DW1000_REGISTER_OFFSET_CIRE					0x00
 #define DW1000_REGISTER_OFFSET_FPAMPL3 				0x04
-#define DW1000_REGISTER_OFFSET_CIRP 				0x04
+#define DW1000_REGISTER_OFFSET_CIRP 				0x06
 
 
 
@@ -233,6 +234,10 @@
 
 #define DW1000_REGISTER_TRANSMIT_POWER_CONTROL_TXPOWSD_SHIFT 16
 #define DW1000_REGISTER_TRANSMIT_POWER_CONTROL_TXPOWPHR_SHIFT 8
+
+#define DWM1000_REGISTER_ACC_MEM 0x25
+#define DWM1000_ACCUMULATOR_LENGTH 1016
+
 
 #define DW1000_REGISTER_DIGITAL_TRANSCEIVER_CONFIGURATION 	0x27
 #define DWM1000_REGISTER_OFFSET_RXPACC_NOSAT 				0x2C
@@ -281,6 +286,9 @@
 
 #define DW1000_REGISTER_PMSC_CTRL0			0x36
 #define DW1000_REGISTER_OFFSET_PMSC_CTRL0		0x00
+#define DW1000_REGISTER_FACE_MASK 0x00000040
+#define DW1000_REGISTER_AMCE_MASK 0x00008000
+#define DW1000_REGISTER_TXCLKS_XTI_MASK 0x00000030
 
 #define DW1000_REGISTER_PMSC_CTRL1			0x36
 #define DW1000_REGISTER_OFFSET_PMSC_CTRL1		0x04
@@ -527,7 +535,19 @@ class DecaDuino {
 		* @date 20180614
 		*/
 
-		uint8_t getFpAmpl1(void);
+		uint16_t getFpAmpl1(void);
+
+		/**
+		* @param idx_start index of the first value to report in the CIR accumulator
+		* @param idx_end index of the last value to report in the CIR accumulator
+		* @param re pointer to the array in which the real part of the samples should be written
+		* @param im pointer to the array in which the imaginary part of the samples should be written
+		* @brief Gets the real and imaginaries part of the CIR samples accumulated between the two index provided
+		* @author Baptiste Pestourie
+		* @date 20200701
+		*/
+
+		void getAccumulatedCIR(int idx_start, int idx_end, int16_t *re, int16_t *im);
 
 		/**
 		* @brief Returns first path amplitude point 2
