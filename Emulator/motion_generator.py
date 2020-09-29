@@ -1,5 +1,5 @@
 import random
-from parameters import *
+from ips.core.parameters import *
 
 class MotionGenerator:
     """Generates node displacements, either random or assetion-based"""

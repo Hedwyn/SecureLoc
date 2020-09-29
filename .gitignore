@@ -4,3 +4,9 @@ rssi
 Documentation_files
 RX_quality
 Platform_Documentation.docx
+__pycache__
+.gitignore
+ips/build
+ips/dist
+ips/__pycache__
+ips/emulator

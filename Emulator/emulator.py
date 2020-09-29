@@ -1,7 +1,7 @@
 import math
 import random
 
-from parameters import *
+from ips.core.parameters import *
 from gui import GUI
 from ips_simulator import Node, Particle, IPS
 

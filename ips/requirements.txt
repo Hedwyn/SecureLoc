@@ -1,0 +1,7 @@
+numpy==1.14.2
+sympy==1.4
+matplotlib==2.2.2
+PyAudio==0.2.11
+paho_mqtt==1.5.1
+panda3d==1.10.7
+keyboard==0.13.5

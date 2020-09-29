@@ -1,6 +1,6 @@
 import math
 import random
-from parameters import *
+from ips.core.parameters import *
 from motion_generator import MotionGenerator
 
 class Node:

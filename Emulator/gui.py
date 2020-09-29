@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from ips_simulator import Node, Particle
-from parameters import W,L,H
+from ips.core.parameters import W,L,H
 
 class GUI:
     def __init__(self):
