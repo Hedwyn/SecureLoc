@@ -311,8 +311,8 @@ class CompilationMenu(Frame):
         """Deploys the chosen project on the platform. The ID's and keys are automaticcaly generated in the compiled files.
         Teensyduino's are remotely flashed by RPI. The config (IDs, IPs) can be changed in config.txt"""
 
-        deploy_hex_files('config2.txt',self.projects_listbox.get(ACTIVE))
-        global_flash('config2.txt')
+        deploy_hex_files('config.txt',self.projects_listbox.get(ACTIVE))
+        global_flash('config.txt')
 
     def cancel(self):
         """Cancel the currents process - sends Ctrl + C to terminal"""

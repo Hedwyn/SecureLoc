@@ -252,7 +252,7 @@ void loop() {
       decaduino.encodeUint64(t3, &txData[25]);
       if (cooperative_distance_pending) {
         //*( (float *) (txData + 33)) = distance_to_tags[target_idx];
-        memcpy((void *) (txData + 33)  ,(const void *) &(tag_samples[target_idx]), sizeof(Data_sample));
+        memcpy((void *) (txData + 33), (const void *) &(tag_samples[target_idx]), sizeof(Data_sample));
 
         Serial.print("Distance sent: ");
         Serial.println(distance_to_tags[target_idx]);

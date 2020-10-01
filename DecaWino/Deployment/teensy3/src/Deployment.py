@@ -231,13 +231,13 @@ if __name__ == "__main__":
 	#send_hex_file('anchorA.hex','pi@Rasp1','raspberry',HOSTPATH)
 	#local_flash('Rasp1','pi','raspberry',['A'])
 
-	#global_clean('config2.txt')
+	#global_clean('config.txt')
 
 
 	if len(sys.argv) == 1:
 		# Default behaviour: flashing remotely all the anchors
-		deploy_hex_files('config2.txt')
-		global_flash('config2.txt')
+		deploy_hex_files('config.txt')
+		global_flash('config.txt')
 	else:
 		if (sys.argv[-1] == "-clean"):
 			clean()

@@ -397,9 +397,9 @@ class Application(Renderer):
         """Creates the 3D world in which entities will evolve"""
         self.anchors = []
         if PLAYBACK:
-            tabfile = 'anchors_playback.tab'
+            tabfile = ROOT_DIR + "/" + ANCHORS_PLAYBACK_CONFIG
         else:
-            tabfile = 'anchors.tab'
+            tabfile = ROOT_DIR + "/" + ANCHORS_CONFIG
 
         ## anchor creation
         with open(tabfile) as anchors_file:

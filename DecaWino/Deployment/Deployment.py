@@ -288,12 +288,12 @@ def global_flash(config = DEFAULT_CONF):
 
 
 if __name__ == "__main__":
-	#deploy_hex_files('config2.txt', 'Anchor_c')
-	#global_flash('config2.txt')
+	#deploy_hex_files('config.txt', 'Anchor_c')
+	#global_flash('config.txt')
 	#compilation(2, 'Anchor_c')
 	#local_flash()
-	#[hosts_list,usernames,passwords,anchors_names] = read_config('config2.txt')
+	#[hosts_list,usernames,passwords,anchors_names] = read_config('config.txt')
 	# for host in hosts_list:
 	# 	print(host)
 	# 	print(anchors_table[host])
-	global_flash('config2.txt',)
+	global_flash('config.txt',)

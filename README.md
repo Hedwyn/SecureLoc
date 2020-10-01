@@ -44,9 +44,6 @@ Three modes are available for the localization engine:
 * Measurements: the user should specify a set of reference points with their coordinates in rp.tab prior to using this mode. Once started, the localization engine with perform a fixed number of  position estimation for each reference point. After each serie of measurements, an audio signal is played and the user can move the tag to the next reference. Once all the reference points have been evaluated, the global accuracy of the localization engine can be evaluated (as the average euclidean distance to the real coordinates).
 * Playback: allows replaying ranging logs previously recorded. Playback can be used for example to compare different localization algorithm on the same set of data. Playback is supported on both measurements and normal logs, however, using logs from normal mode is more recommanded given that in measurements mode the localization is turned off when the tag is moved from one reference point to another.
 
-## **Running this project**
-Follow first all the setup instructions provided in Documentation.pdf. Then simply run "python main.py" in SecureLoc repository.
-
 ## **Firmware**
 The DecaWino nodes can be programmed with the Arduino IDE; the Arduino codes for different projects can be found in DecaWino > Arduino.
 The platform has been switched to a custom compilation tool, so these programs, although functional, are deprecated.

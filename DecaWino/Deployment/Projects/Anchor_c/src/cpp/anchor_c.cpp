@@ -87,7 +87,7 @@ static byte *verifierID;/**< Points to the identifier of the verifier ID for the
 /* Two-Way Ranging protocol   */
 static unsigned long timeout; /**< Timeout variable for all the watchdogs (on Acknowledgment/DATA/Start frames) */
 static bool has_timedout; /**< Whether the last ranging process has timed out or not */
-static uint64_t t1, t2, t3, t4; /**< Timestamp for Two-Way Ranging */
+static int64_t t1, t2, t3, t4; /**< Timestamp for Two-Way Ranging */
 static int64_t tof; /**< Time-of-flight calculated after TWR protocol */
 static int start_length; /**<Length, in bytes, of the START frime; depends on the parameters chosen (cooperative, etc.) */
 static int is_collision = 0; /**< Whether the last TWR has collisioned or not */

@@ -21,6 +21,8 @@ This program is part of the SecureLoc Project @https://github.com/Hedwyn/SecureL
 @see https://github.com/Hedwyn/SecureLoc
 """
 
+from ips.core.parameters import ROOT_DIR, ANCHORS_CONFIG
+
 class dataset:
     """Contains all the data received through MQTT that need to be stored"""
 
@@ -92,7 +94,7 @@ class position:
 class metadata:
     """Contains information on the parameters used for measurements"""
 
-    def __init__(self, tabfile = 'anchors.tab',comments = ''):
+    def __init__(self, tabfile = ROOT_DIR + "/" + ANCHORS_CONFIG, comments = ''):
         self.tabfile = tabfile
         self.tabfile_content = ''
         self.comments = comments
@@ -100,7 +102,7 @@ class metadata:
     def dump_tabfile(self):
         """returns the content of anchors tabfile as a string"""
 
-        with open('anchors.tab','r') as f:
+        with open(self.tabfile,'r') as f:
             for line in f:
                 self.tabfile_content = self.tabfile_content + line[:-1] + " | "
         return

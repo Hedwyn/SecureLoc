@@ -99,6 +99,8 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__)) + "/.."  # root directory 
 LOGSFILE = ROOT_DIR + '/logs/json/measurements/logs'
 LOGSRANGINGS = ROOT_DIR + '/logs/json/rangings/logs'
 LOGSFILE_PLAYBACK = ROOT_DIR + '/logs/json/measurements/raw/logs'
+ANCHORS_CONFIG = "anchors.tab"
+ANCHORS_PLAYBACK_CONFIG = "anchors_playback.tab"
 
 LOGSRANGINGS_PLAYBACK = '/logs/json/rangings/playback/logs'
 
