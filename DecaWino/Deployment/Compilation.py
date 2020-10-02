@@ -244,13 +244,13 @@ class CompilationMenu(Frame):
         """Builds the Arduino libraries.
         Arduino libs have to be rebuilt if a different CPU frequency is chosen"""
         # cleaning previous built
-        self.console_handler("cd teensy3 && make clean","Building Arduino Libraries","Done")
+        self.console_handler("cd teensy3 && make libclean","Building Arduino Libraries","Done")
 
         # converting CPU speed from MHz to kHz
         cpu_speed = cpu_speed[:2] + "000000"
 
         # building arduino libraries
-        self.console_handler("cd teensy3 && make CPU_SPEED=" + cpu_speed)
+        self.console_handler("cd teensy3 && make build CPU_SPEED=" + cpu_speed)
 
     def create_new_project(self):
         """Create a new project directory with a standard architecture"""
