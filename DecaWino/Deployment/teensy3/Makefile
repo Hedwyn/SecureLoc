@@ -87,7 +87,7 @@ CPUARCH = cortex-m4
 
 ifdef ARDUINOPATH
 
-TARGETPATH = "C:\Users\pestourb\Documents\Plateforme src\Compilation\teensy3\main.hex"
+
 # path location for Teensy Loader, teensy_post_compile and teensy_reboot (on Linux)
 #TOOLSPATH = $(abspath $(ARDUINOPATH)/hardware/tools)
 TOOLSPATH  = "C:\Program Files (x86)\Arduino\hardware\tools"
