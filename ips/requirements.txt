@@ -5,3 +5,9 @@ PyAudio==0.2.11
 paho_mqtt==1.5.1
 panda3d==1.10.7
 keyboard==0.13.5
+scipy==1.2.0
+spur==0.3.20
+fabric==2.4.0
+paramiko==2.4.2
+pyserial==3.4
+
