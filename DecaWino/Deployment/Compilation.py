@@ -1,3 +1,26 @@
+"""****************************************************************************
+Copyright (C) 2019 LCIS Laboratory - Baptiste Pestourie
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, in version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+This program is part of the SecureLoc Project @https://github.com/Hedwyn/SecureLoc
+ ****************************************************************************
+
+@file Compilation.py
+@author Baptiste Pestourie
+@date 2019 March 1st
+@brief Compilation menu for automated compilation & deployment
+@see https://github.com/Hedwyn/SecureLoc
+"""
+
 from tkinter import *
 import tkinter as tk
 from tkinter.ttk import *
@@ -10,10 +33,18 @@ from subprocess import Popen, PIPE, STDOUT
 from multiprocessing import Pipe
 import sys
 import serial.tools.list_ports
+import platform
 
+OS =  platform.system() # should return Linux, Darwin or Windows
 SERIAL_ROOT = 'COM'
 # CPU clock speed
 CPU_SPEED = ["96 Mhz","120 Mhz","24 Mhz","48 Mhz","72 Mhz"]
+BOOTLOADER = "teensy_loader_cli"
+if OS == 'Windows':
+    # windows requires .exe
+    WIN_EXTENSION = ".exe"
+else:
+    WIN_EXTENSION = ""
 SHELL_ON = True
 PROJECTS_DIR = "Projects"
 SRCDIR = 'src'
@@ -303,7 +334,7 @@ class CompilationMenu(Frame):
         try:
             # flashing
             self.console_display("flashing, press the teensy button")
-            self.console_handler('teensy_loader_cli.exe -mmcu=mk20dx256 -s -v ' + PROJECTS_DIR + '/' + self.projects_listbox.get(ACTIVE) + '/' + BINDIR +'/' + self.hex_files.get(ACTIVE))
+            self.console_handler(BOOTLOADER + WIN_EXTENSION + ' -mmcu=mk20dx256 -s -v ' + PROJECTS_DIR + '/' + self.projects_listbox.get(ACTIVE) + '/' + BINDIR +'/' + self.hex_files.get(ACTIVE))
         except:
             self.console_display("Target serial device is disconnected")
 

@@ -1,3 +1,27 @@
+"""****************************************************************************
+Copyright (C) 2019 LCIS Laboratory - Baptiste Pestourie
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, in version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+This program is part of the SecureLoc Project @https://github.com/Hedwyn/SecureLoc
+ ****************************************************************************
+
+@file Deployment.py
+@author Baptiste Pestourie
+@date 2019 March 1st
+@brief Compiles a single source file multiple times, 
+generates unique IDs for each, sends the hex files via ftp and triggers Decawinos flashing on the RPIs"
+@see https://github.com/Hedwyn/SecureLoc
+"""
+
 # Cleans the directory, compiles anchor code and generates a different hex for each ID.
 import subprocess
 from subprocess import Popen, PIPE, STDOUT
@@ -223,7 +247,7 @@ def local_flash(hostname,username,password,anchors_list):
 				soft_reset = ' -s'
 			(stdin, stdout, stderr) = ssh.exec_command('nohup /home/pi/Desktop/teensy_loader_cli -mmcu=mk20dx256' + soft_reset + ' -v ' + '/home/pi/Desktop/' + hex_name + anchor + '.hex')
 			stdout.channel.recv_exit_status()
-			console.print('nohup /home/pi/Desktop/teensy_loader_cli -mmcu=mk20dx256' + soft_reset + ' -v ' + '/home/pi/Desktop/' + hex_name + anchor + '.hex')
+			console.print('nohup /home/pi/Desktop/' + BOOTLOADER + ' -mmcu=mk20dx256' + soft_reset + ' -v ' + '/home/pi/Desktop/' + hex_name + anchor + '.hex')
 
 			for line in stdout.readlines():
 				console.print(line)

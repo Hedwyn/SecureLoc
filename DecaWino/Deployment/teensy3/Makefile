@@ -57,7 +57,7 @@ NB_ANCHORS = 4
 #NO_ARDUINO = 1
 ifndef NO_ARDUINO
 # Path to your arduino installation
-ARDUINOPATH ?= ../../../../..
+ARDUINOPATH ?= C:\Program Files (x86)\Arduino
 endif
 
 # configurable options
@@ -87,16 +87,17 @@ CPUARCH = cortex-m4
 
 ifdef ARDUINOPATH
 
-
+OS ?= WIN # available values: WIN, MAC or LINUX
 # path location for Teensy Loader, teensy_post_compile and teensy_reboot (on Linux)
 #TOOLSPATH = $(abspath $(ARDUINOPATH)/hardware/tools)
-TOOLSPATH  = "C:\Program Files (x86)\Arduino\hardware\tools"
+TOOLSPATH  = $(ARDUINOPATH)\hardware\tools"
 # path location for Arduino libraries (currently not used)
 #LIBRARYPATH = $(abspath $(ARDUINOPATH)/libraries)
-LIBRARYPATH = "C:\Users\pestourb\Documents\Arduino\libraries\AES-master"
+# LIBRARYPATH = "C:\Users\pestourb\Documents\Arduino\libraries\AES-master"
+LIBRARYPATH = "../../../Arduino/libraries/*"
 # path location for the arm-none-eabi compiler
 #COMPILERPATH = $(abspath $(ARDUINOPATH)/hardware/tools/arm/bin)
-COMPILERPATH = "C:\Program Files (x86)\Arduino\hardware\tools\arm\bin"
+COMPILERPATH = "$(ARDUINOPATH)\hardware\tools\arm\bin"
 
 else
 # Default to the normal GNU/Linux compiler path if NO_ARDUINO
