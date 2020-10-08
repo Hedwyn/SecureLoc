@@ -33,7 +33,7 @@ import time
 from Make import *
 
 SHELL_ON = True
-
+BOOTLOADER = "teensy_loader_cli"
 HOSTS_LIST = ['Rasp1','Rasp2','Rasp3','Rasp4']
 USERNAMES = {'Rasp1':'pi','Rasp2':'pi','Rasp3':'pi','Rasp4':'pi'}
 USERS_PWD = {'Rasp1':'raspberry','Rasp2':'raspberry','Rasp3':'raspberry','Rasp4':'raspberry'}

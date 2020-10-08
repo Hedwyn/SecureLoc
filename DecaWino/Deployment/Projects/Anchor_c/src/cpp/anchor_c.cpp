@@ -87,7 +87,7 @@ static byte *verifierID;/**< Points to the identifier of the verifier ID for the
 /* Two-Way Ranging protocol   */
 static unsigned long timeout; /**< Timeout variable for all the watchdogs (on Acknowledgment/DATA/Start frames) */
 static bool has_timedout; /**< Whether the last ranging process has timed out or not */
-static int64_t t1, t2, t3, t4; /**< Timestamp for Two-Way Ranging */
+static uint64_t t1, t2, t3, t4,t_start; /**< Timestamp for Two-Way Ranging */
 static int64_t tof; /**< Time-of-flight calculated after TWR protocol */
 static int start_length; /**<Length, in bytes, of the START frime; depends on the parameters chosen (cooperative, etc.) */
 static int is_collision = 0; /**< Whether the last TWR has collisioned or not */
@@ -109,6 +109,9 @@ static int aloha_delay; /**< In Aloha scheduling mode, the delay to wait after a
 static bool my_turn; /**< Switches true when the anchor can start a ranging process */
 static uint64_t slot_start; /**< Timestamp for the beginning of the next TDMA slot. This timestamp is used by a delayed send */
 static uint64_t last_start_frame; /**< Timestamp of the last start frame received, required to calculate the start timestamp of the next TDMA in slot_start */
+static double dw1000_clock_cycle_per_microsecond_f = 1 / DW1000_TIMEBASE_US;
+static uint64_t dw1000_clock_cycle_per_microsecond = (uint64_t) dw1000_clock_cycle_per_microsecond_f;
+static uint64_t interslot_delay_dwtime = SLOT_LENGTH * dw1000_clock_cycle_per_microsecond ; /**<Rounded number of cycles of the 64 Ghz clock to get the defined delay between two TDMA slots*/
 static int delayed; /**< Boolean, true if delayed transmissions are enabled */
 
 /* Cooperative methods */
@@ -295,7 +298,7 @@ float compute_TWR() {
   else {
     tof = ((t4 - t1) - (1 + 1.0E-6*decaduino.getLastRxSkew()) *(t3 - t2))/2;
   }
-
+  
   Serial.print("ToF");
   Serial.println((long)tof);
 
@@ -441,7 +444,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int next_target_idx) {
 					}
  
           /* checking for cooperative calls */
-          if (anchorID[16] == MASTER_ID) {
+          if (anchorID[8] == MASTER_ID) {
             if (is_next_cycle_cooperative) {
               is_current_cycle_cooperative = 1;
               is_next_cycle_cooperative = 0;
@@ -480,7 +483,14 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int next_target_idx) {
             #endif
 
             state = TWR_ENGINE_PREPARE_RANGING;
-            slot_start =  last_start_frame + (SLOT_LENGTH / (DW1000_TIMEBASE * IN_US) );
+            slot_start =  last_start_frame + interslot_delay_dwtime;
+            // Serial.println("Slot start vs last start frame:");
+            // Serial.println((long) last_start_frame);
+            // Serial.println((long) slot_start);
+            // Serial.println((long) interslot_delay_dwtime);
+            // Serial.println((long) dw1000_clock_cycle_per_microsecond);
+            Serial.print("Timestamp START detection: ");
+            Serial.println(millis());
             delayed = 1;
           }
           else if ((differential_twr) && (anchorID[7] <= NB_ANCHORS)) {
@@ -489,6 +499,7 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int next_target_idx) {
             my_turn = false;
             /* recording START timestamp */
             t1 = decaduino.getLastRxTimestamp();
+            Serial.println("FORBIDDEN PATH !!!!!!!!!!!!!!!!!");
 
             /* enabling reception for the incoming ACK */
             decaduino.plmeRxEnableRequest();
@@ -647,6 +658,11 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int next_target_idx) {
       }
 
       /* Sending START frame */
+      Serial.print("Timestamp START tranmission: ");
+      Serial.println(millis());
+      if (delayed) {
+        Serial.println("& Transmissions are scheduled");
+      }
       if(!decaduino.pdDataRequest(txData, start_length, delayed, slot_start) ){
         DPRINTFLN("$Could not send the frame");
       }
@@ -660,14 +676,24 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int next_target_idx) {
 			/* waiting completion */
 			timeout = millis() + TX_TIMEOUT;
       while ((millis() < timeout) && !decaduino.hasTxSucceeded() );
+      if (millis() > timeout) {
+        Serial.println("START FAILED !");
+      }
       //while (!decaduino.hasTxSucceeded());
       //delay(1);
 			t1 = decaduino.getLastTxTimestamp();
+      Serial.print("t1:");
+      Serial.println((unsigned long) decaduino.getSystemTimeCounter());
+      Serial.println(micros());
 			/* enabling reception for the incoming ACK */
 			
       DPRINTFLN(compute_elapsed_time_since(t1));
 			timeout = millis() + ACK_TIMEOUT;
+      Serial.print("time before timeout");
+      Serial.println(ACK_TIMEOUT);
 			state = TWR_ENGINE_STATE_WAIT_ACK;
+      Serial.print("System time");
+      Serial.print((int) decaduino.getSystemTimeCounter());
       decaduino.plmeRxEnableRequest();
       break;
 
@@ -677,6 +703,8 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int next_target_idx) {
       if ( millis() > timeout ) {
         state = TWR_ENGINE_STATE_INIT;
         DPRINTFLN("$timeout on waiting ACK");
+        Serial.print("time after timeout");
+        Serial.println(millis());
         has_timedout = true;
 
         /* re-enabling reception */
@@ -696,6 +724,9 @@ int anchor_loop(byte *myID, byte *myNextAnchorID, int next_target_idx) {
           Serial.println();
           if (byte_array_cmp(rxID, verifierID)) {
             t4 = decaduino.getLastRxTimestamp();
+            Serial.print("t4:");
+            Serial.println((unsigned long) decaduino.getSystemTimeCounter());
+            Serial.println(micros());
             /* enabling reception for DATA frame */
             timeout = millis() + DATA_TIMEOUT;
             state = TWR_ENGINE_STATE_WAIT_DATA_REPLY;

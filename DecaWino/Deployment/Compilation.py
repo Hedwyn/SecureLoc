@@ -39,7 +39,7 @@ OS =  platform.system() # should return Linux, Darwin or Windows
 SERIAL_ROOT = 'COM'
 # CPU clock speed
 CPU_SPEED = ["96 Mhz","120 Mhz","24 Mhz","48 Mhz","72 Mhz"]
-BOOTLOADER = "teensy_loader_cli"
+
 if OS == 'Windows':
     # windows requires .exe
     WIN_EXTENSION = ".exe"
