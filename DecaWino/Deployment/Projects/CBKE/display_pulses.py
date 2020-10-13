@@ -8,8 +8,8 @@ from serial import *
 import random
 import time
 
-VERIFIER_PORT = 'COM18'
-PROVER_PORT = 'COM29'
+VERIFIER_PORT = 'COM23'
+PROVER_PORT = 'COM31'
 
 
 

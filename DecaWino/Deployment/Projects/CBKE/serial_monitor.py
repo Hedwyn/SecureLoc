@@ -3,8 +3,8 @@ import sys
 from threading import Thread
 import time
 
-PROVER_PORT = 'COM18'
-VERIFIER_PORT = 'COM29'
+PROVER_PORT = 'COM23'
+VERIFIER_PORT = 'COM31'
 NB_DATA = 7
 out_file = 'CBKE_log_'
 parameters = ['#', '^', '*', '$', '_', '&', '/']

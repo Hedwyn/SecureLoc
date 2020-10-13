@@ -120,10 +120,10 @@ def quantize(pulse):
         for sample in processed_chunk:
             if sample > guard_margin:
                 if abs(sample) > (threshold + guard_margin):
-                    key_chunk += "11"
+                    key_chunk += "10"
                     # key_chunk += "1"
                 elif abs(sample) < (threshold - guard_margin):
-                    key_chunk += "10"
+                    key_chunk += "11"
                     # key_chunk += "1"
                 else:
                     key_chunk += "1?"
@@ -141,6 +141,54 @@ def quantize(pulse):
             else:
                 # the guard margin should be inferior to the threshold
                 key_chunk += "??"
+                # key_chunk += "?"
+               
+        key += key_chunk
+        key_chunk = ""
+    return(key)
+
+def quantize_signed(pulse):
+    key = ""
+    key_chunk = ""
+
+    for chunk in pulse:       
+        # processing data
+        processed_chunk = center(median_filter(chunk, MEDIAN_SIZE))
+        # processed_chunk = median_filter(moving_average(chunk, 16), MEDIAN_SIZE)[16:]
+        std = np.std(processed_chunk)
+        threshold = GAUSSIAN_MID_RATIO * std
+        guard_margin = GUARD_MARGIN_RATIO * std
+        # quantizing
+        for sample in processed_chunk:
+            if sample > guard_margin:
+                if abs(sample) > (threshold + guard_margin):
+                    key_chunk += "10"
+                elif abs(sample) < (threshold - guard_margin):
+                    key_chunk += "11"
+                elif abs(sample) > threshold:
+                    key_chunk += "1-"                
+                elif abs(sample) < threshold:
+                    key_chunk += "1+"
+                else:
+                    key_chunk += "1?"
+                    # key_chunk += "?"
+            elif sample < -guard_margin:
+                if abs(sample) > (threshold + guard_margin):
+                    key_chunk += "00"
+                elif abs(sample) < (threshold - guard_margin):
+                    key_chunk += "01"
+                elif abs(sample) > threshold:
+                    key_chunk += "0-"
+                elif abs(sample) < threshold:
+                    key_chunk += "0+"                
+                else:
+                    key_chunk += "0?"
+            
+            elif sample > 0:
+                key_chunk += '+1'
+            else:
+                # the guard margin should be inferior to the threshold
+                key_chunk += "-1?"
                 # key_chunk += "?"
                
         key += key_chunk
@@ -218,13 +266,21 @@ def compare_keys(key1, key2):
     err_counter = 0
     one_counter = 0
     unknown_counter = 0
+    successful_corrections = 0
     occurence_counter = {'A': 0,'B': 0, 'C': 0, 'D': 0, '?':0}
 
     # Computing BER and bit balance
     for i, c in enumerate(key1):
+        ## counting 1 occurences
         if c == '1':
             one_counter += 1
+
+        ## comparing
         if c == '?' or key2[i] == '?':
+            unknown_counter += 1
+        elif (c == '-' and key2[i] == '0') or (c == '+' and key2[i] == '1') or (c == '0' and key2[i] == '-') or (c == '1' and key2[i] == '+'):
+            successful_corrections += 1
+        elif c == '-' or c == '+' or key2[i] == '-' or key2[i] == '+':
             unknown_counter += 1
         elif c != key2[i]:
             err_counter += 1
@@ -252,8 +308,8 @@ def compare_keys(key1, key2):
         occurence_counter[char] *= 100
 
     # displaying keys
-    print("Alice's key: " + str(key1))
-    print("Bob's key: " + str(key2))
+    # print("Alice's key: " + str(key1))
+    # print("Bob's key: " + str(key2))
 
     # displaying each character's frequency
 
@@ -263,6 +319,9 @@ def compare_keys(key1, key2):
     print("10 (C):" + str(occurence_counter['C']) + "%")
     print("11 (D):" + str(occurence_counter['D']) + "%")
     print("?? (?):" + str(occurence_counter['?']) + "%")
+
+    # displaying number of corrections 
+    print("Succesful corrections rate: " + str(successful_corrections / len(key1)) )
 
 def compute_ber(key1, key2):
     err_ctr = 0
@@ -452,8 +511,8 @@ if __name__ =="__main__":
     # compute_mutual_information(pulses[0], pulses[1])
     # plot_all(pulses)s
     processed_pulses = process_pulses(pulses)
-    key1 = alt_quantize(pulses[0])
-    key2 = alt_quantize(pulses[1])
+    key1 = quantize_signed(pulses[0])
+    key2 = quantize_signed(pulses[1])
 
     # print(compute_ber(key1, key2))
 
@@ -465,8 +524,8 @@ if __name__ =="__main__":
     # plot_pdf(pulses[0])
     # plot_pulses(processed_pulses)
     # plot_mi_vs_std(pulses)
-    # plot_autocor(pulses)
-    plot_pulses(processed_pulses)
+    # plot_autocor(processed_pulses)
+    #plot_pulses(processed_pulses)
 
     print(compute_character_repetition_rate(key1))
     # print(compute_character_repetition_rate(convert_key(keys[0])))

@@ -52,11 +52,11 @@
   #define MASTER /**< Enables Master anchor mode. The Master anchor is responsible for the cooperative operations and the TDMA watchdog*/
 #endif
 
-#define SLOT_LENGTH 200000/**< TDMA slot length, in microseconds*/
+#define SLOT_LENGTH 100000/**< TDMA slot length, in microseconds*/
 #define SLOT_LENGTH_MS (SLOT_LENGTH / 1000) /**< TDMA slot length, in milliseconds*/
 #define IN_US 1E6 /**< Second to microsecond conversion*/
 
-#define _DEBUG_   //comment to disable debug mode
+//#define _DEBUG_   //comment to disable debug mode
 #ifdef _DEBUG_
   #define DPRINTF  Serial.print/**< When defined, enables debug ouput on the serial port*/
 #else
@@ -88,8 +88,9 @@
 /* watchdogs */
 
 #define TX_TIMEOUT 1 /**< Watchdog for failed transmission that never complete*/
-#define ACK_TIMEOUT SLOT_LENGTH_MS  / 3//(SLOT_LENGTH_MS / 2) /**< Acknowledgment watchdog in TWR protocol*/
-#define DATA_TIMEOUT (SLOT_LENGTH_MS / 3) /**< DATA watchdog in TWR protocol*/
+#define TX_TIMEOUT 1 /**< Guard time for the tranmission of a frame*/
+#define ACK_TIMEOUT (SLOT_LENGTH_MS  / 4)  /**< Acknowledgment watchdog in TWR protocol*/
+#define DATA_TIMEOUT (SLOT_LENGTH_MS / 4) /**< DATA watchdog in TWR protocol*/
 #define START_TIMEOUT (NB_TOTAL_ANCHORS * SLOT_LENGTH_MS) /**< START watchdog for TDMA scheduling - triggered when previous anchor stayed quiet*/
 
 
@@ -114,7 +115,7 @@
 #define DIFFERENTIAL_TWR 0/**<If set, all anchors will compute the distance on each start frame using a diffential calculation*/
 #define PLATFORM_LENGTH 2.5/**< Length of the rectangle formed by the anchor (anchor 1 -> anchor 2) */
 #define PLATFORM_WIDTH 2.5/**< Width of the rectangle formed by the anchor (anchor 1 -> anchor 4) */
-#define T23 300000000 /**< When delayed send is enabled, waiting time between ACK and DATA frame*/
+#define T23 60000000 /**< When delayed send is enabled, waiting time between ACK and DATA frame*/
 #define SKEW_CORRECTION 1/**< Applies a correction on the ToF calculation based on the clock skew with the target tag*/
 
 /* frame types */
@@ -129,6 +130,7 @@
 #define COOPERATIVE_CTRL_FRAME_LENGTH 4
 #define DATA_LENGTH 33
 #define DATA_LENGTH_COOPERATIVE (DATA_LENGTH + sizeof(Data_sample))
+
 /* Cooperative */
 #define COOPERATIVE 0 /**< Enables cooperative mode - see documentation for further details*/
 #if (COOPERATIVE)
@@ -174,6 +176,11 @@ typedef struct Data_sample{
 }Data_sample;
 extern Data_sample tag_samples[NB_ROBOTS]; 
 
+/** @brief print clocks timestamp on serial bus
+  * @author Baptiste Pestourie
+  * @date 2020 March 1st
+*/
+void print_timestamp(uint64_t timestamp);
 
 /** @brief process serial frames containing tag positions
   * @author Baptiste Pestourie

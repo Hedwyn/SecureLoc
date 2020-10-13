@@ -152,9 +152,11 @@ void loop() {
 
     case TWR_ENGINE_STATE_RX_ON:
 			/* sleeping until next slot */
+      /* @TODO: correcting timestamp calculation 
 			while (decaduino.getSystemTimeCounter() - t2 < (SLOT_LENGTH / (DW1000_TIMEBASE * IN_US))  - GUARD_TIME) {
 				delayMicroseconds(30);
 			}
+      */
 
       state = TWR_ENGINE_STATE_WAIT_START;
       //unsigned long waited_time = (decaduino.getSystemTimeCounter()>>4) % 0x0FFFFFFFFFFFFFFF - ts_ghost_anchor>>4;
@@ -266,6 +268,8 @@ void loop() {
       while (!decaduino.hasTxSucceeded());
       Serial.print("TWR duration: ");
       Serial.println(micros() - ranging_timer);
+      Serial.print("Reply time:");
+      Serial.println((long) (t3 - t2));
       state = TWR_ENGINE_STATE_INIT;
       break;
 
