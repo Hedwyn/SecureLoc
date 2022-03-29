@@ -4,6 +4,6 @@ matplotlib==2.2.2
 numpy==1.14.2
 fabric==2.4.0
 keyboard==0.13.0
-paramiko==2.4.2
+paramiko==2.10.1
 pyserial==3.4
 scikit_learn==0.23.2
