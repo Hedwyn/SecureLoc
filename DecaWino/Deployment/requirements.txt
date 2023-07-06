@@ -1,4 +1,4 @@
-scipy==1.2.0
+scipy==1.10.0
 spur==0.3.20
 matplotlib==2.2.2
 numpy==1.14.2
